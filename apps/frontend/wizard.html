@@ -58,7 +58,11 @@
                   </div>
                 </div>
                 <div class="chips mb-2" id="categoryChips"></div>
-                <div class="template-grid" id="templateList" role="radiogroup" aria-label="انتخاب قالب ربات"></div>
+                <div class="template-grid" id="templateList" role="radiogroup" aria-label="انتخاب قالب ربات">
+                  <div class="empty" id="templateFallback">
+                    <span>در حال بارگذاری ۳۲ قالب ربات…</span>
+                  </div>
+                </div>
 
                 <div class="wizard-nav">
                   <span class="tiny dim" id="step1Note">برای ادامه، یک قالب انتخاب کنید.</span>
@@ -257,5 +261,30 @@
     <script src="assets/js/site.js"></script>
     <script src="assets/js/installer.js"></script>
     <script src="assets/js/wizard.js"></script>
+    <script>
+      /* Last-resort guard: if a stale cached wizard.js never fills the picker the
+       * visitor still gets an explanation and a working reload button instead of
+       * an empty box. */
+      (function () {
+        function inspect() {
+          var list = document.getElementById('templateList');
+          var fallback = document.getElementById('templateFallback');
+          if (!list || !fallback) return;
+          var box = document.createElement('div');
+          box.className = 'empty';
+          var text = document.createElement('span');
+          text.textContent = 'فهرست قالب‌ها بارگذاری نشد؛ صفحه را دوباره بارگذاری کنید.';
+          var action = document.createElement('button');
+          action.type = 'button';
+          action.className = 'btn btn-outline btn-sm';
+          action.textContent = 'بارگذاری دوباره';
+          action.addEventListener('click', function () { window.location.reload(); });
+          box.appendChild(text);
+          box.appendChild(action);
+          list.replaceChildren(box);
+        }
+        window.addEventListener('load', function () { window.setTimeout(inspect, 2500); });
+      })();
+    </script>
   </body>
 </html>
