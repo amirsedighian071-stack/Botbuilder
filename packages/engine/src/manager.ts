@@ -13,11 +13,13 @@ import {
   type BotStatus,
   type HttpClient,
   type Logger,
+  type MessengerApi,
   type PlatformName,
   type SecretsManager,
+  type StoredSecret,
   type Storage,
 } from '@botforge/core';
-import { createAdapter, detectPlatformFromToken, type BaseAdapter } from '@botforge/platform-adapters';
+import { createAdapter, detectPlatformFromToken, type AdapterConfig } from '@botforge/platform-adapters';
 import type { JobQueue } from './queue/worker';
 import { BotRuntime } from './runtime/bot-runtime';
 
@@ -29,6 +31,8 @@ export interface BotManagerOptions {
   secrets: SecretsManager;
   queue: JobQueue;
   templates: Map<string, BotDefinition>;
+  /** Overrides adapter construction (used by tests and by embedded runtimes). */
+  adapterFactory?: (config: AdapterConfig & { platform: PlatformName }) => MessengerApi;
 }
 
 export interface CreateBotInput {
@@ -63,7 +67,7 @@ const DEFAULT_FORCE_MEMBERSHIP = {
 
 export class BotManager {
   private readonly runtimes = new Map<string, BotRuntime>();
-  private readonly adapters = new Map<string, BaseAdapter>();
+  private readonly adapters = new Map<string, MessengerApi>();
 
   constructor(private readonly options: BotManagerOptions) {
     this.options.queue.register('bot.job', async (payload, context) => {
@@ -120,12 +124,15 @@ export class BotManager {
 
   private async buildRuntime(bot: BotRecord, template: BotDefinition): Promise<BotRuntime> {
     const token = this.options.secrets.open(bot.tokenCipher);
-    const adapter = createAdapter({
+    const adapterConfig: AdapterConfig & { platform: PlatformName } = {
       platform: bot.platform,
       token,
       botId: bot.id,
       logger: this.options.logger.child({ botId: bot.id, platform: bot.platform }),
-    });
+    };
+    const adapter = this.options.adapterFactory
+      ? this.options.adapterFactory(adapterConfig)
+      : createAdapter(adapterConfig);
     this.adapters.set(bot.id, adapter);
     const runtime = new BotRuntime({
       bot,
@@ -147,12 +154,13 @@ export class BotManager {
     if (detected && detected !== platform) {
       throw badRequest(`توکن وارد شده مربوط به ${detected} است، نه ${platform}`);
     }
-    const adapter = createAdapter({
+    const verifyConfig: AdapterConfig & { platform: PlatformName } = {
       platform,
       token,
       botId: 'verify',
       logger: this.options.logger.child({ scope: 'token-verification', platform }),
-    });
+    };
+    const adapter = this.options.adapterFactory ? this.options.adapterFactory(verifyConfig) : createAdapter(verifyConfig);
     try {
       const identity = await adapter.getMe();
       if (!identity.id || identity.id === 'verify') {
@@ -210,6 +218,18 @@ export class BotManager {
     return record;
   }
 
+  templateFor(templateId: string): BotDefinition | undefined {
+    return this.options.templates.get(templateId);
+  }
+
+  sealSecret(value: string): StoredSecret {
+    return this.options.secrets.seal(value);
+  }
+
+  openToken(bot: BotRecord): string {
+    return this.options.secrets.open(bot.tokenCipher);
+  }
+
   webhookUrl(bot: BotRecord): string {
     const base = this.options.config.PUBLIC_BASE_URL.replace(/\/+$/, '');
     const prefix = this.options.config.WEBHOOK_PATH_PREFIX.replace(/\/+$/, '');
@@ -236,6 +256,32 @@ export class BotManager {
     }
   }
 
+  /**
+   * Points the platform webhook at an externally deployed URL (Cloudflare Worker or Railway),
+   * instead of the control plane's own PUBLIC_BASE_URL.
+   */
+  async registerWebhookAt(botId: string, url: string, secret: string): Promise<boolean> {
+    try {
+      const adapter = await this.getAdapter(botId);
+      const ok = await adapter.setWebhook(url, secret);
+      if (!ok) {
+        await this.options.storage.events.log({
+          botId,
+          type: 'webhook.register_failed',
+          level: 'warn',
+          payload: { url, scope: 'external' },
+        });
+      }
+      return ok;
+    } catch (error) {
+      this.options.logger.warn('external webhook registration failed', {
+        botId,
+        error: (error as Error).message,
+      });
+      return false;
+    }
+  }
+
   async deleteWebhook(bot: BotRecord): Promise<boolean> {
     try {
       const adapter = await this.getAdapter(bot.id);
@@ -245,7 +291,7 @@ export class BotManager {
     }
   }
 
-  private async getAdapter(botId: string): Promise<BaseAdapter> {
+  private async getAdapter(botId: string): Promise<MessengerApi> {
     const cached = this.adapters.get(botId);
     if (cached) return cached;
     await this.getRuntime(botId);

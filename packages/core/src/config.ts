@@ -30,6 +30,15 @@ const envSchema = z.object({
   QUEUE_CONCURRENCY: z.coerce.number().int().min(1).max(64).default(4),
   QUEUE_POLL_INTERVAL_MS: z.coerce.number().int().min(200).max(60000).default(2000),
 
+  CLOUDFLARE_API_BASE: z.string().default('https://api.cloudflare.com/client/v4'),
+  RAILWAY_API_URL: z.string().default('https://backboard.railway.app/graphql/v2'),
+  DEPLOY_WORKER_BUNDLE: z.string().default('dist/cloudflare-worker/index.js'),
+  DEPLOY_WORKER_PREFIX: z.string().default('botforge'),
+  DEPLOY_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(900_000).default(240_000),
+  DEPLOY_POLL_INTERVAL_MS: z.coerce.number().int().min(10).max(30_000).default(4000),
+  DEPLOY_REPO: z.string().default('amirsedighian071-stack/Botbuilder'),
+  DEPLOY_BRANCH: z.string().default('main'),
+
   AI_API_KEY: z.string().optional(),
   AI_BASE_URL: z.string().default('https://api.openai.com/v1'),
   AI_MODEL: z.string().default('gpt-4o-mini'),

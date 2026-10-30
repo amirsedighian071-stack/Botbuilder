@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>پنل مدیریت سامانه — BotForge</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="پنل مدیریت سیستم BotForge: آمار کل، مدیران، کلیدهای API، کارهای پس‌زمینه، حسابرسی و پیکربندی." />
+    <meta name="theme-color" content="#071021" />
+    <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+    <style>
+      :root { color-scheme: dark; }
+      html { background: #040a18; }
+      body {
+        margin: 0;
+        background: #040a18;
+        color: #dbe6f5;
+        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
+        line-height: 1.85;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+      .site-header { min-height: 68px; }
+    </style>
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body data-page="admin">
+    <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark" data-icon="bot" aria-hidden="true"></span>
+          <span class="brand-text"><strong>BotForge</strong><small>پنل مدیریت سامانه</small></span>
+        </a>
+        <nav class="nav-desktop" aria-label="ناوبری پنل">
+          <a class="nav-link" href="../dashboard.html">داشبورد ربات‌ها</a>
+          <a class="nav-link" href="../deployment.html">استقرار</a>
+          <a class="nav-link" href="../docs.html">مستندات</a>
+          <a class="nav-link is-active" href="index.html" aria-current="page">مدیریت سامانه</a>
+        </nav>
+        <div class="header-actions">
+          <span class="tiny dim only-desktop" id="whoami"></span>
+          <button type="button" class="btn btn-ghost btn-sm" id="logoutBtn">خروج</button>
+          <a class="btn btn-outline btn-sm" href="../index.html">بازگشت به سایت</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-head">
+        <div class="container">
+          <span class="eyebrow">دسترسی محدود</span>
+          <h1>مدیریت سامانه</h1>
+          <p>
+            آمار کل، مدیران، کلیدهای API، صف کار، رکوردهای حسابرسی و پیکربندی سرور. این صفحه فقط با حساب مدیر دارای دسترسی
+            <code class="code-inline">system:read</code> کار می‌کند.
+          </p>
+          <div class="btn-row mt-2 only-mobile">
+            <a class="btn btn-outline btn-sm" href="../dashboard.html">داشبورد ربات‌ها</a>
+            <a class="btn btn-outline btn-sm" href="../deployment.html">استقرار</a>
+            <a class="btn btn-outline btn-sm" href="../docs.html">مستندات</a>
+            <a class="btn btn-ghost btn-sm" href="../index.html">سایت اصلی</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-tight" id="adminGate" hidden>
+        <div class="container container-narrow">
+          <div class="card card-pad">
+            <h2>ورود مدیر</h2>
+            <form id="gateForm" class="form-grid" autocomplete="off">
+              <div class="field span-2">
+                <label for="gateBase">آدرس کنترل‌پلین</label>
+                <input id="gateBase" class="input" dir="ltr" placeholder="https://botforge.example.com" />
+              </div>
+              <div class="field">
+                <label for="gateEmail">ایمیل مدیر</label>
+                <input id="gateEmail" class="input" dir="ltr" type="email" placeholder="admin@botforge.local" />
+              </div>
+              <div class="field">
+                <label for="gatePassword">گذرواژه</label>
+                <input id="gatePassword" class="input" dir="ltr" type="password" placeholder="••••••••" />
+              </div>
+              <div class="field span-2">
+                <div class="btn-row">
+                  <button type="button" class="btn btn-primary" id="gateLoginBtn">ورود</button>
+                  <a class="btn btn-ghost" href="../docs.html#quickstart">راه‌اندازی سرور</a>
+                </div>
+                <div class="field-status" id="gateStatus"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-tight" id="adminApp" hidden>
+        <div class="container">
+          <div class="row-between mb-2">
+            <div class="chips" id="envLine"></div>
+            <a class="btn btn-outline btn-sm" href="../deployment.html">وضعیت استقرارها</a>
+          </div>
+
+          <div class="stats-grid" id="statGrid"></div>
+
+          <div class="grid grid-2 mt-2">
+            <div class="card">
+              <div class="card-head"><h3>مدیران سامانه</h3></div>
+              <div class="table-wrap">
+                <table class="data-table data-stack">
+                  <thead>
+                    <tr><th>ایمیل</th><th>نقش</th><th>وضعیت</th><th>آخرین ورود</th><th>عملیات</th></tr>
+                  </thead>
+                  <tbody id="adminsBody"></tbody>
+                </table>
+              </div>
+              <div class="card-body">
+                <h4>ساخت مدیر جدید</h4>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="newAdminEmail">ایمیل</label>
+                    <input id="newAdminEmail" class="input" dir="ltr" type="email" placeholder="operator@example.com" />
+                  </div>
+                  <div class="field">
+                    <label for="newAdminPassword">گذرواژه</label>
+                    <input id="newAdminPassword" class="input" dir="ltr" type="password" placeholder="حداقل ۱۰ کاراکتر" />
+                  </div>
+                  <div class="field">
+                    <label for="newAdminRole">نقش</label>
+                    <select id="newAdminRole">
+                      <option value="operator">اپراتور</option>
+                      <option value="viewer">بازدیدکننده</option>
+                      <option value="superadmin">مدیر ارشد</option>
+                    </select>
+                  </div>
+                  <div class="field" style="justify-content: flex-end">
+                    <button type="button" class="btn btn-primary" id="createAdminBtn">ساخت مدیر</button>
+                  </div>
+                </div>
+                <p class="tiny dim mt-1">ساخت مدیر و تغییر وضعیت فقط با نقش مدیر ارشد امکان‌پذیر است.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h3>کلیدهای API</h3></div>
+              <div class="table-wrap">
+                <table class="data-table data-stack">
+                  <thead>
+                    <tr><th>نام</th><th>پیشوند</th><th>دسترسی‌ها</th><th>آخرین استفاده</th><th>وضعیت</th><th>عملیات</th></tr>
+                  </thead>
+                  <tbody id="keysBody"></tbody>
+                </table>
+              </div>
+              <div class="card-body">
+                <h4>ساخت کلید جدید</h4>
+                <div class="field">
+                  <label for="newKeyName">نام کلید</label>
+                  <input id="newKeyName" class="input" placeholder="deployment-bot" />
+                </div>
+                <div class="stack mt-1" id="scopeChoices"></div>
+                <div class="btn-row mt-2">
+                  <button type="button" class="btn btn-primary" id="createKeyBtn">ساخت کلید API</button>
+                </div>
+                <div class="mt-2" id="newKeyBox"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mt-2">
+            <div class="card-head">
+              <h3>صف کار پس‌زمینه</h3>
+              <div class="btn-row">
+                <select id="jobsStatus" aria-label="وضعیت کار">
+                  <option value="pending">در انتظار</option>
+                  <option value="running">در حال اجرا</option>
+                  <option value="failed">ناموفق</option>
+                  <option value="dead">متوقف</option>
+                  <option value="done">انجام‌شده</option>
+                </select>
+                <button type="button" class="btn btn-outline btn-sm" id="jobsRefresh">به‌روزرسانی</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="jobsPurge">پاک‌سازی قدیمی‌ها</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table data-stack">
+                <thead>
+                  <tr><th>ربات</th><th>نوع</th><th>تلاش</th><th>زمان اجرا</th><th>خطا</th></tr>
+                </thead>
+                <tbody id="jobsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card mt-2">
+            <div class="card-head"><h3>رکوردهای حسابرسی</h3></div>
+            <div class="table-wrap">
+              <table class="data-table data-stack">
+                <thead>
+                  <tr><th>زمان</th><th>عملیات</th><th>هدف</th><th>عامل</th><th>IP</th></tr>
+                </thead>
+                <tbody id="auditsBody"></tbody>
+              </table>
+            </div>
+            <div class="card-foot row-between" id="auditsPager"></div>
+          </div>
+
+          <div class="card mt-2">
+            <div class="card-head"><h3>پیکربندی سامانه</h3></div>
+            <div class="card-body" id="configBox"></div>
+          </div>
+
+          <div class="notice notice-warn mt-2">
+            <span data-icon="alert-triangle" aria-hidden="true"></span>
+            <div>
+              <strong>این صفحه اطلاعات حساس نشان می‌دهد</strong>
+              دسترسی به آن را به حساب‌های مورد اعتماد محدود کنید، از نمایش آن در اسکرین‌شیر خودداری کنید و کلیدهای API را
+              با کمترین دسترسی لازم بسازید.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-bottom">
+        <span>BotForge — پنل مدیریت سامانه</span>
+        <a href="../index.html">بازگشت به سایت اصلی</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/icons.js"></script>
+    <script src="../assets/js/catalog.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/site.js"></script>
+    <script src="../assets/js/admin.js"></script>
+  </body>
+</html>

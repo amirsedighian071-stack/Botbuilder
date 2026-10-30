@@ -12,6 +12,7 @@ import {
 } from '@botforge/core';
 import { JobQueue, BotManager } from '@botforge/engine';
 import { botTemplates } from '@botforge/bot-templates';
+import { DeploymentService, createDeploymentService } from './services/deployments';
 
 export interface AppContext {
   config: AppConfig;
@@ -22,6 +23,7 @@ export interface AppContext {
   queue: JobQueue;
   manager: BotManager;
   templates: Map<string, BotDefinition>;
+  deployments: DeploymentService;
   startedAt: number;
 }
 
@@ -74,7 +76,9 @@ export async function createAppContext(options: CreateContextOptions = {}): Prom
 
   await ensureSeedAdmin(storage, config, logger);
 
-  return { config, logger, storage, secrets, http, queue, manager, templates, startedAt: Date.now() };
+  const deployments = createDeploymentService({ storage, manager, logger, config });
+
+  return { config, logger, storage, secrets, http, queue, manager, templates, deployments, startedAt: Date.now() };
 }
 
 export async function ensureSeedAdmin(storage: Storage, config: AppConfig, logger: Logger): Promise<void> {

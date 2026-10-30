@@ -10,6 +10,7 @@ import { registerTemplateRoutes } from './routes/templates';
 import { registerSystemRoutes } from './routes/system';
 import { registerWebhookRoutes } from './routes/webhooks';
 import { registerMediaRoutes } from './routes/media';
+import { registerDeployRoutes } from './routes/deploy';
 
 export interface BuildAppOptions {
   logger?: boolean;
@@ -114,6 +115,7 @@ export async function buildApp(context: AppContext, options: BuildAppOptions = {
   await registerBotRoutes(app, context);
   await registerWebhookRoutes(app, context);
   await registerMediaRoutes(app, context);
+  await registerDeployRoutes(app, context);
 
   return app;
 }
