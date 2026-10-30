@@ -39,6 +39,17 @@ const envSchema = z.object({
   DEPLOY_REPO: z.string().default('amirsedighian071-stack/Botbuilder'),
   DEPLOY_BRANCH: z.string().default('main'),
 
+  BOT_TEMPLATE: z.string().trim().max(60).optional(),
+  BOT_PLATFORM: z.enum(['telegram', 'bale', 'rubika']).default('telegram'),
+  BOT_TOKEN: z.string().trim().max(400).optional(),
+  BOT_SLUG: z.string().trim().max(40).optional(),
+  BOT_ID: z.string().trim().max(80).optional(),
+  BOT_WEBHOOK_SECRET: z.string().trim().max(120).optional(),
+  BOT_NAME: z.string().trim().max(64).optional(),
+  BOT_CONFIG_JSON: z.string().max(4000).optional(),
+  BOT_FORCE_MEMBERSHIP_JSON: z.string().max(4000).optional(),
+  RUN_MODE: z.enum(['install', 'control-plane']).default('control-plane'),
+
   AI_API_KEY: z.string().optional(),
   AI_BASE_URL: z.string().default('https://api.openai.com/v1'),
   AI_MODEL: z.string().default('gpt-4o-mini'),

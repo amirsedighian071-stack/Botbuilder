@@ -91,7 +91,7 @@
         <nav class="nav-desktop" aria-label="ناوبری اصلی">${links}</nav>
 
         <div class="header-actions">
-          <span class="conn-dot" id="headerConnection" title="وضعیت اتصال به کنترل‌پلین" hidden></span>
+          <span class="conn-dot" id="headerConnection" title="وضعیت اتصال به سرویس ربات" hidden></span>
           <a class="btn btn-ghost btn-sm only-desktop" href="https://github.com/amirsedighian071-stack/Botbuilder" target="_blank" rel="noopener noreferrer">
             ${icon('github', 'icon-sm')} GitHub
           </a>
@@ -179,14 +179,14 @@
       badge.classList.toggle('is-online', Boolean(configured && Api.token));
       badge.title = configured
         ? Api.token
-          ? 'کنترل‌پلین متصل و وارد شده'
-          : 'آدرس کنترل‌پلین ذخیره شده اما وارد نشده‌اید'
-        : 'کنترل‌پلین تنظیم نشده است';
+          ? 'سرویس ربات متصل و وارد شده'
+          : 'آدرس سرویس ذخیره شده اما وارد نشده‌اید'
+        : 'سرویس ربات تنظیم نشده است';
     }
     if (notification) {
       notification.textContent = configured
-        ? `کنترل‌پلین: ${Api.base}`
-        : 'حالت آفلاین: برای استقرار خودکار، آدرس کنترل‌پلین را در ویزارد وارد کنید.';
+        ? `سرویس ربات: ${Api.base}`
+        : 'حالت آفلاین: ویزارد بسته استقرار را بدون سرور می‌سازد.';
     }
   }
 
@@ -358,6 +358,13 @@
     });
   }
 
+  function setStatus(node, text, tone, iconName) {
+    if (!node) return;
+    node.className = `field-status${tone ? ` is-${tone}` : ''}`;
+    const name = iconName || (tone === 'ok' ? 'circle-check' : tone === 'error' ? 'circle-x' : tone === 'busy' ? 'loader' : 'info');
+    node.innerHTML = `${icon(name, 'icon-xs')}<span>${escapeHtml(text)}</span>`;
+  }
+
   function copyRow(value, label) {
     return `<div class="copy-row" data-copy="${escapeHtml(value)}"><span class="value" dir="ltr">${escapeHtml(
       value
@@ -460,6 +467,7 @@
     toast,
     copyText,
     copyRow,
+    setStatus,
     enhanceCopy,
     hydrateIcons,
     categoryName,

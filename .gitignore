@@ -13,3 +13,6 @@ coverage/
 .wrangler/
 .railway/
 *.tsbuildinfo
+
+# generated installer assets (schema + worker bundle)
+apps/frontend/assets/installer/
