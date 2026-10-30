@@ -54,6 +54,18 @@ jobs:
           console.log('no emoji found in frontend assets');
           NODE
 
+      - name: Confirm Pages is available
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --jq '.html_url' > /tmp/pages-url 2>/dev/null; then
+            echo "GitHub Pages is enabled: $(cat /tmp/pages-url)"
+          else
+            echo "GitHub Pages is not enabled for this repository yet." >&2
+            echo "Enable it in Settings → Pages → Source: GitHub Actions, then re-run this workflow." >&2
+            exit 1
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
@@ -72,3 +84,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Publish the deployed URL
+        run: |
+          {
+            echo "### آدرس سایت BotForge"
+            echo ""
+            echo "${{ steps.deployment.outputs.page_url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "deployed to: ${{ steps.deployment.outputs.page_url }}"
