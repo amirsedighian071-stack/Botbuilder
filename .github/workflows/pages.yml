@@ -1,0 +1,74 @@
+name: Deploy frontend to GitHub Pages
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'apps/frontend/**'
+      - 'packages/bot-templates/**'
+      - 'scripts/generate-catalog.mjs'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Regenerate bot catalog from templates
+        run: node --import tsx scripts/generate-catalog.mjs
+
+      - name: Verify frontend has no emoji
+        run: |
+          node - <<'NODE'
+          const { readFileSync, readdirSync, statSync } = require('node:fs');
+          const { join } = require('node:path');
+          const emoji = /[\u{1F300}-\u{1FAFF}\u{1F000}-\u{1F2FF}\u{2600}-\u{27BF}\u{FE0F}]/u;
+          const walk = (dir) => readdirSync(dir).flatMap((entry) => {
+            const full = join(dir, entry);
+            return statSync(full).isDirectory() ? walk(full) : [full];
+          });
+          const offenders = walk('apps/frontend').filter((file) => /\.(html|css|js|svg)$/.test(file) && !file.endsWith('catalog.js') && emoji.test(readFileSync(file, 'utf8')));
+          if (offenders.length > 0) {
+            console.error('Emoji found in:', offenders.join(', '));
+            process.exit(1);
+          }
+          console.log('no emoji found in frontend assets');
+          NODE
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/frontend
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
