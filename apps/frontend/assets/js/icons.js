@@ -1,0 +1,101 @@
+/* BotForge icon set — hand-drawn SVG paths in the Lucide style.
+ * All icons are stroked (no fills, no glyph fonts, no emoji) and inherit currentColor.
+ */
+(function () {
+  const PATHS = {
+    bot: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9 18h6"/>',
+    'trending-up': '<path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/>',
+    newspaper: '<path d="M4 5h12v14H6a2 2 0 0 1-2-2V5z"/><path d="M16 8h4v9a2 2 0 0 1-2 2h-2"/><path d="M7 9h6M7 13h6M7 17h4"/>',
+    bell: '<path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    'cloud-sun': '<path d="M12 4v2M5 7l1.5 1.5M4 13h2"/><circle cx="9" cy="11" r="3"/><path d="M13 20H7a4 4 0 0 1 0-8 4.5 4.5 0 0 1 8.5 1.2A3.4 3.4 0 0 1 17 20h-4z"/>',
+    calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01M8 19h6"/>',
+    'shopping-bag': '<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+    'life-buoy': '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M6.5 6.5l3 3M17.5 6.5l-3 3M6.5 17.5l3-3M17.5 17.5l-3-3"/>',
+    calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M9 14h2M13 14h2M9 17h2"/>',
+    repeat: '<path d="M4 9a4 4 0 0 1 4-4h9"/><path d="M14 2l3 3-3 3"/><path d="M20 15a4 4 0 0 1-4 4H7"/><path d="M10 22l-3-3 3-3"/>',
+    megaphone: '<path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M14 8a4 4 0 0 1 0 8"/><path d="M17 5a8 8 0 0 1 0 14"/>',
+    'clipboard-list': '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 9h6M9 13h6M9 17h3"/>',
+    users: '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.5a3 3 0 0 1 0 5.8"/><path d="M17.5 14.5A5.5 5.5 0 0 1 21 20"/>',
+    instagram: '<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r="1"/>',
+    youtube: '<rect x="3" y="6" width="18" height="12" rx="4"/><path d="M11 9.5l4 2.5-4 2.5z"/>',
+    music: '<circle cx="7" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/><path d="M9.5 18V7l11-2v11"/>',
+    mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3M8 21h8"/>',
+    folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>',
+    'file-cog': '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/><circle cx="12" cy="14" r="2"/><path d="M12 10.5V12M12 16v1.5M8.8 12.2l1.3.8M13.9 15l1.3.8M15.2 12.2l-1.3.8M10.1 15l-1.3.8"/>',
+    'file-audio': '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/><path d="M10 16v-3l4-1v3"/><circle cx="9" cy="16" r="1.4"/><circle cx="13" cy="15" r="1.4"/>',
+    'volume-2': '<path d="M4 10v4h3l4 3V7L7 10H4z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/>',
+    sparkles: '<path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z"/><path d="M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z"/>',
+    languages: '<path d="M3 6h9M7.5 6c0 5-2 8-4.5 9"/><path d="M5 11c1 2 3 3.5 5 4"/><path d="M13 20l4-10 4 10"/><path d="M14.5 16h5"/>',
+    'book-open': '<path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5C17 4 14 4.5 12 6z"/><path d="M12 6v14.5"/>',
+    'pen-line': '<path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13.5 5.5l4 4"/><path d="M14 20h6"/>',
+    'file-text': '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>',
+    shield: '<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
+    'bar-chart-3': '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+    'alarm-clock': '<circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 1.5"/><path d="M5 4L3 6M19 4l2 2"/>',
+    link: '<path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/>',
+    'clipboard-check': '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 13l2 2 4-4"/>',
+    'graduation-cap': '<path d="M2 8l10-4 10 4-10 4L2 8z"/><path d="M6 10v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 8v5"/>',
+    activity: '<path d="M3 12h4l2-6 4 12 2-6h6"/>',
+    check: '<path d="M4 12l5 5L20 6"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/>',
+    'arrow-left': '<path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>',
+    'arrow-right': '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+    github: '<path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 4.5-1.4 4.5-4.9a3.8 3.8 0 0 0-1-2.6 3.5 3.5 0 0 0-.1-2.6s-1.1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.2 5.1 5.1 5.4 5.1 5.4a3.5 3.5 0 0 0-.1 2.6 3.8 3.8 0 0 0-1 2.7c0 3.4 1.7 4.5 4.5 4.8-.3.3-.5.8-.5 1.4V21"/>',
+    terminal: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/>',
+    server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h4M11 16.5h4"/>',
+    database: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/>',
+    zap: '<path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18-2.5-3-2.5-15 0-18z"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+    'chevron-down': '<path d="M6 9l6 6 6-6"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    x: '<path d="M6 6l12 12M18 6L6 18"/>',
+    layers: '<path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/>',
+    briefcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
+    download: '<path d="M12 3v11"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/>',
+    code: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>',
+    'git-branch': '<circle cx="7" cy="6" r="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="8" r="2"/><path d="M7 8v8"/><path d="M17 10c0 4-4 3-6 4"/>',
+    box: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
+    type: '<path d="M5 6V4h14v2M12 4v16M9 20h6"/>',
+    'list-checks': '<path d="M4 7l2 2 3-3M4 15l2 2 3-3"/><path d="M12 7h8M12 15h8"/>',
+    'message-circle': '<path d="M21 12a8 8 0 0 1-8 8H7l-4 3 1-5a8 8 0 1 1 17-6z"/>',
+    'credit-card': '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/>',
+    truck: '<path d="M3 7h10v9H3z"/><path d="M13 11h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',
+    cart: '<circle cx="9" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/><path d="M3 4h2l2.5 11h11L21 7H6"/>',
+    mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+    star: '<path d="M12 3l2.7 5.6 6.3.9-4.5 4.3 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.5l6.3-.9L12 3z"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    'alert-triangle': '<path d="M12 4l9 16H3L12 4z"/><path d="M12 10v4M12 17h.01"/>',
+    'external-link': '<path d="M14 4h6v6"/><path d="M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
+    'refresh-cw': '<path d="M20 11a8 8 0 0 0-14-4L3 10"/><path d="M3 5v5h5"/><path d="M4 13a8 8 0 0 0 14 4l3-3"/><path d="M21 19v-5h-5"/>',
+    eye: '<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/>',
+    trash: '<path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/><path d="M10 11v5M14 11v5"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    'user-check': '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 10-4"/><path d="M15 17l2 2 4-4"/>',
+    wallet: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 14h2"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>'
+  };
+
+  const ALIASES = {
+    'trending-up': 'trending-up',
+    send: 'arrow-right',
+    'bar-chart': 'bar-chart-3',
+    'shopping-bag': 'shopping-bag'
+  };
+
+  function resolve(name) {
+    if (PATHS[name]) return PATHS[name];
+    if (ALIASES[name] && PATHS[ALIASES[name]]) return PATHS[ALIASES[name]];
+    return PATHS.box;
+  }
+
+  function icon(name, className) {
+    const classes = ['icon'];
+    if (className) classes.push(className);
+    return `<svg class="${classes.join(' ')}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${resolve(name)}</svg>`;
+  }
+
+  window.BotForgeIcons = { icon, has: (name) => Boolean(PATHS[name] || ALIASES[name]), names: Object.keys(PATHS) };
+})();

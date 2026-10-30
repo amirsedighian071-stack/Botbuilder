@@ -1,0 +1,17 @@
+{
+  "name": "@botforge/cloudflare-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@botforge/core": "1.0.0",
+    "@botforge/engine": "1.0.0",
+    "@botforge/bot-templates": "1.0.0",
+    "@botforge/platform-adapters": "1.0.0"
+  }
+}

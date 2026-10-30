@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+out/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+.data/
+.tmp/
+.DS_Store
+.wrangler/
+.railway/
+*.tsbuildinfo

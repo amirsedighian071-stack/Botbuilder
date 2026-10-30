@@ -1,0 +1,30 @@
+name = "botforge-webhooks"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[observability]
+enabled = true
+
+[triggers]
+crons = ["*/1 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "botforge"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+PUBLIC_BASE_URL = "https://botforge-webhooks.your-subdomain.workers.dev"
+WEBHOOK_PATH_PREFIX = "/webhooks"
+LOG_LEVEL = "info"
+CORS_ORIGINS = "*"
+MEDIA_DIR = "/tmp/media"
+MEDIA_PUBLIC_PREFIX = "/media"
+MAX_UPLOAD_MB = "20"
+
+# رازها را با دستور wrangler secret put تنظیم کنید:
+#   wrangler secret put SECRET_MASTER_KEY
+#   wrangler secret put JWT_SECRET
+#   wrangler secret put AI_API_KEY

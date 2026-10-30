@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Build artifacts
+        run: npm run build
+
+      - name: Migrate and seed against SQLite
+        env:
+          DATABASE_DRIVER: sqlite
+          SQLITE_PATH: .data/ci.sqlite
+          SECRET_MASTER_KEY: ci-master-key-32-characters-long!!
+          JWT_SECRET: ci-jwt-secret-32-characters-long!!
+          ADMIN_SEED_EMAIL: admin@ci.local
+          ADMIN_SEED_PASSWORD: CiPassword#2026
+        run: |
+          npm run migrate
+          npm run seed

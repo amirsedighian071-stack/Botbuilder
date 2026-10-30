@@ -1,0 +1,42 @@
+{
+  "name": "botforge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BotForge - multi-platform messenger bot platform (Telegram, Bale, Rubika) with 32 production bots",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "node scripts/build.mjs",
+    "test": "node --import tsx --test \"packages/**/test/*.test.ts\" \"apps/**/test/*.test.ts\"",
+    "test:watch": "node --import tsx --test --watch \"packages/**/test/*.test.ts\" \"apps/**/test/*.test.ts\"",
+    "dev:api": "node --import tsx apps/control-plane/src/main.ts",
+    "dev:web": "node scripts/serve-frontend.mjs",
+    "migrate": "node --import tsx packages/core/src/scripts/migrate.ts",
+    "seed": "node --import tsx packages/core/src/scripts/seed.ts",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "esbuild": "^0.24.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@fastify/helmet": "^12.0.1",
+    "@fastify/rate-limit": "^10.2.0",
+    "@fastify/static": "^8.0.3",
+    "fastify": "^5.2.0",
+    "pg": "^8.13.1",
+    "zod": "^3.24.1"
+  }
+}
