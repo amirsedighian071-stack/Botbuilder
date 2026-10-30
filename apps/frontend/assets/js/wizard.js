@@ -11,9 +11,30 @@
   const BF = window.BF;
   const Installer = window.BotForgeInstaller;
   const CATALOG = window.BOTFORGE_CATALOG || { bots: [], categories: [] };
-  const icon = BF.icon;
-  const esc = BF.escapeHtml;
-  const fa = BF.faDigits;
+  const icon = BF && BF.icon ? BF.icon : function () { return ''; };
+  const esc = BF && BF.escapeHtml ? BF.escapeHtml : function (value) { return String(value == null ? '' : value); };
+  const fa = BF && BF.faDigits ? BF.faDigits : function (value) { return String(value == null ? '' : value); };
+
+  /* An empty picker with no explanation looks exactly like a broken deploy, so
+   * every boot failure paints a message plus a reload button into the list. */
+  function bootFailure(message) {
+    const list = document.getElementById('templateList');
+    if (!list) return;
+    const box = document.createElement('div');
+    box.className = 'empty';
+    const text = document.createElement('span');
+    text.textContent = message;
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'btn btn-outline btn-sm';
+    action.textContent = 'بارگذاری دوباره صفحه';
+    action.addEventListener('click', function () { window.location.reload(); });
+    box.appendChild(text);
+    box.appendChild(action);
+    list.replaceChildren(box);
+    const note = document.getElementById('step1Note');
+    if (note) note.textContent = 'فهرست قالب‌ها بارگذاری نشد.';
+  }
 
   const KEY_LINKS = {
     GOLD_API_KEY: { href: 'https://metals.dev/', label: 'ساخت کلید metals.dev' },
@@ -189,6 +210,11 @@
   }
 
   function renderTemplates() {
+    if (!templates().length) {
+      el.templateCount.textContent = '۰ قالب';
+      bootFailure('کاتالوگ ۳۲ ربات بارگذاری نشد؛ اتصال شبکه را بررسی و صفحه را دوباره بارگذاری کنید.');
+      return;
+    }
     const list = visibleTemplates();
     el.templateCount.textContent = `${fa(templates().length)} قالب`;
     if (!list.length) {
@@ -702,35 +728,50 @@
   }
 
   function boot() {
-    if (!window.BotForgeInstaller) {
-      BF.toast('موتور نصب بارگذاری نشد؛ صفحه را دوباره باز کنید.', 'error');
+    if (!BF) {
+      bootFailure('اسکریپت‌های سایت بارگذاری نشد؛ اتصال شبکه را بررسی و صفحه را دوباره باز کنید.');
       return;
     }
-    cache();
-    wire();
-    renderStepper();
-    renderCategories();
-    renderTemplates();
-    renderPlatforms();
-    renderProviders();
-    renderTokenStatus();
-    document.querySelectorAll('.wizard-step').forEach((section) => {
-      const active = Number(section.getAttribute('data-step')) === 0;
-      section.classList.toggle('is-active', active);
-      section.hidden = !active;
-    });
-    const params = new URLSearchParams(window.location.search);
-    const pre = params.get('template') || params.get('bot');
-    const preselected = pre ? templates().find((bot) => bot.id === pre) : null;
-    if (preselected) {
-      state.templateId = preselected.id;
-      state.name = preselected.name;
-      state.slug = Installer.suggestionFor(preselected.id, state.platform);
+    try {
+      cache();
+      renderStepper();
+      renderCategories();
       renderTemplates();
-      el.step1Note.textContent = `انتخاب شد: ${preselected.name}`;
+    } catch (error) {
+      bootFailure('فهرست قالب‌ها نمایش داده نشد؛ صفحه را یک بار دوباره بارگذاری کنید.');
+      return;
     }
-    BF.hydrateIcons(document);
+    if (!Installer) {
+      bootFailure('موتور نصب بارگذاری نشد؛ صفحه را دوباره باز کنید.');
+      return;
+    }
+    try {
+      wire();
+      renderPlatforms();
+      renderProviders();
+      renderTokenStatus();
+      document.querySelectorAll('.wizard-step').forEach((section) => {
+        const active = Number(section.getAttribute('data-step')) === 0;
+        section.classList.toggle('is-active', active);
+        section.hidden = !active;
+      });
+      const params = new URLSearchParams(window.location.search);
+      const pre = params.get('template') || params.get('bot');
+      const preselected = pre ? templates().find((bot) => bot.id === pre) : null;
+      if (preselected) {
+        state.templateId = preselected.id;
+        state.name = preselected.name;
+        state.slug = Installer.suggestionFor(preselected.id, state.platform);
+        renderTemplates();
+        el.step1Note.textContent = `انتخاب شد: ${preselected.name}`;
+      }
+      BF.hydrateIcons(document);
+    } catch (error) {
+      BF.toast('بخشی از ویزارد بارگذاری نشد؛ صفحه را دوباره باز کنید.', 'error');
+    }
   }
 
-  BF.ready(boot);
+  if (BF && BF.ready) BF.ready(boot);
+  else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();

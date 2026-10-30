@@ -9,6 +9,7 @@
  */
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, extname, join, relative } from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build as esbuild } from 'esbuild';
 
@@ -156,11 +157,55 @@ async function copyWorkerForInstaller() {
   return bundleStat.size;
 }
 
+const ASSET_REFERENCE = /(href|src)="((?:\.\.\/)*)(assets\/[^"?#]+)"/g;
+
+async function assetDigest(assetPath) {
+  try {
+    const content = await readFile(join(dist, 'frontend', assetPath));
+    return createHash('sha256').update(content).digest('hex').slice(0, 10);
+  } catch {
+    return null;
+  }
+}
+
+/* GitHub Pages serves static files with a ten minute shared cache, so a stale
+ * wizard.js could load next to a fresh wizard.html and leave the template
+ * picker empty. Every local asset reference is stamped with the content hash of
+ * the file it points at: a changed file gets a brand new URL and the browser can
+ * never pair mismatched revisions again. */
+async function versionAssets() {
+  const front = join(dist, 'frontend');
+  const files = await walk(front, ['.html']);
+  const digests = new Map();
+  let references = 0;
+  for (const file of files) {
+    const source = await readFile(file, 'utf8');
+    if (!source.includes('assets/')) continue;
+    const base = relative(front, dirname(file));
+    const resolve = (prefix, target) => join(base, prefix.replace(/\.\.\//g, '../'), target).split('\\').join('/');
+    for (const [, , prefix, target] of source.matchAll(ASSET_REFERENCE)) {
+      const resolved = resolve(prefix, target);
+      if (digests.has(resolved)) continue;
+      digests.set(resolved, await assetDigest(resolved));
+    }
+    const output = source.replace(ASSET_REFERENCE, (match, attribute, prefix, target) => {
+      const digest = digests.get(resolve(prefix, target));
+      if (!digest) return match;
+      references += 1;
+      return `${attribute}="${prefix}${target}?v=${digest}"`;
+    });
+    if (output !== source) await writeFile(file, output, 'utf8');
+  }
+  return references;
+}
+
 async function copyFrontend() {
   await rm(join(dist, 'frontend'), { recursive: true, force: true });
   await cp(join(root, 'apps/frontend'), join(dist, 'frontend'), { recursive: true });
   const catalog = await stat(join(dist, 'frontend/assets/js/catalog.js'));
   if (catalog.size < 1000) throw new Error('generated catalog is suspiciously small');
+  const references = await versionAssets();
+  if (references < 10) throw new Error('asset versioning did not stamp the frontend');
 }
 
 async function writeBuildInfo() {
