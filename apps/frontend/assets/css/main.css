@@ -61,6 +61,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
@@ -1999,6 +2003,52 @@ pre.code code {
 .summary-row strong {
   text-align: end;
   overflow-wrap: anywhere;
+}
+
+/* ========================================================== misc ui ==== */
+
+.search {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.search > .icon {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 0.75rem;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+.search input {
+  padding-inline-start: 2.3rem;
+}
+
+.template-option.is-active {
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: var(--ring);
+}
+
+details.card > summary {
+  list-style: none;
+}
+
+details.card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.build-steps {
+  margin: 0;
+  padding-inline-start: 1.2rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 2;
+}
+
+.build-steps code {
+  font-size: 0.78rem;
 }
 
 /* ========================================================= dashboard ==== */

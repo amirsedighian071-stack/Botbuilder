@@ -76,31 +76,36 @@
             <div class="prose" id="docsProse">
               <h2 id="quickstart">راه‌اندازی سریع</h2>
               <p>
-                پروژه یک مونوریپوی Node.js با حداقل نسخه ۲۰٫۱۱ است. برای اجرای محلی، ابتدا وابستگی‌ها را نصب و سپس کنترل‌پلین
-                را با درایور حافظه اجرا کنید.
+                این سایت کاملاً ایستا است: ویزارد، بسته استقرار را در همان مرورگر می‌سازد و هیچ سروری برای ساخت ربات لازم
+                نیست. برای اجرای محلی همین سایت:
               </p>
               <pre class="code"><code>git clone https://github.com/amirsedighian071-stack/Botbuilder.git
 cd Botbuilder
 npm install
-npm run typecheck
-npm test</code></pre>
-              <p>اجرای کنترل‌پلین با پایگاه‌داده حافظه برای آزمایش سریع:</p>
-              <pre class="code"><code>PORT=8090 HOST=0.0.0.0 \
-DATABASE_DRIVER=memory \
-SECRET_MASTER_KEY=dev-master-key-change-me \
-JWT_SECRET=dev-jwt-secret-change-me \
-ADMIN_SEED_EMAIL=admin@botforge.local \
-ADMIN_SEED_PASSWORD='ChangeMe#2026' \
-npm run dev:api</code></pre>
-              <p>سرو کردن رابط کاربری به‌صورت ایستا روی پورت ۴۱۷۳:</p>
-              <pre class="code"><code>node scripts/serve-frontend.mjs --port 4173 --host 0.0.0.0</code></pre>
+npm run build
+node scripts/serve-frontend.mjs --port 4173 --host 0.0.0.0</code></pre>
+              <p>
+                مهم‌ترین خروجی ساخت، <code class="code-inline">dist/install/main.js</code> است: یک سرویس تک‌ربات که همه
+                چیزش از متغیرهای محیطی خوانده می‌شود. همان فایل در بسته‌های Cloudflare و Railway استفاده می‌شود:
+              </p>
+              <pre class="code"><code>BOT_TEMPLATE=gold-price \
+BOT_PLATFORM=telegram \
+BOT_TOKEN='123456:AA...' \
+BOT_SLUG=gold-price \
+BOT_NAME='قیمت طلا' \
+BOT_CONFIG_JSON='{"defaultCity":"Tehran"}' \
+SECRET_MASTER_KEY='کلید-۳۲-کاراکتری' \
+JWT_SECRET='کلید-امضای-توکن' \
+ADMIN_SEED_EMAIL='admin@example.com' \
+ADMIN_SEED_PASSWORD='گذرواژه-قوی' \
+PORT=8080 node dist/install/main.js</code></pre>
               <div class="notice">
                 <span data-icon="info" aria-hidden="true"></span>
                 <div>
-                  <strong>حساب مدیر اولیه</strong>
-                  ایمیل و گذرواژه از متغیرهای <code class="code-inline">ADMIN_SEED_EMAIL</code> و
-                  <code class="code-inline">ADMIN_SEED_PASSWORD</code> خوانده می‌شوند. پس از اولین ورود، گذرواژه را تغییر
-                  دهید: <code class="code-inline">POST /api/auth/password</code>
+                  <strong>در اولین اجرا چه می‌شود</strong>
+                  سرویس جدول‌ها را می‌سازد، رکورد ربات را ثبت می‌کند، توکن را با کلید اصلی رمزنگاری می‌کند و آدرس
+                  وب‌هوک را روی پلتفرم ثبت می‌کند. نشانی سلامت در <code class="code-inline">/health</code> و ورود مدیر در
+                  <code class="code-inline">POST /api/auth/login</code> است.
                 </div>
               </div>
 
@@ -112,9 +117,9 @@ npm run dev:api</code></pre>
   engine/             موتور اجرا، مدیریت ربات، صف کار، وب‌هوک
   bot-templates/      ۳۲ قالب ربات و کاتالوگ
 apps/
-  control-plane/      API Fastify + داشبورد + استقرار
+  control-plane/      API Fastify + سرویس install (تک‌ربات) + استقرار
   cloudflare-worker/  نسخه ورکر برای استقرار لبه‌ای
-  frontend/           سایت چندصفحه‌ای ایستا (همین سایت)
+  frontend/           سایت چندصفحه‌ای ایستا + ویزارد سازنده بسته
 scripts/              ساخت، تولید کاتالوگ، سرور پیش‌نمایش</code></pre>
               <p>
                 لایه ذخیره‌سازی با یک قرارداد مشترک پیاده شده است: SQLite برای توسعه، PostgreSQL برای تولید و D1 برای
@@ -131,28 +136,43 @@ packages/engine/src/manager.ts            // createBot, reload, webhookUrl, regi
 packages/engine/src/runtime.ts            // اجرای دستورها، میان‌افزارها، محدودیت نرخ</code></pre>
 
               <h2 id="env">تنظیمات محیطی</h2>
-              <p>متغیرهای اصلی که برای اجرای تولید لازم است:</p>
+              <p>
+                هر بسته استقرار یک ربات را توصیف می‌کند؛ ویزارد همه این متغیرها را در فایل
+                <code class="code-inline">.env</code> می‌نویسد:
+              </p>
               <table>
                 <thead>
                   <tr><th>متغیر</th><th>الزامی</th><th>توضیح</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td><code class="code-inline">PORT</code></td><td>خیر</td><td>پورت سرور، پیش‌فرض ۸۰۹۰</td></tr>
-                  <tr><td><code class="code-inline">DATABASE_DRIVER</code></td><td>بله</td><td>یکی از <code class="code-inline">sqlite</code>، <code class="code-inline">postgres</code> یا <code class="code-inline">d1</code></td></tr>
-                  <tr><td><code class="code-inline">DATABASE_URL</code></td><td>بسته به درایور</td><td>رشته اتصال PostgreSQL</td></tr>
-                  <tr><td><code class="code-inline">SECRET_MASTER_KEY</code></td><td>بله</td><td>کلید رمزنگاری توکن ربات و اعتبارنامه‌ها؛ حداقل ۳۲ کاراکتر</td></tr>
+                  <tr><td><code class="code-inline">BOT_TEMPLATE</code></td><td>بله</td><td>شناسه قالب از کاتالوگ ۳۲ رباتی</td></tr>
+                  <tr><td><code class="code-inline">BOT_PLATFORM</code></td><td>بله</td><td>یکی از <code class="code-inline">telegram</code>، <code class="code-inline">bale</code> یا <code class="code-inline">rubika</code></td></tr>
+                  <tr><td><code class="code-inline">BOT_TOKEN</code></td><td>بله</td><td>توکن ربات؛ با کلید اصلی رمزنگاری و ذخیره می‌شود</td></tr>
+                  <tr><td><code class="code-inline">BOT_SLUG</code></td><td>خیر</td><td>شناسه یکتای ربات و نام سرویس (پیش‌فرض از قالب و پلتفرم ساخته می‌شود)</td></tr>
+                  <tr><td><code class="code-inline">BOT_NAME</code></td><td>خیر</td><td>نام نمایشی ربات در پنل و پیام‌ها</td></tr>
+                  <tr><td><code class="code-inline">BOT_ID</code></td><td>خیر</td><td>شناسه ثابت ربات که ویزارد ساخته است؛ مسیر وب‌هوک را پایدار نگه می‌دارد</td></tr>
+                  <tr><td><code class="code-inline">BOT_WEBHOOK_SECRET</code></td><td>خیر</td><td>کلید مسیر وب‌هوک؛ همان مقداری که در بسته و آدرس وب‌هوک آمده است</td></tr>
+                  <tr><td><code class="code-inline">BOT_CONFIG_JSON</code></td><td>خیر</td><td>تنظیمات اختصاصی قالب به‌صورت JSON معتبر</td></tr>
+                  <tr><td><code class="code-inline">BOT_FORCE_MEMBERSHIP_JSON</code></td><td>خیر</td><td>کانال‌های عضویت اجباری و متن پیام دعوت</td></tr>
+                  <tr><td><code class="code-inline">RUN_MODE</code></td><td>خیر</td><td><code class="code-inline">install</code> برای همین سرویس تک‌ربات؛ سرویس چندرباتی مقدار <code class="code-inline">control-plane</code> دارد</td></tr>
+                  <tr><td><code class="code-inline">SECRET_MASTER_KEY</code></td><td>بله</td><td>کلید رمزنگاری توکن و اعتبارنامه‌ها؛ حداقل ۳۲ کاراکتر</td></tr>
                   <tr><td><code class="code-inline">JWT_SECRET</code></td><td>بله</td><td>امضای توکن ورود مدیران، اعتبار ۱۲ ساعت</td></tr>
-                  <tr><td><code class="code-inline">CORS_ORIGINS</code></td><td>خیر</td><td>فهرست مبدأهای مجاز جداشده با کاما؛ در تولید از <code class="code-inline">*</code> استفاده نکنید</td></tr>
-                  <tr><td><code class="code-inline">SSRF_PROTECTION</code></td><td>خیر</td><td>فعال‌سازی محافظت SSRF در خلاصه‌ساز لینک و وب‌هوک</td></tr>
-                  <tr><td><code class="code-inline">DEPLOY_WORKER_BUNDLE</code></td><td>برای استقرار</td><td>مسیر بسته ورکر؛ پیش‌فرض <code class="code-inline">dist/cloudflare-worker/index.js</code></td></tr>
+                  <tr><td><code class="code-inline">ADMIN_SEED_EMAIL</code></td><td>بله</td><td>ایمیل مدیر اولیه؛ با اولین اجرا ساخته می‌شود</td></tr>
+                  <tr><td><code class="code-inline">ADMIN_SEED_PASSWORD</code></td><td>بله</td><td>گذرواژه مدیر اولیه؛ بعد از اولین ورود تغییر دهید</td></tr>
+                  <tr><td><code class="code-inline">DATABASE_DRIVER</code></td><td>بسته به میزبان</td><td><code class="code-inline">d1</code> برای ورکر، <code class="code-inline">postgres</code> برای Railway، <code class="code-inline">sqlite</code> برای اجرای محلی</td></tr>
+                  <tr><td><code class="code-inline">DATABASE_URL</code></td><td>با postgres</td><td>رشته اتصال پایگاه‌داده</td></tr>
+                  <tr><td><code class="code-inline">PUBLIC_BASE_URL</code></td><td>بله</td><td>دامنه عمومی ربات که در آدرس وب‌هوک استفاده می‌شود</td></tr>
+                  <tr><td><code class="code-inline">CORS_ORIGINS</code></td><td>خیر</td><td>مبدأهای مجاز جداشده با کاما؛ برای کنسول مدیریت همین سایت را اضافه کنید</td></tr>
+                  <tr><td><code class="code-inline">SSRF_PROTECTION</code></td><td>خیر</td><td>محافظت SSRF در خلاصه‌ساز لینک و درخواست‌های بیرونی</td></tr>
                 </tbody>
               </table>
               <div class="notice notice-warn">
                 <span data-icon="alert-triangle" aria-hidden="true"></span>
                 <div>
                   <strong>کلیدها را در مخزن نگذارید</strong>
-                  همه متغیرهای حساس از پنل میزبان یا فایل <code class="code-inline">.env</code> خارج از Git وارد
-                  می‌شوند. فایل <code class="code-inline">.gitignore</code> این مسیرها را پوشش می‌دهد.
+                  فایل <code class="code-inline">.env</code> بسته فقط روی رایانه شما ذخیره می‌شود و
+                  <code class="code-inline">.gitignore</code> بسته آن را نادیده می‌گیرد. رمزها را در پنل میزبان یا
+                  <code class="code-inline">wrangler secret</code> وارد کنید.
                 </div>
               </div>
 
@@ -177,18 +197,19 @@ packages/engine/src/runtime.ts            // اجرای دستورها، میا�
               </p>
 
               <h2 id="wizard">ویزارد و استقرار خودکار</h2>
-              <p>ویزارد شش مرحله دارد و هر مرحله پیش از عبور، ورودی را اعتبارسنجی می‌کند:</p>
+              <p>
+                ویزارد چهار مرحله دارد. هیچ سروری از شما خواسته نمی‌شود: نه آدرس سرویس، نه ایمیل مدیر، نه ورود به پنل
+                واسط.
+              </p>
               <ol>
-                <li>انتخاب قالب ربات از میان ۳۲ قالب.</li>
-                <li>انتخاب پلتفرم، دریافت توکن از BotFather و اعتبارسنجی زنده با <code class="code-inline">getMe</code>.</li>
-                <li>تعیین نام و شناسه یکتای ربات.</li>
-                <li>ورود کلیدهای یکپارچه‌سازی با راهنمای دریافت هر کلید.</li>
-                <li>انتخاب میزبان و اعتبارسنجی توکن Cloudflare یا Railway.</li>
-                <li>بازبینی، ساخت بسته و «تأیید و استقرار خودکار».</li>
+                <li>انتخاب یکی از ۳۲ قالب با جست‌وجو و فیلتر دسته‌بندی.</li>
+                <li>انتخاب پلتفرم (تلگرام، بله، روبیکا) و توکن ربات؛ توکن در صورت دسترسی شبکه، با <code class="code-inline">getMe</code> بررسی می‌شود و در غیر این صورت فقط الگوی آن اعتبارسنجی می‌شود.</li>
+                <li>ورود کلیدهای یکپارچه‌سازی همان قالب، همراه با لینک مستقیم صفحه رسمی ساخت کلید.</li>
+                <li>نام و شناسه ربات، انتخاب میزبان و دکمه «ساخت و استقرار خودکار».</li>
               </ol>
               <p>
-                دکمه‌های «دریافت API» همیشه به صفحه رسمی ساخت توکن لینک می‌شوند. پس از ورود توکن، در صورت اتصال به
-                کنترل‌پلین، اعتبارسنجی خودکار انجام می‌شود؛ بدون اتصال، فقط قالب توکن بررسی و بسته استقرار دانلود می‌شود.
+                در پایان، بسته کامل به‌صورت ZIP دانلود می‌شود: فایل‌های متغیر محیطی، اسکریپت استقرار، تنظیمات میزبان و
+                آدرس آماده وب‌هوک. توکن و کلیدها فقط در حافظه همان تب پردازش می‌شوند.
               </p>
 
               <h2 id="force-membership">عضویت اجباری</h2>
@@ -242,6 +263,11 @@ packages/engine/src/runtime.ts            // اجرای دستورها، میا�
                   <tr><td><code class="code-inline">POST …/deployments/:id/health</code></td><td>bots:write</td><td>بررسی دوباره سلامت</td></tr>
                   <tr><td><code class="code-inline">GET …/deployments/:id/package</code></td><td>bots:read</td><td>فایل‌های بسته استقرار</td></tr>
                   <tr><td><code class="code-inline">GET /api/system/stats</code></td><td>system:read</td><td>آمار کل سامانه</td></tr>
+                  <tr><td><code class="code-inline">GET /api/system/config</code></td><td>system:read</td><td>پیکربندی ماسک‌شده و وضعیت کلیدهای یکپارچه‌سازی</td></tr>
+                  <tr><td><code class="code-inline">GET /api/system/jobs</code></td><td>system:read</td><td>کارهای صف با فیلتر وضعیت</td></tr>
+                  <tr><td><code class="code-inline">GET /api/auth/admins</code></td><td>system:read</td><td>فهرست مدیران و وضعیت فعال بودن</td></tr>
+                  <tr><td><code class="code-inline">GET /api/keys</code></td><td>system:read</td><td>کلیدهای API با پیشوند و دامنه دسترسی</td></tr>
+                  <tr><td><code class="code-inline">GET /api/audits</code></td><td>system:read</td><td>رکوردهای حسابرسی با صفحه‌بندی</td></tr>
                 </tbody>
               </table>
               <p>نمونه ساخت کلید API و ساخت ربات:</p>
@@ -265,85 +291,62 @@ curl -X POST "https://SERVER/api/bots" \
 
               <h2 id="auto-deploy">استقرار خودکار</h2>
               <p>
-                استقرار یک عملیات ناهمگام است: درخواست با کد ۲۰۲ پذیرفته می‌شود و گام‌ها در پس‌زمینه اجرا می‌شوند. برای
-                پیگیری، مسیر وضعیت را تا رسیدن به <code class="code-inline">healthy</code> یا
-                <code class="code-inline">failed</code> بخوانید.
+                استقرار روی Cloudflare با یک دستور در پوشه بسته انجام می‌شود. اسکریپت به‌ترتیب پایگاه‌داده D1 را می‌سازد،
+                طرح‌واره و رکورد ربات را وارد می‌کند، رمزها را به‌عنوان secret ثبت می‌کند، ورکر را منتشر می‌کند و وب‌هوک را
+                روی پلتفرم ثبت می‌کند:
               </p>
-              <pre class="code"><code>curl -X POST "https://SERVER/api/bots/BOT_ID/deploy" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "provider": "cloudflare",
-    "credentials": { "apiToken": "CLOUDFLARE_TOKEN" },
-    "integrationKeys": { "OPENAI_API_KEY": "sk-..." },
-    "corsOrigins": "https://example.com"
-  }'</code></pre>
-              <p>پاسخ آغاز استقرار:</p>
-              <pre class="code"><code>{
-  "deployment": {
-    "id": "dep_ab12cd34",
-    "botId": "bot_9f...",
-    "provider": "cloudflare",
-    "status": "queued",
-    "steps": [],
-    "urls": {}
-  },
-  "statusUrl": "/api/bots/bot_9f.../deployments/dep_ab12cd34"
-}</code></pre>
-              <h3>گام‌های واقعی</h3>
-              <ol>
-                <li><code class="code-inline">validate</code> — بررسی توکن پلتفرم و اعتبارنامه میزبان.</li>
-                <li><code class="code-inline">database</code> یا <code class="code-inline">project</code> — ساخت D1 و اجرای طرح‌واره، یا ساخت پروژه Railway.</li>
-                <li><code class="code-inline">service</code> — ساخت سرویس مقصد برای Railway.</li>
-                <li><code class="code-inline">upload</code> یا <code class="code-inline">variables</code> — بارگذاری ماژول ورکر و رمزها، یا تنظیم متغیرهای سرویس.</li>
-                <li><code class="code-inline">domain</code> — تخصیص دامنه <code class="code-inline">workers.dev</code> یا دامنه Railway.</li>
-                <li><code class="code-inline">wait</code> — انتظار برای پایان استقرار سرویس.</li>
-                <li><code class="code-inline">webhook</code> — ثبت آدرس <code class="code-inline">/webhooks/&lt;platform&gt;/&lt;botId&gt;/&lt;secret&gt;</code>.</li>
-                <li><code class="code-inline">health</code> — درخواست <code class="code-inline">/health</code> و ثبت کد پاسخ و تأخیر.</li>
-              </ol>
-              <p>پاسخ وضعیت شامل گام‌ها، گزارش‌ها، آدرس‌ها و نتیجه سلامت است:</p>
-              <pre class="code"><code>{
-  "deployment": {
-    "status": "healthy",
-    "urls": {
-      "app": "https://botforge-gold-price.account.workers.dev",
-      "webhook": "https://botforge-gold-price.account.workers.dev/webhooks/telegram/bot_9f.../whsec_...",
-      "health": "https://botforge-gold-price.account.workers.dev/health"
-    },
-    "health": { "ok": true, "status": 200, "latencyMs": 184 }
-  }
-}</code></pre>
+              <pre class="code"><code>bash deploy.sh
+# یا معادل آن:
+npx --yes wrangler deploy
+npx --yes wrangler d1 execute botforge-gold-price --remote --file=schema.sql --yes</code></pre>
+              <p>
+                روی Railway، همان پوشه با <code class="code-inline">railway.json</code> و
+                <code class="code-inline">Dockerfile</code> ساخته می‌شود؛ ایمیج، <code class="code-inline">dist/install/main.js</code>
+                را اجرا می‌کند و متغیرها از <code class="code-inline">.env</code> تنظیم می‌شوند:
+              </p>
+              <pre class="code"><code>bash deploy.sh
+# جایگزین بدون CLI:
+docker compose up -d --build</code></pre>
+              <p>
+                پس از استقرار، آدرس <code class="code-inline">/health</code> سرویس را در صفحه
+                <a href="deployment.html">استقرار</a> ثبت کنید تا کد پاسخ، تأخیر و نسخه سرویس نمایش داده شود.
+              </p>
               <h3>دسترسی‌های لازم</h3>
               <p>
                 توکن Cloudflare باید دسترسی <strong>Workers Scripts:Edit</strong>، <strong>D1:Edit</strong> و
                 <strong>Account Settings:Read</strong> داشته باشد. توکن Railway از صفحه
                 <a href="https://railway.com/account/tokens" target="_blank" rel="noopener noreferrer">Account Tokens</a>
-                ساخته می‌شود و به پروژه‌های همان حساب دسترسی دارد.
+                ساخته می‌شود و فقط به پروژه‌های همان حساب دسترسی دارد.
               </p>
-              <div class="notice notice-warn">
-                <span data-icon="alert-triangle" aria-hidden="true"></span>
+              <div class="notice">
+                <span data-icon="shield-check" aria-hidden="true"></span>
                 <div>
-                  <strong>محدودیت واقعی GitHub Pages</strong>
-                  این سایت ایستا است و نمی‌تواند به‌جای شما درخواست API بفرستد. اعتبارسنجی زنده و استقرار خودکار فقط با
-                  آدرس کنترل‌پلین در دسترس است. برای همین، ویزارد در حالت بدون سرور بسته استقرار و اسکریپت bash معتبر
-                  می‌سازد.
+                  <strong>بدون واسطه</strong>
+                  توکن میزبان و توکن ربات هرگز به سرور شخص ثالثی فرستاده نمی‌شوند؛ فقط در همان تب مرورگر برای تولید
+                  فایل‌های بسته استفاده می‌شوند و در بسته ZIP ذخیره می‌شوند.
                 </div>
               </div>
-              <p>پس از استقرار، برای اطمینان از دریافت پیام، وب‌هوک را دوباره ثبت کنید:</p>
-              <pre class="code"><code>curl -X POST "https://SERVER/api/bots/BOT_ID/webhook/register" \
-  -H "Authorization: Bearer $ADMIN_TOKEN"</code></pre>
 
               <h2 id="deploy-package">بسته استقرار</h2>
-              <p>مسیر <code class="code-inline">GET /api/bots/:id/deployments/:id/package</code> چهار بخش برمی‌گرداند:</p>
-              <ul>
-                <li><code class="code-inline">.env</code> — متغیرهای غیرحساس و ماسک‌شده برای بازبینی.</li>
-                <li><code class="code-inline">.env.secrets</code> — مقادیر حساس تولیدشده در سمت سرور.</li>
-                <li><code class="code-inline">deploy.sh</code> — اسکریپت بازتولید همان استقرار.</li>
-                <li><code class="code-inline">webhook.txt</code> — آدرس نهایی وب‌هوک.</li>
-              </ul>
+              <p>هر ZIP شامل این فایل‌ها است:</p>
+              <table>
+                <thead>
+                  <tr><th>فایل</th><th>کار</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code class="code-inline">.env</code> و <code class="code-inline">.env.example</code></td><td>همه متغیرهای <code class="code-inline">BOT_*</code> و رمزهای تولیدشده</td></tr>
+                  <tr><td><code class="code-inline">deploy.sh</code></td><td>اسکریپت استقرار مخصوص میزبان انتخابی</td></tr>
+                  <tr><td><code class="code-inline">wrangler.toml</code> + <code class="code-inline">schema.sql</code> + <code class="code-inline">bot-row.sql</code></td><td>پیکربندی ورکر، طرح‌واره D1 و رکورد آماده ربات</td></tr>
+                  <tr><td><code class="code-inline">railway.json</code> + <code class="code-inline">Dockerfile</code> + <code class="code-inline">docker-compose.yml</code></td><td>استقرار کانتینری روی Railway یا هر میزبان Docker</td></tr>
+                  <tr><td><code class="code-inline">webhook.txt</code></td><td>آدرس کامل و آماده وب‌هوک همراه با مسیر و کلید</td></tr>
+                  <tr><td><code class="code-inline">botforge.install.json</code></td><td>مشخصات نصب برای بازسازی و پیگیری در همین سایت</td></tr>
+                  <tr><td><code class="code-inline">src/index.js</code></td><td>کد ورکر آماده آپلود (در بسته Cloudflare، وقتی build اجرا شده باشد)</td></tr>
+                  <tr><td><code class="code-inline">README.md</code></td><td>مراحل دقیق همان استقرار با دستورهای قابل کپی</td></tr>
+                </tbody>
+              </table>
               <p>
-                فایل‌های حاوی رمز را فقط در محیط امن نگه دارید. توصیه می‌شود پس از دریافت، آن‌ها را در رمزنگاری‌شده ذخیره
-                و از مخزن Git دور نگه دارید.
+                فایل‌های حاوی رمز را در محیط امن نگه دارید. صفحه <a href="dashboard.html">داشبورد</a> می‌تواند بسته را با
+                همان مقادیر دوباره بسازد، به‌شرط آنکه نشست مرورگر باز مانده باشد؛ در غیر این صورت یک نصب تازه بسازید.
               </p>
 
               <h2 id="security">امنیت</h2>
@@ -369,9 +372,10 @@ curl -X POST "https://SERVER/api/bots" \
               </p>
               <h4>خطای «بسته ورکر پیدا نشد»</h4>
               <p>
-                سرور بسته ورکر را از مسیر <code class="code-inline">dist/cloudflare-worker/index.js</code> می‌خواند. ابتدا
-                <code class="code-inline">npm run build</code> را اجرا کنید یا مسیر را با
-                <code class="code-inline">DEPLOY_WORKER_BUNDLE</code> مشخص کنید.
+                ویزارد کد ورکر را از همان سایت دانلود و داخل بسته قرار می‌دهد؛ اگر شبکه اجازه نداد، فایل
+                <code class="code-inline">src/index.js</code> از بسته‌های قبلی یا خروجی
+                <code class="code-inline">npm run build</code> (مسیر <code class="code-inline">dist/cloudflare-worker/index.js</code>)
+                را در پوشه بسته بگذارید و <code class="code-inline">bash deploy.sh</code> را دوباره اجرا کنید.
               </p>
               <h4>استقرار در گام <code class="code-inline">webhook</code> متوقف می‌شود</h4>
               <p>
@@ -385,13 +389,15 @@ curl -X POST "https://SERVER/api/bots" \
               </p>
               <h4>داشبورد داده نشان نمی‌دهد</h4>
               <p>
-                ابتدا از اتصال به کنترل‌پلین مطمئن شوید. اگر آدرس درست است اما خطای ۴۰۱ می‌گیرید، توکن منقضی شده است؛
-                دوباره وارد شوید. در حالت بدون سرور، هیچ داده‌ای وجود ندارد و این رفتار طبیعی است.
+                داشبورد محلی فقط نصب‌های همین مرورگر را نشان می‌دهد و داده زنده ندارد. برای آمار، کاربران و پیام همگانی،
+                از صفحه <a href="admin/index.html">کنسول مدیریت</a> با ایمیل و گذرواژه‌ای که در <code class="code-inline">.env</code>
+                بسته آمده وارد سرویس مستقرشده شوید. خطای ۴۰۱ یعنی نشست منقضی شده است؛ دوباره وارد شوید.
               </p>
               <h4>خطای CORS در مرورگر</h4>
               <p>
-                دامنه سایت را در <code class="code-inline">CORS_ORIGINS</code> سرور اضافه کنید و سرور را دوباره راه‌اندازی
-                کنید. برای محیط آزمایش می‌توانید موقتاً از <code class="code-inline">*</code> استفاده کنید.
+                آدرس سایت را در <code class="code-inline">CORS_ORIGINS</code> سرویس اضافه کنید:
+                <code class="code-inline">https://amirsedighian071-stack.github.io</code>. برای آزمایش می‌توانید موقتاً از
+                <code class="code-inline">*</code> استفاده کنید، اما آن را در محیط تولید نگه ندارید.
               </p>
             </div>
           </div>

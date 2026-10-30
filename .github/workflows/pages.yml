@@ -5,7 +5,9 @@ on:
     branches: ['main']
     paths:
       - 'apps/frontend/**'
-      - 'packages/bot-templates/**'
+      - 'apps/cloudflare-worker/**'
+      - 'packages/**'
+      - 'scripts/build.mjs'
       - 'scripts/generate-catalog.mjs'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -33,8 +35,10 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Regenerate bot catalog from templates
-        run: node --import tsx scripts/generate-catalog.mjs
+      - name: Build frontend, installer assets and worker bundle
+        # The wizard embeds assets/installer/schema.sql and assets/installer/worker.js
+        # into the deployment package, so Pages must serve the built output.
+        run: npm run build
 
       - name: Verify frontend has no emoji
         run: |
@@ -72,7 +76,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/frontend
+          path: dist/frontend
 
   deploy:
     needs: build

@@ -3,29 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>استقرار خودکار — BotForge</title>
+    <title>استقرار و سلامت — BotForge</title>
     <meta
       name="description"
-      content="استقرار خودکار BotForge روی Cloudflare Workers و Railway: تاریخچه استقرار، گام‌های زنده، گزارش، بررسی سلامت و دانلود بسته استقرار."
+      content="صفحه استقرار BotForge: ثبت دامنه سرویس، بررسی واقعی مسیر سلامت، آدرس وب‌هوک و دستورهای دقیق استقرار بسته روی Cloudflare Workers یا Railway و Docker."
     />
     <meta name="theme-color" content="#071021" />
     <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
     <link rel="manifest" href="site.webmanifest" />
-    <style>
-      :root { color-scheme: dark; }
-      html { background: #040a18; }
-      body {
-        margin: 0;
-        background: #040a18;
-        color: #dbe6f5;
-        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
-        line-height: 1.85;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
-      .site-header { min-height: 68px; }
-    </style>
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
   <body data-page="deployment">
@@ -40,128 +25,94 @@
             <span data-icon="chevron-left" aria-hidden="true"></span>
             <span>استقرار</span>
           </nav>
-          <span class="eyebrow">Cloudflare Workers و Railway</span>
-          <h1>استقرار خودکار و پایش سلامت</h1>
+          <span class="eyebrow">پس از ساخت بسته</span>
+          <h1>استقرار و بررسی سلامت</h1>
           <p>
-            سرور BotForge با API رسمی میزبان، پایگاه‌داده می‌سازد، کد را بارگذاری می‌کند، متغیرها را تزریق می‌کند،
-            وب‌هوک را ثبت می‌کند و سلامت سرویس را می‌سنجد. این صفحه وضعیت همان عملیات را نشان می‌دهد.
+            بسته‌ای که ویزارد ساخته، خودش پایگاه‌داده، رازها، ورکر یا کانتینر و وب‌هوک را می‌سازد. این‌جا دامنه نهایی را
+            ثبت می‌کنید تا وضعیت واقعی سرویس بررسی شود و آدرس وب‌هوک کامل را بردارید.
           </p>
         </div>
       </section>
 
-      <section class="section-tight" id="deployGate" hidden>
-        <div class="container container-narrow">
-          <div class="card card-pad">
-            <h2>اتصال به کنترل‌پلین</h2>
-            <p class="tiny dim">فهرست استقرارها و بسته‌های خروجی مستقیماً از API سرور شما خوانده می‌شوند.</p>
-            <form id="gateForm" class="form-grid" autocomplete="off">
-              <div class="field span-2">
-                <label for="gateBase">آدرس کنترل‌پلین</label>
-                <input id="gateBase" class="input" dir="ltr" placeholder="https://botforge.example.com" />
+      <section class="section-tight">
+        <div class="container">
+          <div id="deployEmpty"></div>
+
+          <div id="deployApp" hidden>
+            <div class="filter-bar">
+              <div class="field" style="flex: 1 1 260px; min-width: 0">
+                <label for="installSelect">نصب</label>
+                <select id="installSelect" aria-label="انتخاب نصب"></select>
               </div>
-              <div class="field">
-                <label for="gateEmail">ایمیل مدیر</label>
-                <input id="gateEmail" class="input" dir="ltr" type="email" placeholder="admin@botforge.local" />
-              </div>
-              <div class="field">
-                <label for="gatePassword">گذرواژه</label>
-                <input id="gatePassword" class="input" dir="ltr" type="password" placeholder="••••••••" />
-              </div>
-              <div class="field span-2">
-                <div class="btn-row">
-                  <button type="button" class="btn btn-primary" id="gateLoginBtn">ورود و بارگذاری</button>
-                  <a class="btn btn-ghost" href="docs.html#auto-deploy">مستندات استقرار</a>
+              <span class="badge badge-info" id="installProvider"></span>
+            </div>
+
+            <div class="grid grid-2" style="align-items: start">
+              <div class="card">
+                <div class="card-head"><h3>مشخصات نصب</h3></div>
+                <div class="card-body">
+                  <div class="selection-summary" id="installFacts"></div>
+                  <div class="mt-2" id="webhookRow"></div>
                 </div>
-                <div class="field-status" id="gateStatus"></div>
               </div>
-            </form>
-          </div>
-        </div>
-      </section>
 
-      <section class="section-tight" id="deployApp" hidden>
-        <div class="container">
-          <div class="filter-bar">
-            <div class="field" style="flex: 1 1 260px; min-width: 0" id="botSelectWrap">
-              <label for="botSelect">ربات</label>
-              <select id="botSelect" aria-label="انتخاب ربات"></select>
-            </div>
-            <div class="btn-row">
-              <button type="button" class="btn btn-outline btn-sm" id="refreshDeployments">به‌روزرسانی</button>
-              <button type="button" class="btn btn-primary btn-sm" id="newDeploy">استقرار جدید</button>
-            </div>
-          </div>
-
-          <div id="noBots" hidden>
-            <div class="empty">
-              <span data-icon="bot" aria-hidden="true"></span>
-              <span>برای استقرار ابتدا یک ربات بسازید.</span>
-              <a class="btn btn-primary btn-sm" href="wizard.html">ساخت ربات</a>
-            </div>
-          </div>
-
-          <div class="grid grid-2" style="align-items: start">
-            <div class="card">
-              <div class="card-head"><h3>تاریخچه استقرارها</h3></div>
-              <div class="card-body" id="deployHistory"></div>
-            </div>
-
-            <div class="card">
-              <div class="card-head"><h3 id="deployDetailTitle">جزئیات استقرار</h3></div>
-              <div class="card-body" id="deployDetail"></div>
-            </div>
-          </div>
-
-          <h2 class="mt-3">سرویس‌های میزبانی پشتیبانی‌شده</h2>
-          <div id="providersBox"></div>
-
-          <div class="grid grid-2 mt-3">
-            <div class="card card-pad">
-              <h3>مسیر واقعی استقرار</h3>
-              <ol class="muted" style="font-size: 0.88rem">
-                <li>اعتبارسنجی توکن ربات با فراخوانی <code class="code-inline">getMe</code> پلتفرم.</li>
-                <li>بررسی توکن میزبان با API رسمی Cloudflare یا Railway.</li>
-                <li>ساخت پایگاه‌داده D1 یا اتصال PostgreSQL و اجرای طرح‌واره.</li>
-                <li>تزریق متغیرهای محیطی و رمزهای تولیدشده در سمت سرور.</li>
-                <li>بارگذاری بسته ورکر یا استقرار سرویس Node.js و تخصیص دامنه.</li>
-                <li>ثبت وب‌هوک با کلید مخفی در پلتفرم پیام‌رسان.</li>
-                <li>درخواست <code class="code-inline">/health</code> و ثبت نتیجه در تاریخچه.</li>
-              </ol>
-            </div>
-            <div class="card card-pad">
-              <h3>اگر API در دسترس نباشد</h3>
-              <p class="muted" style="font-size: 0.88rem">
-                GitHub Pages نمی‌تواند کد سمت سرور اجرا کند. در این حالت ویزارد یک بسته واقعی می‌سازد: فایل
-                <code class="code-inline">.env</code>، نقشه استقرار JSON و اسکریپت bash که همان دو درخواست API را با
-                <code class="code-inline">curl</code> اجرا می‌کند. برای اعتبارسنجی زنده، کنترل‌پلین را با
-                <code class="code-inline">docker compose up</code> یا Railway راه‌اندازی کنید.
-              </p>
-              <div class="btn-row mt-2">
-                <a class="btn btn-outline btn-sm" href="docs.html#auto-deploy">راهنمای کامل استقرار</a>
-                <a class="btn btn-ghost btn-sm" href="wizard.html">رفتن به ویزارد</a>
+              <div class="card">
+                <div class="card-head">
+                  <h3>دامنه و سلامت</h3>
+                  <button type="button" class="btn btn-outline btn-sm" id="healthBtn">
+                    <span data-icon="activity" aria-hidden="true"></span>
+                    بررسی سلامت
+                  </button>
+                </div>
+                <div class="card-body">
+                  <div class="field">
+                    <label for="publicBaseUrl">آدرس عمومی سرویس</label>
+                    <div class="input-group">
+                      <input id="publicBaseUrl" class="input" dir="ltr" placeholder="https://botforge-my-shop.workers.dev" />
+                      <button type="button" class="btn btn-secondary btn-sm" id="saveDomain">ذخیره</button>
+                    </div>
+                    <span class="hint">همان آدرسی که اسکریپت deploy.sh چاپ می‌کند یا دامنه Railway شما.</span>
+                  </div>
+                  <div class="field-status mt-1" id="healthStatus" role="status" aria-live="polite"></div>
+                  <div class="selection-summary mt-2" id="healthDetails"></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="notice notice-warn mt-3">
-            <span data-icon="alert-triangle" aria-hidden="true"></span>
-            <div>
-              <strong>توکن میزبان همان دسترسی GitHub نیست</strong>
-              توکن Railway یا Cloudflare فقط برای ساخت سرویس و متغیرها استفاده می‌شود. برای استقرار از مخزن GitHub روی
-              Railway، باید مخزن را یک بار در حساب Railway متصل کنید؛ این کار از مرورگر و با API توکن انجام نمی‌شود.
+            <div class="card mt-2">
+              <div class="card-head">
+                <h3>دستورهای استقرار</h3>
+                <span class="tiny dim" id="deployProviderLabel"></span>
+              </div>
+              <div class="card-body" id="deploySteps"></div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section class="section">
-        <div class="container">
-          <div class="cta-band">
-            <h2>آماده استقرار اولین ربات هستید؟</h2>
-            <p>ویزارد همه پیش‌نیازها را بررسی می‌کند و در پایان استقرار، آدرس سرویس و وب‌هوک را به شما می‌دهد.</p>
-            <div class="btn-row">
-              <a class="btn btn-primary btn-lg" href="wizard.html">شروع استقرار خودکار</a>
-              <a class="btn btn-outline btn-lg" href="docs.html#auto-deploy">مطالعه مستندات</a>
+            <div class="grid grid-2 mt-2" style="align-items: start">
+              <div class="card">
+                <div class="card-head"><h3>فایل‌های بسته</h3></div>
+                <div class="card-body">
+                  <div class="chips" id="fileChips"></div>
+                  <div class="btn-row mt-2">
+                    <button type="button" class="btn btn-outline btn-sm" id="regenerateBtn">دانلود دوباره بسته</button>
+                    <a class="btn btn-ghost btn-sm" href="dashboard.html">بازگشت به داشبورد</a>
+                  </div>
+                  <p class="tiny dim mt-1" id="regenHint"></p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h3>میزبان‌ها</h3></div>
+                <div class="card-body stack" id="providersBox"></div>
+              </div>
+            </div>
+
+            <div class="notice mt-2">
+              <span data-icon="info" aria-hidden="true"></span>
+              <div>
+                <strong>پس از هر تغییر تنظیمات</strong>
+                اگر عضویت اجباری یا کلیدها را عوض کردید، دوباره بسته بسازید و استقرار را تکرار کنید؛ یا از کنسول مدیریت
+                مقدار جدید را روی سرویس زنده اعمال کنید.
+              </div>
             </div>
           </div>
         </div>
@@ -174,6 +125,8 @@
     <script src="assets/js/catalog.js"></script>
     <script src="assets/js/api.js"></script>
     <script src="assets/js/site.js"></script>
+    <script src="assets/js/installer.js"></script>
+    <script src="assets/js/installations.js"></script>
     <script src="assets/js/deployment.js"></script>
   </body>
 </html>

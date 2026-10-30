@@ -3,29 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>داشبورد مدیریت ربات — BotForge</title>
+    <title>داشبورد نصب‌ها — BotForge</title>
     <meta
       name="description"
-      content="داشبورد BotForge: آمار زنده کاربران و پیام‌ها، مدیریت و مسدودسازی کاربران، ارسال همگانی محدودشده، عضویت اجباری، تنظیمات و رویدادهای هر ربات."
+      content="همه ربات‌هایی که با ویزارد BotForge ساخته‌اید در یک نگاه: نام سرویس، پلتفرم، وب‌هوک، بررسی سلامت سرویس مستقرشده، دانلود دوباره بسته و ورود به کنسول مدیریت."
     />
     <meta name="theme-color" content="#071021" />
     <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
     <link rel="manifest" href="site.webmanifest" />
-    <style>
-      :root { color-scheme: dark; }
-      html { background: #040a18; }
-      body {
-        margin: 0;
-        background: #040a18;
-        color: #dbe6f5;
-        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
-        line-height: 1.85;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
-      .site-header { min-height: 68px; }
-    </style>
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
   <body data-page="dashboard">
@@ -38,242 +23,36 @@
           <nav class="breadcrumb" aria-label="مسیر صفحه">
             <a href="index.html">خانه</a>
             <span data-icon="chevron-left" aria-hidden="true"></span>
-            <span>داشبورد</span>
+            <span>داشبورد نصب‌ها</span>
           </nav>
-          <span class="eyebrow">پنل مدیریت</span>
-          <h1>داشبورد ربات‌های شما</h1>
+          <span class="eyebrow">نصب‌های این مرورگر</span>
+          <h1>داشبورد نصب‌ها</h1>
           <p>
-            آمار زنده، کاربران، ارسال همگانی، عضویت اجباری و تنظیمات هر ربات در یک صفحه. برای دیدن داده واقعی باید به
-            کنترل‌پلین خودتان متصل شوید.
+            هر رباتی که در این مرورگر ساخته‌اید این‌جا نگه داشته می‌شود؛ بدون حساب کاربری و بدون سرور. آدرس سرویس
+            مستقرشده را ثبت کنید تا سلامت آن به‌صورت واقعی بررسی شود.
           </p>
-        </div>
-      </section>
-
-      <section class="section-tight" id="dashGate" hidden>
-        <div class="container container-narrow">
-          <div class="card card-pad">
-            <h2>اتصال به کنترل‌پلین</h2>
-            <p class="tiny dim">
-              داشبورد با API سرور BotForge شما کار می‌کند. اگر سرور را روی Railway یا سرور خودتان مستقر کرده‌اید، آدرس آن
-              را وارد کنید. اگر آدرس را نمی‌دانید، ابتدا مستندات استقرار را بخوانید.
-            </p>
-            <form id="gateForm" class="form-grid" autocomplete="off">
-              <div class="field span-2">
-                <label for="gateBase">آدرس کنترل‌پلین</label>
-                <input id="gateBase" class="input" dir="ltr" placeholder="https://botforge.example.com" />
-                <span class="hint">آدرس شامل پروتکل باشد: <code class="code-inline">https://...</code></span>
-              </div>
-              <div class="field">
-                <label for="gateEmail">ایمیل مدیر</label>
-                <input id="gateEmail" class="input" dir="ltr" type="email" placeholder="admin@botforge.local" />
-              </div>
-              <div class="field">
-                <label for="gatePassword">گذرواژه</label>
-                <input id="gatePassword" class="input" dir="ltr" type="password" placeholder="••••••••" />
-              </div>
-              <div class="field span-2">
-                <div class="btn-row">
-                  <button type="button" class="btn btn-primary" id="gateLoginBtn">ورود و بارگذاری داشبورد</button>
-                  <a class="btn btn-ghost" href="docs.html#api">راهنمای راه‌اندازی سرور</a>
-                </div>
-                <div class="field-status" id="gateStatus"></div>
-              </div>
-            </form>
+          <div class="btn-row mt-2">
+            <a class="btn btn-primary" href="wizard.html">
+              <span data-icon="plus" aria-hidden="true"></span>
+              ساخت ربات جدید
+            </a>
+            <a class="btn btn-outline" href="deployment.html">راهنمای استقرار</a>
           </div>
         </div>
       </section>
 
-      <section class="section-tight" id="dashApp" hidden>
+      <section class="section-tight">
         <div class="container">
-          <div class="dash-layout">
-            <aside class="dash-side">
-              <div class="card">
-                <div class="card-head">
-                  <h3 style="margin: 0">ربات‌ها</h3>
-                  <a class="btn btn-ghost btn-sm" href="wizard.html">ربات جدید</a>
-                </div>
-                <div class="bot-switcher" id="botSwitcher"></div>
-              </div>
+          <div class="stats-grid" id="installStats"></div>
+          <div id="installGrid" class="grid grid-2 mt-2" style="align-items: start"></div>
+          <div id="dashboardEmpty"></div>
 
-              <div class="card card-pad">
-                <h4>وضعیت ربات</h4>
-                <div class="field mt-1">
-                  <label class="sr-only" for="statusSelect">تغییر وضعیت</label>
-                  <select id="statusSelect" aria-label="وضعیت ربات">
-                    <option value="active">فعال</option>
-                    <option value="paused">متوقف</option>
-                    <option value="maintenance">حالت تعمیر</option>
-                    <option value="disabled">غیرفعال</option>
-                  </select>
-                  <span class="hint">حالت تعمیر پیام‌ها را متوقف و برای کاربران پیام نگهداری ارسال می‌کند.</span>
-                </div>
-                <div class="divider"></div>
-                <div class="stack">
-                  <button type="button" class="btn btn-outline btn-sm" id="registerWebhook">ثبت وب‌هوک روی پلتفرم</button>
-                  <button type="button" class="btn btn-ghost btn-sm" id="deleteWebhook">حذف وب‌هوک</button>
-                </div>
-              </div>
-
-              <div class="card card-pad">
-                <h4>اتصال‌های سریع</h4>
-                <div class="stack mt-1">
-                  <a class="btn btn-ghost btn-sm" href="deployment.html">تاریخچه استقرار</a>
-                  <a class="btn btn-ghost btn-sm" href="catalog.html">کاتالوگ ربات‌ها</a>
-                  <a class="btn btn-ghost btn-sm" href="docs.html#force-membership">راهنمای عضویت اجباری</a>
-                </div>
-              </div>
-            </aside>
-
-            <div class="dash-main" id="dashMain">
-              <div class="card card-pad">
-                <div class="row-between">
-                  <div style="min-width: 0">
-                    <h2 id="botTitle" style="margin-bottom: 0.3rem">ربات</h2>
-                    <div class="chips" id="botSubtitle"></div>
-                  </div>
-                  <button type="button" class="btn btn-outline btn-sm" id="refreshDash">به‌روزرسانی</button>
-                </div>
-                <div class="mt-2" id="webhookBox"></div>
-                <div class="health-row mt-2" id="healthRow"></div>
-              </div>
-
-              <div class="stats-grid" id="dashStats"></div>
-
-              <div class="tabs" id="dashTabs" role="tablist" aria-label="بخش‌های داشبورد">
-                <button type="button" class="tab is-active" data-tab="overview" role="tab" aria-selected="true">نمای کلی</button>
-                <button type="button" class="tab" data-tab="users" role="tab" aria-selected="false">کاربران</button>
-                <button type="button" class="tab" data-tab="broadcast" role="tab" aria-selected="false">پیام همگانی</button>
-                <button type="button" class="tab" data-tab="force" role="tab" aria-selected="false">عضویت اجباری</button>
-                <button type="button" class="tab" data-tab="settings" role="tab" aria-selected="false">تنظیمات</button>
-                <button type="button" class="tab" data-tab="events" role="tab" aria-selected="false">رویدادها</button>
-              </div>
-
-              <section data-tab-panel="overview" data-group="dash">
-                <div class="grid grid-2">
-                  <div class="card">
-                    <div class="card-head"><h3>آخرین استقرار</h3></div>
-                    <div class="card-body" id="deploymentBox"></div>
-                  </div>
-                  <div class="card">
-                    <div class="card-head"><h3>عضویت اجباری</h3></div>
-                    <div class="card-body">
-                      <p class="tiny dim">وضعیت فعلی: <strong id="forceSummary">غیرفعال</strong></p>
-                      <p class="tiny muted">
-                        با فعال‌سازی، ربات پیش از هر پاسخ عضویت کاربر در کانال‌های مشخص‌شده را بررسی می‌کند و برای
-                        غیرعضوها لینک عضویت می‌فرستد.
-                      </p>
-                      <button type="button" class="btn btn-outline btn-sm" data-open-tab="force">تنظیم کانال‌ها</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="card mt-2">
-                  <div class="card-head"><h3>آخرین رویدادها</h3></div>
-                  <div class="card-body" id="eventsBox"></div>
-                </div>
-              </section>
-
-              <section data-tab-panel="users" data-group="dash" hidden>
-                <div class="card">
-                  <div class="card-head">
-                    <h3>کاربران ربات</h3>
-                    <div class="filter-bar" style="margin: 0; padding: 0.4rem; border: 0; background: transparent">
-                      <div class="search">
-                        <span data-icon="search" aria-hidden="true"></span>
-                        <label class="sr-only" for="usersSearch">جست‌وجوی کاربر</label>
-                        <input class="input" id="usersSearch" type="search" placeholder="نام یا شناسه کاربر..." />
-                      </div>
-                      <select id="usersBlocked" aria-label="فیلتر مسدودسازی">
-                        <option value="">همه کاربران</option>
-                        <option value="true">مسدودشده‌ها</option>
-                        <option value="false">کاربران مجاز</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="table-wrap">
-                    <table class="data-table data-stack">
-                      <caption>مدیریت کاربران: مسدودسازی، تغییر نقش و حذف کامل داده کاربر.</caption>
-                      <thead>
-                        <tr>
-                          <th scope="col">کاربر</th>
-                          <th scope="col">شناسه چت</th>
-                          <th scope="col">نقش</th>
-                          <th scope="col">پیام‌ها</th>
-                          <th scope="col">آخرین فعالیت</th>
-                          <th scope="col">وضعیت</th>
-                          <th scope="col">عملیات</th>
-                        </tr>
-                      </thead>
-                      <tbody id="usersBody"></tbody>
-                    </table>
-                  </div>
-                  <div class="card-foot row-between" id="usersPager"></div>
-                </div>
-              </section>
-
-              <section data-tab-panel="broadcast" data-group="dash" hidden>
-                <div class="grid grid-2">
-                  <div class="card">
-                    <div class="card-head"><h3>ارسال پیام همگانی</h3></div>
-                    <div class="card-body">
-                      <div class="field">
-                        <label for="broadcastText">متن پیام</label>
-                        <textarea id="broadcastText" maxlength="3800" placeholder="پیام شما برای همه کاربران مجاز..."></textarea>
-                        <span class="hint">حداکثر ۳۸۰۰ کاراکتر. ارسال با محدودیت نرخ انجام می‌شود تا پلتفرم مسدود نکند.</span>
-                      </div>
-                      <div class="field mt-1">
-                        <label for="broadcastMode">قالب متن</label>
-                        <select id="broadcastMode">
-                          <option value="HTML">HTML</option>
-                          <option value="Markdown">Markdown</option>
-                        </select>
-                      </div>
-                      <label class="check-row mt-2">
-                        <input type="checkbox" id="broadcastConfirm" />
-                        <span>تأیید می‌کنم این پیام برای همه کاربران مجاز ارسال شود.</span>
-                      </label>
-                      <div class="btn-row mt-2">
-                        <button type="button" class="btn btn-primary" id="broadcastBtn">شروع ارسال همگانی</button>
-                        <button type="button" class="btn btn-ghost btn-sm" id="broadcastRefresh">به‌روزرسانی پیشرفت</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-head"><h3>پیشرفت ارسال</h3></div>
-                    <div class="card-body" id="broadcastProgress">
-                      <p class="tiny dim">پس از شروع ارسال، پیشرفت هر چند ثانیه به‌روزرسانی می‌شود.</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section data-tab-panel="force" data-group="dash" hidden>
-                <div class="card">
-                  <div class="card-head">
-                    <h3>عضویت اجباری در کانال‌ها</h3>
-                    <span class="badge badge-info">وضعیت: <span id="forceSummaryInline"></span></span>
-                  </div>
-                  <div class="card-body" id="forceBox"></div>
-                </div>
-              </section>
-
-              <section data-tab-panel="settings" data-group="dash" hidden>
-                <div id="settingsBox"></div>
-              </section>
-
-              <section data-tab-panel="events" data-group="dash" hidden>
-                <div class="card">
-                  <div class="card-head"><h3>رویدادهای ربات</h3></div>
-                  <div class="card-body" id="eventsBoard"></div>
-                </div>
-              </section>
-            </div>
-          </div>
-
-          <div id="dashEmpty" hidden>
-            <div class="empty">
-              <span data-icon="bot" aria-hidden="true"></span>
-              <span>هنوز رباتی نساخته‌اید. با ویزارد اولین ربات را بسازید.</span>
-              <a class="btn btn-primary btn-sm" href="wizard.html">ساخت اولین ربات</a>
+          <div class="notice mt-3">
+            <span data-icon="lock" aria-hidden="true"></span>
+            <div>
+              <strong>توکن‌ها کجا هستند؟</strong>
+              توکن ربات و کلیدها فقط داخل بسته ZIP و در حافظه همان تب ویزارد هستند. این صفحه فقط مشخصات عمومی نصب را
+              نگه می‌دارد؛ برای ساخت دوباره بسته باید همان تب ویزارد باز باشد.
             </div>
           </div>
         </div>
@@ -286,6 +65,8 @@
     <script src="assets/js/catalog.js"></script>
     <script src="assets/js/api.js"></script>
     <script src="assets/js/site.js"></script>
+    <script src="assets/js/installer.js"></script>
+    <script src="assets/js/installations.js"></script>
     <script src="assets/js/dashboard.js"></script>
   </body>
 </html>

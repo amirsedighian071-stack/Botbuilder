@@ -44,6 +44,9 @@ export interface CreateBotInput {
   ownerId?: string;
   config?: Record<string, unknown>;
   status?: BotStatus;
+  /** Installer-provided identity so the packaged webhook path stays stable. */
+  id?: string;
+  webhookSecret?: string;
   skipVerification?: boolean;
 }
 
@@ -187,7 +190,7 @@ export class BotManager {
     const sealed = this.options.secrets.seal(input.token);
     const now = new Date().toISOString();
     const record: BotRecord = {
-      id: randomId('bot_'),
+      id: input.id ?? randomId('bot_'),
       slug: input.slug,
       templateId: input.templateId,
       name: input.name,
@@ -198,7 +201,7 @@ export class BotManager {
       ownerId: input.ownerId ?? 'system',
       config: { ...template.defaultConfig, ...(input.config ?? {}) },
       forceMembership: { ...DEFAULT_FORCE_MEMBERSHIP },
-      webhookSecret: createWebhookSecret(),
+      webhookSecret: input.webhookSecret ?? createWebhookSecret(),
       createdAt: now,
       updatedAt: now,
     };

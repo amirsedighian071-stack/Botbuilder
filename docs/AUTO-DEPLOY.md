@@ -1,123 +1,127 @@
-# استقرار خودکار BotForge با API
+# استقرار خودکار BotForge — بدون کنترل‌پلین
 
-این سند توضیح می‌دهد دکمه «تأیید و استقرار خودکار» در ویزارد چه کاری انجام می‌دهد، چه کلیدهایی لازم است و اگر
-دسترسی به API نبود چه گزینه‌هایی دارید. همه درخواست‌های توصیف‌شده در کد `apps/control-plane/src/routes/deploy.ts` و
-`apps/control-plane/src/services/deployments.ts` پیاده‌سازی شده‌اند.
+این سند توضیح می‌دهد دکمه «ساخت و استقرار خودکار» در ویزارد چه چیزی تولید می‌کند و چطور همان بسته را روی Cloudflare
+Workers یا Railway بالا بیاورید. تمام مراحل ساخت بسته در مرورگر انجام می‌شود
+(`apps/frontend/assets/js/installer.js`) و هیچ سروری برای تولید فایل‌ها لازم نیست.
 
 ## نمای کلی
 
-1. کاربر توکن ربات (تلگرام، بله یا روبیکا) را در ویزارد وارد می‌کند.
-2. سایت با `POST /api/deploy/validate-token` توکن را به کنترل‌پلین می‌فرستد.
-3. کنترل‌پلین با `getMe` پلتفرم، هویت ربات را تأیید می‌کند.
-4. کاربر توکن میزبان (Cloudflare یا Railway) را وارد می‌کند و `POST /api/deploy/validate-provider` حساب را بررسی می‌کند.
-5. با تأیید نهایی، ویزارد ابتدا `POST /api/bots` را برای ساخت ربات و سپس `POST /api/bots/:id/deploy` را صدا می‌زند.
-6. سرور مراحل استقرار را در پس‌زمینه اجرا می‌کند و سایت با خواندن `GET /api/bots/:id/deployments/:deploymentId`
-   پیشرفت را نمایش می‌دهد.
+1. کاربر در صفحه [ویزارد](../apps/frontend/wizard.html) یکی از ۳۲ قالب را انتخاب می‌کند.
+2. پلتفرم (تلگرام، بله، روبیکا) و توکن ربات را وارد می‌کند. اگر شبکه اجازه دهد، توکن با `getMe` همان پلتفرم بررسی
+   می‌شود؛ در غیر این صورت فقط قالب توکن اعتبارسنجی می‌شود و کاربر می‌تواند ادامه دهد.
+3. کلیدهای یکپارچه‌سازی همان قالب را وارد می‌کند؛ هر کلید لینک مستقیم صفحه رسمی ساخت کلید دارد.
+4. نام و شناسه ربات و میزبان هدف را انتخاب می‌کند و دکمه «ساخت و استقرار خودکار» را می‌زند.
+5. مرورگر فایل‌های بسته را می‌سازد، توکن را با `SECRET_MASTER_KEY` رمزنگاری می‌کند، آدرس وب‌هوک را حساب می‌کند و یک
+   فایل ZIP قابل دانلود می‌دهد.
+6. کاربر بسته را از حالت فشرده خارج می‌کند و یک دستور اجرا می‌کند: `bash deploy.sh`. سرور نصب‌شده در اولین اجرا
+   جدول‌ها را می‌سازد، رکورد ربات را ثبت می‌کند و وب‌هوک را روی پلتفرم ثبت می‌کند.
 
-پاسخ آغاز استقرار کد `202` دارد و شامل `deployment.id` و `statusUrl` است.
+هیچ مرحله‌ای از این مسیر آدرس سرور، ایمیل مدیر یا ورود به پنل واسط نمی‌خواهد. ایمیل و گذرواژه مدیر اولیه به‌صورت
+تصادفی در بسته تولید و داخل `.env` نوشته می‌شوند.
 
-## گام‌های واقعی استقرار
+## محتوای بسته
 
-| گام | Cloudflare Workers | Railway |
-| --- | --- | --- |
-| `validate` | بررسی توکن و دسترسی‌ها با `GET /accounts` | بررسی توکن با کوئری GraphQL `me` |
-| `database` / `project` | ساخت یا انتخاب D1 و اجرای طرح‌واره | ساخت یا انتخاب پروژه |
-| `service` | — | ساخت سرویس از ایمیج یا مخزن متصل |
-| `upload` / `variables` | `PUT` ماژول ورکر، رمزها، کرون و زیردامنه | تنظیم متغیرهای محیطی سرویس |
-| `domain` | آدرس `https://<prefix>-<slug>.<subdomain>.workers.dev` | دامنه تولیدشده Railway |
-| `wait` | — | انتظار برای رسیدن استقرار به وضعیت نهایی |
-| `webhook` | ثبت آدرس روی پلتفرم پیام‌رسان | همان |
-| `health` | درخواست `GET /health` و ثبت کد پاسخ و تأخیر | همان |
+| فایل | کار |
+| --- | --- |
+| `.env` | همه متغیرهای `BOT_*`، رمزهای تولیدشده و کلیدهای یکپارچه‌سازی |
+| `.env.example` | همان کلیدها با مقدار خالی برای بازبینی سریع |
+| `deploy.sh` | اسکریپت کامل استقرار مخصوص میزبان انتخابی |
+| `wrangler.toml` | پیکربندی ورکر، اتصال D1 و کرون تجدید اشتراک |
+| `schema.sql` / `bot-row.sql` | طرح‌واره D1 و رکورد آماده ربات با توکن رمزنگاری‌شده |
+| `railway.json` / `Dockerfile` / `docker-compose.yml` | استقرار کانتینری با ایمیج ورودی و ffmpeg |
+| `src/index.js` | کد ورکر آماده آپلود برای مسیر Cloudflare (اگر build اجرا شده باشد) |
+| `webhook.txt` | آدرس کامل وب‌هوک و کلید مسیر |
+| `botforge.install.json` | مشخصات نصب برای پیگیری در داشبورد و کنسول سایت |
+| `README.md` | مراحل دقیق همین استقرار با دستورهای قابل کپی |
 
-وضعیت‌های ممکن: `queued`، `validating`، `provisioning`، `uploading`، `deploying`، `registering`، `healthy`، `failed`.
+فایل‌های حاوی رمز را فقط در محیط امن نگه دارید؛ `deploy.sh` هم به آن‌ها از همان پوشه نیاز دارد.
 
-## کلیدهای لازم
-
-### توکن ربات
-
-- تلگرام: `@BotFather` → `/newbot` → توکن با الگوی `123456789:AA...`
-- بله: BotFather داخل بله → ساخت ربات
-- روبیکا: BotFather داخل روبیکا → ساخت ربات
-
-### Cloudflare
-
-صفحه ساخت توکن: <https://dash.cloudflare.com/profile/api-tokens>
-
-دسترسی‌های لازم:
-
-- `Workers Scripts:Edit`
-- `D1:Edit`
-- `Account Settings:Read`
-
-### Railway
-
-صفحه ساخت توکن: <https://railway.com/account/tokens>
-
-توکن Railway به پروژه‌های همان حساب دسترسی دارد. **توکن Railway معادل اتصال GitHub نیست**؛ برای استقرار مستقیم از
-مخزن، باید یک بار مخزن را در داشبورد Railway متصل کنید. این عملیات از طریق مرورگر و با توکن API انجام نمی‌شود.
-
-## نمونه درخواست‌ها
+## مسیر Cloudflare Workers + D1
 
 ```bash
-export CONTROL_PLANE="https://your-control-plane.example.com"
-export ADMIN_TOKEN="<jwt یا کلید bf_...>"
+unzip botforge-gold-price.zip -d botforge-gold-price
+cd botforge-gold-price
 
-curl -sS -X POST "$CONTROL_PLANE/api/deploy/validate-token" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"platform":"telegram","token":"123456789:AA..."}'
+export CLOUDFLARE_API_TOKEN="<توکن با دسترسی Workers Scripts:Edit، D1:Edit و Account Settings:Read>"
+export CLOUDFLARE_ACCOUNT_ID="<شناسه حساب>"
 
-curl -sS -X POST "$CONTROL_PLANE/api/deploy/validate-provider" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"provider":"cloudflare","credentials":{"apiToken":"CLOUDFLARE_TOKEN"}}'
-
-curl -sS -X POST "$CONTROL_PLANE/api/bots" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"templateId":"gold-price","name":"قیمت طلا","slug":"gold-price-1a2b","platform":"telegram","token":"123456789:AA..."}'
-
-curl -sS -X POST "$CONTROL_PLANE/api/bots/BOT_ID/deploy" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"provider":"cloudflare","credentials":{"apiToken":"CLOUDFLARE_TOKEN"},"integrationKeys":{}}'
-
-curl -sS "$CONTROL_PLANE/api/bots/BOT_ID/deployments/DEPLOYMENT_ID" \
-  -H "Authorization: Bearer $ADMIN_TOKEN"
+bash deploy.sh
 ```
 
-## پیش‌نیاز سمت سرور
+اسکریپت شش گام را اجرا می‌کند:
 
-- `npm run build` باید انجام شده باشد تا `dist/cloudflare-worker/index.js` وجود داشته باشد.
-- متغیر `DEPLOY_WORKER_BUNDLE` مسیر بسته را مشخص می‌کند (پیش‌فرض `dist/cloudflare-worker/index.js`).
-- `DEPLOY_TIMEOUT_MS` و `DEPLOY_POLL_INTERVAL_MS` زمان انتظار و فاصله بررسی را کنترل می‌کنند.
-- `SECRET_MASTER_KEY` برای رمزنگاری اعتبارنامه‌های ذخیره‌شده الزامی است.
+| گام | کار |
+| --- | --- |
+| ۱ | خواندن شناسه حساب و زیردامنه `workers.dev` و نوشتن `PUBLIC_BASE_URL` در `wrangler.toml` |
+| ۲ | ساخت یا بازیابی پایگاه D1 و نوشتن `database_id` در `wrangler.toml` |
+| ۳ | اجرای `schema.sql` و `bot-row.sql` روی پایگاه |
+| ۴ | ثبت `SECRET_MASTER_KEY`، `JWT_SECRET` و کلیدهای یکپارچه‌سازی به‌عنوان secret |
+| ۵ | انتشار ورکر با `wrangler deploy` |
+| ۶ | ثبت وب‌هوک روی تلگرام یا بله؛ برای روبیکا آدرس چاپ می‌شود تا در پنل ربات ثبت شود |
 
-## بسته استقرار دستی
+آدرس نهایی: `https://botforge-<slug>.workers.dev` — سلامت: `/health`، وب‌هوک: `/webhooks/<platform>/<botId>/<secret>`.
 
-اگر نمی‌خواهید توکن میزبان را به سرور بدهید، می‌توانید:
+> پردازش رسانه و ffmpeg روی Workers پشتیبانی نمی‌شود. ربات‌های دسته C (دانلود و رسانه) را روی Railway مستقر کنید.
 
-1. در ویزارد «دانلود نقشه استقرار (JSON)» را بزنید.
-2. فایل `.env` و اسکریپت `botforge-deploy-*.sh` را دانلود کنید.
-3. همان دو درخواست `POST /api/bots` و `POST /api/bots/:id/deploy` را با curl اجرا کنید.
+## مسیر Railway یا هر میزبان Docker
 
-از مسیر `GET /api/bots/:id/deployments/:id/package` نیز فایل‌های `.env`، `.env.secrets`، `deploy.sh` و `webhook.txt`
-دریافت می‌شود؛ این فایل‌ها را محرمانه نگه دارید.
+```bash
+unzip botforge-gold-price.zip -d botforge-gold-price
+cd botforge-gold-price
 
-## محدودیت‌های شناخته‌شده
+export RAILWAY_TOKEN="<توکن از Account Settings → Tokens>"
+bash deploy.sh
+```
 
-- **GitHub Pages نمی‌تواند کد سمت سرور اجرا کند.** سایت فقط آدرس کنترل‌پلین را ذخیره می‌کند و درخواست‌ها را به آن
-  می‌فرستد. بدون کنترل‌پلین، اعتبارسنجی زنده و استقرار خودکار ممکن نیست و ویزارد فقط قالب را بررسی و بسته می‌سازد.
-- **پردازش رسانه روی Workers** پشتیبانی نمی‌شود؛ ربات‌های دسته C باید روی Railway مستقر شوند.
-- **اتصال مخزن GitHub به Railway** نیاز به تأیید در داشبورد Railway دارد و با توکن API انجام نمی‌شود.
-- توکن‌های واردشده در ویزارد فقط در حافظه و `sessionStorage` همان تب می‌مانند و با بستن تب پاک می‌شوند.
+اسکریپت پروژه را می‌سازد، همه متغیرهای `.env` را روی سرویس تنظیم می‌کند، دامنه می‌گیرد و ایمیج را مستقر می‌کند.
+جایگزین بدون Railway CLI:
 
-## عیب‌یابی سریع
+```bash
+docker compose up -d --build
+docker compose logs -f
+```
+
+ایمیج از مخزن GitHub ساخته می‌شود (`node scripts/build.mjs` داخل build stage) و در نهایت
+`node dist/install/main.js` را اجرا می‌کند؛ همان سرویس تک‌ربات که همه‌چیز را از متغیرهای محیطی می‌خواند.
+
+پس از گرفتن دامنه، مقدار `PUBLIC_BASE_URL` را در `.env` برابر دامنه بگذارید و `bash deploy.sh` را دوباره اجرا کنید تا
+آدرس وب‌هوک درست ثبت شود.
+
+## شروع کار سرویس
+
+سرور در اولین اجرا این کارها را انجام می‌دهد:
+
+- ساخت جدول‌ها بر اساس `DATABASE_DRIVER` (`d1`، `postgres` یا `sqlite`).
+- ثبت رکورد ربات از روی `BOT_TEMPLATE`، `BOT_PLATFORM`، `BOT_SLUG`، `BOT_NAME` و `BOT_CONFIG_JSON`.
+- رمزنگاری `BOT_TOKEN` با کلید مشتق‌شده از `SECRET_MASTER_KEY`.
+- ساخت مدیر اولیه از `ADMIN_SEED_EMAIL` و `ADMIN_SEED_PASSWORD`.
+- ثبت وب‌هوک با آدرس عمومی سرویس.
+
+اگر ثبت وب‌هوک ناموفق باشد، سرویس با هشدار بالا می‌آید و می‌توانید بعداً از صفحه
+[استقرار](../apps/frontend/deployment.html) آدرس را کپی و دستی ثبت کنید.
+
+## بررسی سلامت و پنل
+
+- `GET https://<domain>/health` باید `200` و بدنه JSON با نسخه سرویس برگرداند. صفحه استقرار همین آدرس را با تأخیر
+  اندازه‌گیری‌شده بررسی می‌کند.
+- پنل زنده ربات در [کنسول مدیریت](../apps/frontend/admin/index.html) باز می‌شود: آدرس سرویس، ایمیل و گذرواژه
+  `ADMIN_SEED_*` از `.env` را وارد کنید تا آمار، کاربران، مسدودسازی، پیام همگانی و عضویت اجباری در دسترس باشد.
+- اگر مرورگر خطای CORS داد، آدرس سایت (`https://amirsedighian071-stack.github.io`) را در `CORS_ORIGINS` سرویس اضافه
+  و آن را دوباره مستقر کنید.
+
+## عضویت اجباری
+
+کانال‌ها در ویزارد یا در صفحه [استقرار](../apps/frontend/deployment.html) ثبت می‌شوند و به‌صورت
+`BOT_FORCE_MEMBERSHIP_JSON` داخل بسته نوشته می‌شوند. اگر ربات مستقر است، با `PUT /api/bots/:id/force-membership`
+می‌توانید بدون بازسازی بسته اعمال کنید.
+
+## عیب‌یابی
 
 | نشانه | بررسی |
 | --- | --- |
-| `402` یا خطای اعتبارنامه | دسترسی‌های توکن Cloudflare/Railway را بررسی کنید |
-| خطای «بسته ورکر پیدا نشد» | `npm run build` را اجرا و `DEPLOY_WORKER_BUNDLE` را بررسی کنید |
-| توقف در `webhook` | آدرس عمومی و HTTPS سرویس را بررسی کنید؛ توکن ربات باید معتبر باشد |
-| `health` ناموفق | مسیر `/health` سرویس را با مرورگر باز کنید و لاگ‌های سرویس را ببینید |
-| خطای CORS در سایت | دامنه Pages را در `CORS_ORIGINS` اضافه کنید |
+| خطای «توکن وارد شده معتبر نیست» | الگوی توکن را بررسی کنید؛ تلگرام و بله `عدد:رشته` و روبیکا فقط حروف و ارقام دارد |
+| `deploy.sh` در گام D1 متوقف می‌شود | دسترسی `D1:Edit` توکن Cloudflare و `CLOUDFLARE_ACCOUNT_ID` را بررسی کنید |
+| انتشار ورکر انجام شد اما پیام نمی‌آید | آدرس `webhook.txt` را با `getWebhookInfo` مقایسه و دوباره `setWebhook` کنید |
+| `health` ناموفق | لاگ سرویس را ببینید؛ معمولاً `SECRET_MASTER_KEY` کوتاه یا `DATABASE_URL` نامعتبر است |
+| خطای CORS در کنسول مدیریت | دامنه سایت را در `CORS_ORIGINS` اضافه کنید |
+| دانلود بسته ورکر ناموفق | فایل `src/index.js` را از خروجی `npm run build` در پوشه بسته بگذارید |

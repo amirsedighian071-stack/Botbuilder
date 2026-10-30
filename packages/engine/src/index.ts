@@ -18,5 +18,11 @@ export {
   type MembershipCheckResult,
 } from './force-membership';
 export { BotManager, createBotManager, type BotManagerOptions, type CreateBotInput } from './manager';
+export {
+  ensureInstalledBot,
+  type InstallOptions,
+  type InstallResult,
+  type InstallSpec,
+} from './install';
 export * from './services';
 export { TtlCache } from './util/cache';
