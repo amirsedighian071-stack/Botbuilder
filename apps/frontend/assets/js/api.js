@@ -1,0 +1,150 @@
+/* BotForge API client — talks to a user-provided control plane instance.
+ * Configuration lives in localStorage so the static GitHub Pages site can be
+ * pointed at any Railway / self-hosted deployment without a rebuild.
+ */
+(function () {
+  'use strict';
+
+  const BASE_KEY = 'botforge.apiBase';
+  const TOKEN_KEY = 'botforge.token';
+  const ADMIN_KEY = 'botforge.admin';
+
+  function normalizeBase(value) {
+    const trimmed = String(value || '').trim().replace(/\/+$/, '');
+    if (!trimmed) return '';
+    if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+    return trimmed;
+  }
+
+  const state = {
+    base: normalizeBase(localStorage.getItem(BASE_KEY) || ''),
+    token: localStorage.getItem(TOKEN_KEY) || '',
+    admin: readAdmin()
+  };
+
+  function readAdmin() {
+    try {
+      const raw = localStorage.getItem(ADMIN_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function apiError(message, status, payload) {
+    const error = new Error(message);
+    error.status = status;
+    error.payload = payload;
+    return error;
+  }
+
+  async function request(path, options = {}) {
+    if (!state.base) throw apiError('آدرس کنترل‌پلین تنظیم نشده است. در بخش «اتصال به سرور» آن را وارد کنید.', 0);
+    const url = `${state.base}${path.startsWith('/') ? path : `/${path}`}`;
+    const headers = { Accept: 'application/json', ...(options.headers || {}) };
+    let body = options.body;
+    if (body !== undefined && !(body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+      body = JSON.stringify(body);
+    }
+    const token = options.token !== undefined ? options.token : state.token;
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 30000);
+    let response;
+    try {
+      response = await fetch(url, { method: options.method || 'GET', headers, body, signal: controller.signal });
+    } catch (error) {
+      const message = error.name === 'AbortError' ? 'پاسخ سرور بیش از حد طول کشید.' : 'ارتباط با کنترل‌پلین برقرار نشد. آدرس و دسترسی شبکه را بررسی کنید.';
+      throw apiError(message, 0);
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const text = await response.text();
+    let payload = null;
+    if (text) {
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        payload = { raw: text };
+      }
+    }
+
+    if (!response.ok) {
+      const message =
+        (payload && payload.error && payload.error.message) ||
+        (payload && payload.message) ||
+        `درخواست با کد ${response.status} رد شد.`;
+      throw apiError(message, response.status, payload);
+    }
+    return payload;
+  }
+
+  const api = {
+    request,
+    get: (path, options) => request(path, { ...options, method: 'GET' }),
+    post: (path, body, options) => request(path, { ...options, method: 'POST', body }),
+    put: (path, body, options) => request(path, { ...options, method: 'PUT', body }),
+    patch: (path, body, options) => request(path, { ...options, method: 'PATCH', body }),
+    del: (path, options) => request(path, { ...options, method: 'DELETE' }),
+
+    get base() {
+      return state.base;
+    },
+    get token() {
+      return state.token;
+    },
+    get admin() {
+      return state.admin;
+    },
+    get configured() {
+      return Boolean(state.base);
+    },
+    get authenticated() {
+      return Boolean(state.base && state.token);
+    },
+
+    setBase(value) {
+      state.base = normalizeBase(value);
+      localStorage.setItem(BASE_KEY, state.base);
+      return state.base;
+    },
+    setToken(value, admin) {
+      state.token = String(value || '').trim();
+      localStorage.setItem(TOKEN_KEY, state.token);
+      if (admin !== undefined) {
+        state.admin = admin;
+        if (admin) localStorage.setItem(ADMIN_KEY, JSON.stringify(admin));
+        else localStorage.removeItem(ADMIN_KEY);
+      }
+    },
+    clearSession() {
+      state.token = '';
+      state.admin = null;
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(ADMIN_KEY);
+    },
+    async login(email, password) {
+      const result = await request('/api/auth/login', {
+        method: 'POST',
+        body: { email, password },
+        token: null
+      });
+      this.setToken(result.token, result.admin);
+      return result;
+    },
+    async verifySession() {
+      if (!state.token) return null;
+      try {
+        return await request('/api/auth/me');
+      } catch (error) {
+        if (error.status === 401) this.clearSession();
+        throw error;
+      }
+    }
+  };
+
+  window.BotForgeApi = api;
+})();

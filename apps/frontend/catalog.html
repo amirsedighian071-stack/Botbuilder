@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>کاتالوگ ۳۲ ربات — BotForge</title>
+    <meta
+      name="description"
+      content="فهرست کامل ۳۲ ربات آماده BotForge در پنج دسته مالی، کسب‌وکار، رسانه، هوش مصنوعی و ابزارهای روزمره با دستورها و کلیدهای مورد نیاز."
+    />
+    <meta name="theme-color" content="#071021" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="manifest" href="site.webmanifest" />
+    <style>
+      :root { color-scheme: dark; }
+      html { background: #040a18; }
+      body {
+        margin: 0;
+        background: #040a18;
+        color: #dbe6f5;
+        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
+        line-height: 1.85;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+      .site-header { min-height: 68px; }
+    </style>
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body data-page="catalog">
+    <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+    <header class="site-header" id="site-header"></header>
+
+    <main id="main">
+      <section class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="مسیر صفحه">
+            <a href="index.html">خانه</a>
+            <span data-icon="chevron-left" aria-hidden="true"></span>
+            <span>کاتالوگ ربات‌ها</span>
+          </nav>
+          <span class="eyebrow">۳۲ ربات تولیدی</span>
+          <h1>کاتالوگ کامل ربات‌های BotForge</h1>
+          <p>
+            هر ربات یک قالب واقعی با منطق اجرایی، دستورها، منوی دکمه‌ای و کلیدهای مشخص است. با جست‌وجو یا فیلتر دسته،
+            ربات مناسب را پیدا کنید و مستقیم به ویزارد ساخت بروید.
+          </p>
+
+          <div class="stats-grid mt-2">
+            <div class="stat"><span class="stat-label">ربات</span><span class="stat-value" id="statBots">۳۲</span></div>
+            <div class="stat"><span class="stat-label">دستور ثبت‌شده</span><span class="stat-value" id="statCommands">۸۶</span></div>
+            <div class="stat"><span class="stat-label">دسته</span><span class="stat-value" id="statCategories">۵</span></div>
+            <div class="stat"><span class="stat-label">کلید محیطی</span><span class="stat-value" id="statRequirements">۱۵</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-tight">
+        <div class="container">
+          <div class="filter-bar" role="search">
+            <div class="search">
+              <span data-icon="search" aria-hidden="true"></span>
+              <label class="sr-only" for="catalogSearch">جست‌وجوی ربات</label>
+              <input class="input" id="catalogSearch" type="search" placeholder="جست‌وجو بر اساس نام، دستور یا برچسب..." autocomplete="off" />
+            </div>
+            <label class="sr-only" for="catalogCategory">دسته</label>
+            <select id="catalogCategory" aria-label="فیلتر دسته"></select>
+            <label class="sr-only" for="catalogSort">ترتیب</label>
+            <select id="catalogSort" aria-label="ترتیب نمایش">
+              <option value="number">ترتیب کاتالوگ</option>
+              <option value="name">الفبایی</option>
+              <option value="commands">بیشترین دستور</option>
+            </select>
+            <span class="filter-count" id="catalogCount"></span>
+          </div>
+
+          <div class="row-between mb-2">
+            <div class="tabs" role="tablist" aria-label="نمای کاتالوگ">
+              <button type="button" class="tab is-active" data-view="cards" role="tab" aria-selected="true">نمای کارت</button>
+              <button type="button" class="tab" data-view="table" role="tab" aria-selected="false">نمای جدول</button>
+            </div>
+            <div class="btn-row">
+              <a class="btn btn-outline btn-sm" href="wizard.html">ساخت ربات جدید</a>
+              <a class="btn btn-ghost btn-sm" href="docs.html#bots">توضیح قالب‌ها</a>
+            </div>
+          </div>
+
+          <div id="catalogList" aria-live="polite"></div>
+
+          <div class="notice mt-3">
+            <span data-icon="shield-check" aria-hidden="true"></span>
+            <div>
+              <strong>همه قالب‌ها کد اجرایی دارند</strong>
+              هیچ رباتی در این فهرست نمونه یا نمایشی نیست؛ هر قالب با منطق واقعی، مدیریت خطا، محدودیت نرخ و تنظیمات
+              اختصاصی خود پیاده‌سازی شده و تست دارد.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="cta-band">
+            <h2>ربات مناسب را پیدا کردید؟</h2>
+            <p>با ویزارد، توکن را اعتبارسنجی کنید و ربات را روی Cloudflare یا Railway مستقر کنید.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary btn-lg" href="wizard.html">شروع ساخت ربات</a>
+              <a class="btn btn-outline btn-lg" href="deployment.html">وضعیت استقرارها</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="site-footer"></footer>
+
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/catalog.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/catalog-page.js"></script>
+  </body>
+</html>

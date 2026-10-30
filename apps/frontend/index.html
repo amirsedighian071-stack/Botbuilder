@@ -1,648 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BotForge — پلتفرم ساخت و مدیریت ۳۲ ربات پیام‌رسان</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>BotForge — ساخت، استقرار و مدیریت ۳۲ ربات پیام‌رسان</title>
     <meta
       name="description"
-      content="BotForge یک پلتفرم متن‌باز برای ساخت، استقرار و مدیریت ربات‌های تلگرام، بله و روبیکا با ۳۲ ربات آماده، موتور مشترک، پنل مدیریت و امنیت تولیدی است."
+      content="BotForge پلتفرم کامل ساخت ربات تلگرام، بله و روبیکا با ۳۲ ربات آماده، ویزارد شش‌مرحله‌ای، اعتبارسنجی زنده توکن و استقرار خودکار روی Cloudflare Workers و Railway است."
     />
-    <meta name="theme-color" content="#04070f" />
-    <meta property="og:title" content="BotForge — پلتفرم ربات‌های چندپلتفرمی" />
-    <meta
-      property="og:description"
-      content="۳۲ ربات آماده برای تلگرام، بله و روبیکا؛ موتور مشترک، آداپتر مستقل، صف کار، عضویت اجباری و پنل مدیریت."
-    />
-    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#071021" />
     <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="manifest" href="site.webmanifest" />
+    <meta property="og:title" content="BotForge — پلتفرم ربات پیام‌رسان" />
+    <meta property="og:description" content="۳۲ ربات آماده برای تلگرام، بله و روبیکا با استقرار خودکار و داشبورد مدیریت." />
+    <meta property="og:type" content="website" />
+    <style>
+      :root { color-scheme: dark; }
+      html { background: #040a18; }
+      body {
+        margin: 0;
+        background: #040a18;
+        color: #dbe6f5;
+        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
+        line-height: 1.85;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+      .site-header { min-height: 68px; }
+      .hero { min-height: 240px; }
+    </style>
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
-  <body>
+  <body data-page="home">
     <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
-
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="index.html" aria-label="BotForge">
-          <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="8" width="16" height="12" rx="3" />
-              <path d="M12 4v4" />
-              <circle cx="9" cy="14" r="1" />
-              <circle cx="15" cy="14" r="1" />
-              <path d="M9 18h6" />
-            </svg>
-          </span>
-          <span>
-            BotForge
-            <small>BOT PLATFORM</small>
-          </span>
-        </a>
-
-        <nav class="nav" aria-label="ناوبری اصلی">
-          <a href="#features">امکانات</a>
-          <a href="#platforms">پلتفرم‌ها</a>
-          <a href="#catalog">کاتالوگ ربات‌ها</a>
-          <a href="#wizard">راه‌اندازی</a>
-          <a href="#architecture">معماری</a>
-          <a href="docs.html">مستندات</a>
-        </nav>
-
-        <div class="header-actions">
-          <a class="btn btn-ghost btn-sm" href="docs.html">مستندات</a>
-          <a class="btn btn-primary btn-sm" href="#wizard">شروع کنید</a>
-          <button class="nav-toggle" type="button" aria-label="منوی ناوبری" aria-expanded="false">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </header>
+    <header class="site-header" id="site-header"></header>
 
     <main id="main">
       <section class="hero">
         <div class="container hero-grid">
           <div>
-            <span class="eyebrow">
-              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" /></svg>
-              موتور مشترک، سه پلتفرم، ۳۲ ربات آماده
-            </span>
-            <h1>
-              زیرساخت <span class="text-gradient">ربات‌های پیام‌رسان</span> برای تلگرام، بله و روبیکا
+            <span class="eyebrow">BotForge 1.0 — آماده استقرار صنعتی</span>
+            <h1 class="hero-title">
+              ربات پیام‌رسان خود را بسازید،
+              <span class="text-gradient">خودکار مستقر کنید</span>
+              و از یک داشبورد مدیریت کنید.
             </h1>
             <p class="hero-lead">
-              یک مونوریپوی کامل و اجراشدنی: موتور مشترک ربات، آداپترهای مستقل هر پلتفرم، مدیریت توکن و رمزنگاری، صف کار، عضویت
-              اجباری، پنل مدیریت زنده و ۳۲ ربات تولیدی با منطق کامل — بدون ماک و بدون بخش ناتمام.
+              زیرساخت کامل Node.js و Cloudflare Workers با موتور مشترک تلگرام، بله و روبیکا، ۳۲ قالب ربات آماده،
+              اعتبارسنجی زنده توکن، ساخت خودکار پایگاه‌داده، اتصال وب‌هوک و بررسی سلامت. هیچ بخشی از این پروژه شبیه‌سازی
+              نیست؛ همه مسیرها کد اجرایی واقعی دارند.
             </p>
-
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#wizard">
-                راه‌اندازی گام‌به‌گام
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
-              </a>
-              <a class="btn btn-ghost" href="docs.html">مطالعه مستندات</a>
+              <a class="btn btn-primary btn-lg" href="wizard.html">ساخت ربات در ۶ گام</a>
+              <a class="btn btn-outline btn-lg" href="catalog.html">دیدن ۳۲ ربات</a>
             </div>
-
-            <div class="hero-badges">
-              <span class="chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> TypeScript سخت‌گیرانه</span>
-              <span class="chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg> رمزنگاری توکن</span>
-              <span class="chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6" /></svg> D1 و PostgreSQL</span>
-              <span class="chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z" /><path d="M9 12l2 2 4-4" /></svg> محافظت SSRF</span>
-            </div>
-
-            <div class="hero-stats">
-              <div class="stat glass"><strong id="statBots">۳۲</strong><span>ربات کامل</span></div>
-              <div class="stat glass"><strong id="statCommands">۸۶</strong><span>دستور آماده</span></div>
-              <div class="stat glass"><strong id="statCategories">۵</strong><span>دسته‌بندی</span></div>
-              <div class="stat glass"><strong>۳</strong><span>پلتفرم پیام‌رسان</span></div>
+            <div class="hero-meta">
+              <span>۳ پلتفرم پیام‌رسان</span>
+              <span>۳۲ قالب آماده</span>
+              <span>استقرار روی Cloudflare و Railway</span>
+              <span>بدون ایموجی، با آیکون‌های SVG</span>
             </div>
           </div>
 
-          <div class="code-window copyable" data-copy-src="#heroCode">
-            <div class="code-window-head">
-              <span class="dot red"></span>
-              <span class="dot amber"></span>
-              <span class="dot green"></span>
-              <span class="code-window-title">terminal — botforge</span>
-            </div>
-            <pre id="heroCode"><code>npm install
-cp .env.example .env
-
-npm run migrate
-npm run seed
-
-npm run dev:api
-# control plane  ->  http://localhost:8080
-# health check   ->  http://localhost:8080/health
-
-npm run dev:web
-# frontend       ->  http://localhost:4173</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="features">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">امکانات کلیدی</span>
-            <h2>همه‌چیز برای ربات تولیدی، نه نمونه نمایشی</h2>
-            <p>هر بخش این پروژه اجراشدنی است: از اعتبارسنجی توکن و وب‌هوک امضاشده تا صف کار مقاوم به خطا و پنل مدیریت فارسی.</p>
-          </div>
-
-          <div class="grid grid-3">
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M4 7.5l8 4.5 8-4.5M12 12v9" /></svg></div>
-              <h3>موتور مشترک ربات</h3>
-              <p>یک هسته برای نمایش منو، وضعیت گفتگو، دستورها، دکمه‌های شیشه‌ای، تنظیمات، آمار و مدیریت خطا که هر ۳۲ ربات روی آن ساخته شده‌اند.</p>
-            </article>
-
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6z" /><path d="M10 20a2 2 0 0 0 4 0" /></svg></div>
-              <h3>آداپتر مستقل هر پلتفرم</h3>
-              <p>تلگرام، بله و روبیکا هر کدام آداپتر اختصاصی با نگاشت پیام، دکمه، فایل و وب‌هوک دارند؛ تفاوت API پلتفرم‌ها در لایه موتور پنهان می‌شود.</p>
-            </article>
-
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h12v14H6a2 2 0 0 1-2-2V5z" /><path d="M16 8h4v9a2 2 0 0 1-2 2h-2" /><path d="M7 9h6M7 13h6" /></svg></div>
-              <h3>صف کار و زمان‌بند</h3>
-              <p>ارسال همگانی، یادآوری‌ها، هشدار قیمت و پایش سایت از طریق صف پایدار با تلاش مجدد نمایی و سقف تلاش اجرا می‌شوند.</p>
-            </article>
-
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z" /><path d="M9 12l2 2 4-4" /></svg></div>
-              <h3>امنیت تولیدی</h3>
-              <p>رمزنگاری توکن با AES-256-GCM، امضای وب‌هوک، محدودیت نرخ چندلایه، اعتبارسنجی ورودی با Zod، محافظت SQL Injection و SSRF.</p>
-            </article>
-
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8a6 6 0 1 0 0 12h6a6 6 0 1 0 0-12H9z" /><path d="M9 14h6" /></svg></div>
-              <h3>عضویت اجباری کانال</h3>
-              <p>ماژول سراسری بررسی عضویت با کش، دکمه عضویت و بازبینی مجدد؛ برای هر ربات جداگانه فعال و پیکربندی می‌شود.</p>
-            </article>
-
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg></div>
-              <h3>پنل مدیریت درون ربات</h3>
-              <p>آمار زنده، مدیریت کاربران، مسدودسازی، نقش‌ها، پیام همگانی نرخ‌محدود، حالت تعمیر و ویرایش تنظیمات از داخل چت.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="platforms">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">پلتفرم‌ها</span>
-            <h2>یک منطق، سه پیام‌رسان</h2>
-            <p>هر آداپتر توانمندی‌های واقعی پلتفرم خود را اعلام می‌کند و موتور بر اساس همان توانمندی‌ها دکمه و رسانه می‌سازد.</p>
-          </div>
-
-          <div class="platform-tabs" role="tablist" aria-label="پلتفرم‌ها">
-            <button class="platform-tab is-active" type="button" data-platform="telegram" role="tab">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4L3 11l5 2 2 6 3-4 5 3 3-14z" /></svg>
-              Telegram
-            </button>
-            <button class="platform-tab" type="button" data-platform="bale" role="tab">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-9 9H4l2-4a9 9 0 1 1 15-5z" /></svg>
-              Bale
-            </button>
-            <button class="platform-tab" type="button" data-platform="rubika" role="tab">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M12 8v8M8 12h8" /></svg>
-              Rubika
-            </button>
-          </div>
-
-          <div class="platform-panel" data-panel="telegram">
-            <h3>Telegram Bot API</h3>
-            <p>
-              کامل‌ترین آداپتر: وب‌هوک با هدر امنیتی <code>X-Telegram-Bot-Api-Secret-Token</code>، دکمه شیشه‌ای، ویرایش و حذف پیام،
-              دریافت فایل تا سقف پیکربندی‌شده، ارسال ویدئو و صوت، و بررسی عضویت کانال.
-            </p>
-            <ul class="capability-list">
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> وب‌هوک امضاشده</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> دکمه‌های Inline</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> فایل و رسانه</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> بررسی عضویت</li>
-            </ul>
-          </div>
-
-          <div class="platform-panel" data-panel="bale" hidden>
-            <h3>Bale Bot API</h3>
-            <p>
-              آداپتر بله روی API سازگار با تلگرام ساخته شده اما تفاوت‌های واقعی را پوشش می‌دهد: مسیر وب‌هوک اختصاصی، محدودیت نرخ
-              محافظه‌کارانه‌تر، عدم پشتیبانی از برخی انواع رسانه و نگاشت امن فایل‌ها.
-            </p>
-            <ul class="capability-list">
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> وب‌هوک اختصاصی</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> دکمه و کیبورد</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> ارسال فایل</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> بررسی عضویت</li>
-            </ul>
-          </div>
-
-          <div class="platform-panel" data-panel="rubika" hidden>
-            <h3>Rubika Bot API</h3>
-            <p>
-              آداپتر روبیکا با احراز هویت مبتنی بر کلید ربات، نگاشت دکمه‌های شیشه‌ای به ساختار <code>inline_keypad</code>، پشتیبانی از
-              ارسال ویدئو و مدیریت عضویت گروه. محدودیت‌های پلتفرم در پاسخ‌های آداپتر گزارش می‌شوند.
-            </p>
-            <ul class="capability-list">
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> کیبورد شیشه‌ای</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> ویدئو و سند</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> مدیریت گروه</li>
-              <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg> وضعیت تحویل</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="catalog">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">کاتالوگ</span>
-            <h2>۳۲ ربات آماده با منطق کامل</h2>
-            <p>
-              هر ربات یک قالب کامل با منو، تنظیمات، دستورها و جریان گفتگو است. فیلتر کنید، جزئیات و کلیدهای لازم را ببینید و از
-              همان‌جا به ویزارد راه‌اندازی بروید.
-            </p>
-          </div>
-
-          <div class="catalog-toolbar">
-            <div class="filter-chips" id="filterChips" role="group" aria-label="فیلتر دسته‌بندی"></div>
-            <div class="search-box">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
-              <input id="catalogSearch" type="search" placeholder="جست‌وجو در نام، دستور یا توضیح ربات" aria-label="جست‌وجو در کاتالوگ" />
-            </div>
-          </div>
-
-          <p id="catalogCount" style="font-size: 13px; color: var(--muted-2)">۳۲ ربات</p>
-          <div class="catalog-grid" id="catalogGrid"></div>
-        </div>
-      </section>
-
-      <section class="section" id="wizard">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">ویزارد راه‌اندازی</span>
-            <h2>در چهار گام به ربات فعال برسید</h2>
-            <p>انتخاب پلتفرم، انتخاب ربات، ورود اطلاعات و دریافت دستورهای آماده اجرا. همه کدهای تولیدشده قابل کپی هستند.</p>
-          </div>
-
-          <div class="wizard" id="wizard">
-            <div class="wizard-progress" aria-hidden="true">
-              <div class="wizard-step-dot is-done"></div>
-              <div class="wizard-step-dot"></div>
-              <div class="wizard-step-dot"></div>
-              <div class="wizard-step-dot"></div>
-            </div>
-            <div class="wizard-labels" aria-hidden="true">
-              <span class="is-active">پلتفرم</span>
-              <span>انتخاب ربات</span>
-              <span>توکن و نام</span>
-              <span>خروجی و استقرار</span>
-            </div>
-
-            <section class="wizard-panel is-active" data-step="1">
-              <h3>پلتفرم مقصد را انتخاب کنید</h3>
-              <p>هر ربات می‌تواند روی هر سه پلتفرم اجرا شود؛ انتخاب شما فقط اطلاعات راه‌اندازی را دقیق‌تر می‌کند.</p>
-              <div class="option-grid">
-                <button type="button" class="option-card is-selected" data-platform-choice="telegram">
-                  <strong>
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4L3 11l5 2 2 6 3-4 5 3 3-14z" /></svg>
-                    Telegram
-                  </strong>
-                  <small>توکن از BotFather، وب‌هوک امن با secret token</small>
-                </button>
-                <button type="button" class="option-card" data-platform-choice="bale">
-                  <strong>
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-9 9H4l2-4a9 9 0 1 1 15-5z" /></svg>
-                    Bale
-                  </strong>
-                  <small>توکن از BotFather بله، وب‌هوک با مسیر امضاشده</small>
-                </button>
-                <button type="button" class="option-card" data-platform-choice="rubika">
-                  <strong>
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M12 8v8M8 12h8" /></svg>
-                    Rubika
-                  </strong>
-                  <small>کلید ربات از پنل توسعه‌دهندگان روبیکا</small>
-                </button>
+          <div class="hero-visual">
+            <div class="hero-panel">
+              <div class="panel-topbar">
+                <span class="panel-dot is-live"></span>
+                <span class="panel-dot"></span>
+                <span class="panel-dot"></span>
+                <span class="mono">deploy/pipeline</span>
               </div>
-              <div class="hint-box">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
-                <div>برای هر پلتفرم یک ربات جداگانه در BotForge ثبت می‌شود؛ توکن‌ها رمزنگاری‌شده ذخیره می‌شوند و هرگز در لاگ‌ها ظاهر نمی‌شوند.</div>
+              <div class="console">
+                <div class="console-line"><span class="ok">1</span> validate — توکن ربات و اعتبارنامه میزبان</div>
+                <div class="console-line"><span class="ok">2</span> database — ساخت D1 یا اتصال PostgreSQL</div>
+                <div class="console-line"><span class="ok">3</span> service — ساخت سرویس و تزریق متغیرها</div>
+                <div class="console-line"><span class="ok">4</span> upload — بارگذاری بسته ورکر یا ایمیج</div>
+                <div class="console-line"><span class="ok">5</span> domain — تخصیص دامنه عمومی workers.dev</div>
+                <div class="console-line"><span class="ok">6</span> webhook — ثبت آدرس روی پلتفرم</div>
+                <div class="console-line"><span class="wait">7</span> health — بررسی /health و گزارش نهایی</div>
               </div>
-              <div class="wizard-nav">
-                <span></span>
-                <button type="button" class="btn btn-primary" data-wizard-next>
-                  مرحله بعد
-                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
-                </button>
-              </div>
-            </section>
-
-            <section class="wizard-panel" data-step="2">
-              <h3>ربات مورد نظر را انتخاب کنید</h3>
-              <p>فهرست زیر مستقیماً از قالب‌های واقعی مخزن ساخته می‌شود.</p>
-              <div class="field">
-                <label for="wizardBot">ربات</label>
-                <select id="wizardBot"></select>
-                <small id="wizardBotSummary"></small>
-              </div>
-              <div class="wizard-nav">
-                <button type="button" class="btn btn-ghost" data-wizard-prev>
-                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5" /><path d="M11 18l-6-6 6-6" /></svg>
-                  مرحله قبل
-                </button>
-                <button type="button" class="btn btn-primary" data-wizard-next>مرحله بعد</button>
-              </div>
-            </section>
-
-            <section class="wizard-panel" data-step="3">
-              <h3>اطلاعات ربات را وارد کنید</h3>
-              <p>این مقادیر در دستورهای پایانی استفاده می‌شوند و در هیچ سروری ذخیره نمی‌شوند.</p>
-              <div class="hint-box warn" id="wizardError" hidden></div>
-              <div class="field-row">
-                <div class="field">
-                  <label for="wizardName">نام نمایشی</label>
-                  <input id="wizardName" type="text" placeholder="فروشگاه آرام" autocomplete="off" />
-                </div>
-                <div class="field">
-                  <label for="wizardSlug">شناسه ربات (slug)</label>
-                  <input id="wizardSlug" dir="ltr" type="text" placeholder="shop-aram" autocomplete="off" />
-                  <small>فقط حروف کوچک لاتین، عدد و خط تیره.</small>
-                </div>
-              </div>
-              <div class="field">
-                <label for="wizardToken">توکن ربات</label>
-                <input id="wizardToken" dir="ltr" type="password" placeholder="123456789:AA..." autocomplete="off" spellcheck="false" />
-                <small>توکن فقط برای ساخت دستور کپی استفاده می‌شود؛ کلیدهای حساس را در مدیریت ربات تنظیم کنید.</small>
-              </div>
-              <h3 style="font-size: 15px; margin-top: 22px">کلیدهای سرویس‌های خارجی</h3>
-              <div id="wizardRequirements"></div>
-              <div class="wizard-nav">
-                <button type="button" class="btn btn-ghost" data-wizard-prev>مرحله قبل</button>
-                <button type="button" class="btn btn-primary" data-wizard-next>ساخت خروجی</button>
-              </div>
-            </section>
-
-            <section class="wizard-panel" data-step="4">
-              <h3>خروجی آماده است</h3>
-              <p>کلید اصلی سرور و JWT به‌صورت تصادفی در مرورگر شما تولید شده‌اند. آن‌ها را جای‌گذاری و کپی کنید.</p>
-              <div id="wizardResult"></div>
-              <div id="wizardDeployLinks" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px"></div>
-              <div class="wizard-nav">
-                <button type="button" class="btn btn-ghost" data-wizard-prev>مرحله قبل</button>
-                <button type="button" class="btn btn-ghost" data-wizard-restart>شروع دوباره</button>
-              </div>
-            </section>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="architecture">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">معماری</span>
-            <h2>مونوریپوی ماژولار با مرزهای روشن</h2>
-            <p>هر لایه مسئولیت مشخصی دارد و می‌توانید کل کنترل‌پلین را روی Railway یا بخش سبک را روی Cloudflare Workers اجرا کنید.</p>
-          </div>
-
-          <div class="arch-wrap">
-            <div class="arch-diagram reveal" aria-label="نمودار لایه‌های معماری">
-              <div class="layer">
-                <span class="layer-title">پلتفرم‌ها</span>
-                <div class="layer-boxes">
-                  <span class="layer-box accent">Telegram</span>
-                  <span class="layer-box accent">Bale</span>
-                  <span class="layer-box accent">Rubika</span>
-                </div>
-              </div>
-              <div class="layer-arrow">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" /><path d="M6 13l6 6 6-6" /></svg>
-              </div>
-              <div class="layer">
-                <span class="layer-title">آداپترها</span>
-                <div class="layer-boxes">
-                  <span class="layer-box">platform-adapters/telegram</span>
-                  <span class="layer-box">platform-adapters/bale</span>
-                  <span class="layer-box">platform-adapters/rubika</span>
-                  <span class="layer-box">parse + base</span>
-                </div>
-              </div>
-              <div class="layer-arrow">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" /><path d="M6 13l6 6 6-6" /></svg>
-              </div>
-              <div class="layer">
-                <span class="layer-title">موتور</span>
-                <div class="layer-boxes">
-                  <span class="layer-box accent">bot-runtime</span>
-                  <span class="layer-box">router + middleware</span>
-                  <span class="layer-box">queue / worker</span>
-                  <span class="layer-box">admin panel</span>
-                  <span class="layer-box">force-membership</span>
-                </div>
-              </div>
-              <div class="layer-arrow">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" /><path d="M6 13l6 6 6-6" /></svg>
-              </div>
-              <div class="layer">
-                <span class="layer-title">قالب‌ها</span>
-                <div class="layer-boxes">
-                  <span class="layer-box accent">۳۲ bot templates</span>
-                  <span class="layer-box">services (ai, weather, news, media)</span>
-                  <span class="layer-box">kit + validators</span>
-                </div>
-              </div>
-              <div class="layer-arrow">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" /><path d="M6 13l6 6 6-6" /></svg>
-              </div>
-              <div class="layer">
-                <span class="layer-title">داده و زیرساخت</span>
-                <div class="layer-boxes">
-                  <span class="layer-box">PostgreSQL</span>
-                  <span class="layer-box">SQLite</span>
-                  <span class="layer-box">Cloudflare D1</span>
-                  <span class="layer-box">Fastify control plane</span>
-                  <span class="layer-box">GitHub Pages</span>
-                </div>
-              </div>
-            </div>
-
-            <ul class="arch-list reveal">
-              <li>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 9l3 3-3 3M13 15h4" /></svg>
-                <div>
-                  <strong>apps/control-plane</strong>
-                  <span>API فستيفای برای مدیریت ربات‌ها، کاربران، تنظیمات، وب‌هوک، رسانه و پیام همگانی.</span>
-                </div>
-              </li>
-              <li>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3c2.5 3 2.5 15 0 18-2.5-3-2.5-15 0-18z" /></svg>
-                <div>
-                  <strong>apps/frontend</strong>
-                  <span>سایت استاتیک آماده GitHub Pages: کاتالوگ، ویزارد، مستندات و کدهای قابل کپی.</span>
-                </div>
-              </li>
-              <li>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z" /></svg>
-                <div>
-                  <strong>apps/cloudflare-worker</strong>
-                  <span>ورکر سبک برای دریافت وب‌هوک روی D1 و اجرای زمان‌بند با cron trigger.</span>
-                </div>
-              </li>
-              <li>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M4 7.5l8 4.5 8-4.5" /></svg>
-                <div>
-                  <strong>packages/*</strong>
-                  <span>هسته، آداپترها، موتور و قالب‌ها به‌صورت بسته‌های مستقل با تایپ‌های مشترک.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="security">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">امنیت</span>
-            <h2>کنترل‌های امنیتی در همه لایه‌ها</h2>
-            <p>طراحی بر پایه کمترین دسترسی و دفاع لایه‌ای؛ هیچ توکنی در پاسخ‌های API بازگردانده نمی‌شود.</p>
-          </div>
-          <div class="grid grid-3">
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg></div>
-              <h3>رمزنگاری توکن و کلید</h3>
-              <p>توکن ربات با AES-256-GCM و مشتق‌سازی کلید ذخیره می‌شود؛ کلیدهای حساس تنظیمات نیز رمزنگاری‌شده در پایگاه داده می‌نشینند.</p>
-            </article>
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z" /></svg></div>
-              <h3>وب‌هوک امضاشده</h3>
-              <p>مسیر وب‌هوک شامل secret یکتا و HMAC است؛ برای تلگرام هدر امنیتی جداگانه بررسی و درخواست نامعتبر رد می‌شود.</p>
-            </article>
-            <article class="feature-card reveal">
-              <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 8v4M12 16h.01" /></svg></div>
-              <h3>محافظت SSRF و تزریق</h3>
-              <p>درخواست‌های خارجی از فیلتر SSRF با بلاک شبکه‌های داخلی عبور می‌کنند؛ کوئری‌ها پارامتری و ورودی‌ها با Zod اعتبارسنجی می‌شوند.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="quickstart">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">شروع سریع</span>
-            <h2>از صفر تا ربات فعال</h2>
-            <p>پنج گام زیر روی هر محیطی با Node.js نسخه ۲۰ یا بالاتر اجرا می‌شود.</p>
-          </div>
-
-          <div class="steps">
-            <div class="step reveal">
-              <div class="step-number">۱</div>
-              <div>
-                <h3>نصب وابستگی‌ها</h3>
-                <p>مخزن را کلون و وابستگی‌های همه ورک‌اسپیس‌ها را نصب کنید.</p>
-                <pre class="copyable"><code>git clone https://github.com/amirsedighian071-stack/Botbuilder.git
-cd Botbuilder
-npm install</code></pre>
-              </div>
-            </div>
-
-            <div class="step reveal">
-              <div class="step-number">۲</div>
-              <div>
-                <h3>پیکربندی محیط</h3>
-                <p>متغیرهای الزامی را تنظیم کنید. کلیدها باید حداقل ۳۲ نویسه تصادفی باشند.</p>
-                <pre class="copyable"><code>cp .env.example .env
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"</code></pre>
-              </div>
-            </div>
-
-            <div class="step reveal">
-              <div class="step-number">۳</div>
-              <div>
-                <h3>ساخت پایگاه داده و مدیر</h3>
-                <p>اسکریپت مهاجرت جدول‌ها را می‌سازد و اسکریپت بذر حساب مدیر و کلید API را ایجاد می‌کند.</p>
-                <pre class="copyable"><code>npm run migrate
-npm run seed</code></pre>
-              </div>
-            </div>
-
-            <div class="step reveal">
-              <div class="step-number">۴</div>
-              <div>
-                <h3>اجرای کنترل‌پلین</h3>
-                <p>سرور API روی پورت ۸۰۸۰ بالا می‌آید و وب‌هوک‌ها را دریافت می‌کند.</p>
-                <pre class="copyable"><code>npm run dev:api
-curl http://localhost:8080/health</code></pre>
-              </div>
-            </div>
-
-            <div class="step reveal">
-              <div class="step-number">۵</div>
-              <div>
-                <h3>ثبت ربات و اتصال وب‌هوک</h3>
-                <p>پس از ورود به پنل، ربات را با توکن ثبت کنید؛ آدرس وب‌هوک به‌صورت خودکار روی پلتفرم تنظیم می‌شود.</p>
-                <pre class="copyable"><code>curl -X POST http://localhost:8080/api/bots \\
-  -H "Authorization: Bearer $BOTFORGE_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{"templateId":"gold-price","name":"قیمت طلا","slug":"gold-price","platform":"telegram","token":"<BOT_TOKEN>"}'</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="faq">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">پرسش‌های متداول</span>
-            <h2>پاسخ کوتاه به پرسش‌های رایج</h2>
-          </div>
-
-          <div class="faq-list">
-            <div class="faq-item">
-              <button class="faq-question" type="button" aria-expanded="false">
-                آیا برای استفاده از ربات‌ها به کلیدهای خارجی نیاز دارم؟
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              </button>
-              <div class="faq-answer">
-                بخشی از ربات‌ها (فروشگاه، پشتیبانی، فرم‌ساز، یادآور، کوتاه‌کننده لینک، مدیریت گروه) بدون هیچ کلید خارجی کار می‌کنند. ربات‌های
-                هوش مصنوعی، گفتار، اخبار و قیمت طلا به کلید سرویس مربوطه نیاز دارند؛ در کاتالوگ هر ربات، کلیدهای لازم با نشان الزامی یا
-                اختیاری مشخص شده است.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question" type="button" aria-expanded="false">
-                داده‌ی هر ربات جدا نگه داشته می‌شود؟
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              </button>
-              <div class="faq-answer">
-                بله. هر جدول با شناسه ربات ایندکس شده و همه پرس‌وجوها با <code>bot_id</code> محدود می‌شوند. مجموعه‌های سند (documents)
-                نیز به همین شکل تفکیک می‌شوند؛ بنابراین دو ربات حتی با قالب یکسان داده مشترک ندارند.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question" type="button" aria-expanded="false">
-                آیا می‌توانم فقط بخشی را روی Cloudflare Workers اجرا کنم؟
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              </button>
-              <div class="faq-answer">
-                ورکر سبک برای دریافت وب‌هوک، کاتالوگ و سلامت سرویس آماده است و روی D1 کار می‌کند. پردازش رسانه و ffmpeg نیازمند محیط
-                Node.js است؛ برای این ربات‌ها کنترل‌پلین را روی Railway یا Docker اجرا کنید.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question" type="button" aria-expanded="false">
-                پیام همگانی چگونه محدود می‌شود؟
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              </button>
-              <div class="faq-answer">
-                ارسال همگانی از طریق صف و با باکت توکنی انجام می‌شود؛ نرخ پیش‌فرض پنج پیام در ثانیه و اندازه دسته ۲۵ کاربر است. پیشرفت
-                ارسال در پنل مدیریت قابل مشاهده و کاربران مسدود نادیده گرفته می‌شوند.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question" type="button" aria-expanded="false">
-                اگر توکن ربات لو برود چه می‌شود؟
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              </button>
-              <div class="faq-answer">
-                توکن‌ها رمزنگاری‌شده ذخیره می‌شوند و در پاسخ‌های API فقط نسخه ماسک‌شده نمایش داده می‌شود. در صورت افشا، توکن را در پنل
-                پلتفرم باطل و ربات را با توکن جدید به‌روزرسانی کنید؛ همچنین می‌توانید <code>SECRET_MASTER_KEY</code> را بچرخانید.
+              <div class="hero-stats">
+                <div class="hero-stat"><b>۳۲</b><span>ربات کامل و اجرایی</span></div>
+                <div class="hero-stat"><b>۸۶</b><span>دستور ثبت‌شده</span></div>
+                <div class="hero-stat"><b>۹</b><span>گام استقرار خودکار</span></div>
+                <div class="hero-stat"><b>۳</b><span>پلتفرم با موتور مشترک</span></div>
               </div>
             </div>
           </div>
@@ -651,79 +93,300 @@ curl http://localhost:8080/health</code></pre>
 
       <section class="section-tight">
         <div class="container">
-          <div class="cta reveal">
-            <div>
-              <h2>همین حالا اولین ربات خود را بالا بیاورید</h2>
-              <p>مستندات کامل شامل متغیرهای محیطی، استقرار روی Railway و Cloudflare، مرجع API و راهنمای هر ۳۲ ربات است.</p>
+          <div class="stats-grid">
+            <div class="stat"><span class="stat-label">قالب ربات</span><span class="stat-value" id="homeBots">۳۲</span></div>
+            <div class="stat"><span class="stat-label">دستور و منو</span><span class="stat-value" id="homeCommands">۸۶</span></div>
+            <div class="stat"><span class="stat-label">دسته‌بندی محصول</span><span class="stat-value" id="homeCategories">۵</span></div>
+            <div class="stat"><span class="stat-label">پلتفرم پیام‌رسان</span><span class="stat-value">۳</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">معماری</span>
+            <h2 class="section-title">هر چیزی که یک ربات تجاری لازم دارد، بدون بخش ناتمام</h2>
+            <p class="section-lead">
+              BotForge یک مونوریپوی TypeScript است: هسته مشترک، آداپتور پلتفرم‌ها، موتور اجرا، قالب‌های ربات، کنترل‌پلین
+              Fastify و ورکر Cloudflare. هر ماژول تست دارد و مسیرهای API با احراز هویت و محدودیت نرخ محافظت می‌شوند.
+            </p>
+          </div>
+
+          <div class="grid grid-3">
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="layers"></span>
+              <h3>موتور مشترک چندپلتفرمه</h3>
+              <p>
+                یک هسته برای تلگرام، بله و روبیکا؛ تفاوت‌ها در لایه آداپتور جدا شده‌اند تا منطق ربات یک بار نوشته و روی هر
+                سه پلتفرم اجرا شود.
+              </p>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="rocket"></span>
+              <h3>استقرار خودکار با API</h3>
+              <p>
+                با وارد کردن توکن میزبان، سرور پایگاه‌داده را می‌سازد، بسته را بارگذاری می‌کند، متغیرهای محیطی را تزریق و
+                وب‌هوک را ثبت می‌کند؛ سپس سلامت سرویس را می‌سنجد.
+              </p>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="shield-check"></span>
+              <h3>عضویت اجباری و ضدسوءاستفاده</h3>
+              <p>
+                بررسی عضویت در کانال‌ها، مسدودسازی کاربران، محدودیت نرخ روی وب‌هوک و ارسال همگانی، محافظت SSRF و
+                اعتبارسنجی سخت‌گیرانه ورودی‌ها.
+              </p>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="gauge"></span>
+              <h3>داشبورد مدیریت واقعی</h3>
+              <p>
+                آمار زنده کاربران و پیام‌ها، مدیریت نقش‌ها، مسدودسازی، ارسال همگانی با نرخ مجاز، حالت تعمیر و مشاهده
+                رویدادها برای هر ربات به‌صورت جداگانه.
+              </p>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="database"></span>
+              <h3>سه موتور ذخیره‌سازی</h3>
+              <p>
+                SQLite برای اجرای سریع، PostgreSQL برای تولید و D1 برای ورکر؛ همه پشت یک لایه Storage با جداسازی کامل
+                داده هر ربات.
+              </p>
+            </article>
+            <article class="feature reveal">
+              <span class="feature-icon" aria-hidden="true" data-icon="clock"></span>
+              <h3>صف کار و کرون</h3>
+              <p>
+                کارهای پس‌زمینه با تلاش مجدد و زمان‌بندی، اجرای زمان‌بند ورکر هر دقیقه و پیگیری وضعیت کارها در داشبورد و
+                API.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">کاتالوگ</span>
+            <h2 class="section-title">پنج دسته، سی‌ودو ربات آماده</h2>
+            <p class="section-lead">هر قالب شامل دستورها، منوی دکمه‌ای، تنظیمات پیش‌فرض و فهرست کلیدهای مورد نیاز است.</p>
+          </div>
+          <div class="grid grid-3" id="categoryPreview">
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="trending-up" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>مالی و اطلاعاتی</h3><span class="bot-meta">۵ ربات</span></div>
+              </div>
+              <p class="bot-summary">قیمت طلا و ارز، رمزارز، اخبار، هشدار قیمت، آب‌وهوا و ماشین‌حساب مالی.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html?category=A">مشاهده دسته</a></div>
+            </article>
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="briefcase" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>فروش و کسب‌وکار</h3><span class="bot-meta">۷ ربات</span></div>
+              </div>
+              <p class="bot-summary">فروشگاه، پشتیبانی، نوبت‌دهی، اشتراک، بازاریابی، سفارش خدمات و CRM.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html?category=B">مشاهده دسته</a></div>
+            </article>
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="download" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>دانلود و رسانه</h3><span class="bot-meta">۸ ربات</span></div>
+              </div>
+              <p class="bot-summary">دانلود از اینستاگرام و یوتیوب، تبدیل صوت، مدیریت فایل و گفتار.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html?category=C">مشاهده دسته</a></div>
+            </article>
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="sparkles" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>هوش مصنوعی و بهره‌وری</h3><span class="bot-meta">۵ ربات</span></div>
+              </div>
+              <p class="bot-summary">دستیار هوشمند، مترجم، دستیار مطالعه، تولید محتوا و خلاصه‌سازی امن لینک.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html?category=D">مشاهده دسته</a></div>
+            </article>
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="layers" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>مدیریت و ابزار روزمره</h3><span class="bot-meta">۷ ربات</span></div>
+              </div>
+              <p class="bot-summary">مدیریت گروه، نظرسنجی، یادآور، کوتاه‌کننده لینک، فرم‌ساز، دوره و پایش سایت.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html?category=E">مشاهده دسته</a></div>
+            </article>
+            <article class="bot-card reveal">
+              <div class="bot-card-top">
+                <span class="bot-icon" data-icon="list" aria-hidden="true"></span>
+                <div class="bot-heading"><h3>فهرست کامل</h3><span class="bot-meta">نمای کارت و جدول</span></div>
+              </div>
+              <p class="bot-summary">جست‌وجو بر اساس نام، دستور و کلید؛ مقایسه دستورها و انتخاب سریع برای ساخت.</p>
+              <div class="bot-card-foot"><a class="link-arrow" href="catalog.html">رفتن به کاتالوگ</a></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">مسیر اجرا</span>
+            <h2 class="section-title">از انتخاب قالب تا ربات فعال، چهار ایستگاه</h2>
+            <p class="section-lead">ویزارد همه چیز را به هم وصل می‌کند: توکن، هویت، کلیدها، میزبان و در پایان استقرار.</p>
+          </div>
+          <div class="flow">
+            <div class="flow-item">
+              <h4>انتخاب ربات و پلتفرم</h4>
+              <p>از میان ۳۲ قالب، ربات مناسب را انتخاب و پلتفرم مقصد را مشخص کنید.</p>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap">
-              <a class="btn btn-primary" href="docs.html">مستندات کامل</a>
-              <a class="btn btn-ghost" href="#wizard">ویزارد راه‌اندازی</a>
+            <div class="flow-item">
+              <h4>دریافت و اعتبارسنجی توکن</h4>
+              <p>دکمه «دریافت API» شما را به BotFather می‌برد؛ پس از ورود توکن، سرور آن را با پلتفرم بررسی می‌کند.</p>
+            </div>
+            <div class="flow-item">
+              <h4>کلیدها و میزبان</h4>
+              <p>کلید سرویس‌های بیرونی و توکن Cloudflare یا Railway را وارد و اعتبارسنجی کنید.</p>
+            </div>
+            <div class="flow-item">
+              <h4>استقرار و سلامت</h4>
+              <p>با یک دکمه بسته ساخته، مستقر و وب‌هوک ثبت می‌شود؛ نتیجه و آدرس‌ها گزارش می‌شوند.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="grid grid-2">
+            <div class="card card-pad">
+              <span class="eyebrow">Cloudflare Workers</span>
+              <h2>استقرار لبه‌ای برای پاسخ سریع</h2>
+              <p class="muted">
+                ورکر ساخته‌شده با D1 و کرون هر دقیقه اجرا می‌شود. مناسب وب‌هوک پرترافیک و ربات‌های اطلاعاتی؛ پردازش
+                رسانه سنگین در این محیط پشتیبانی نمی‌شود و باید Railway را انتخاب کنید.
+              </p>
+              <div class="chips">
+                <span class="chip chip-active">وب‌هوک</span>
+                <span class="chip chip-active">D1</span>
+                <span class="chip chip-active">cron</span>
+              </div>
+              <div class="btn-row mt-2">
+                <a class="btn btn-secondary btn-sm" href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" rel="noopener noreferrer">دریافت API Token</a>
+                <a class="btn btn-ghost btn-sm" href="docs.html#auto-deploy">راهنمای استقرار</a>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <span class="eyebrow">Railway</span>
+              <h2>کنترل‌پلین کامل با PostgreSQL</h2>
+              <p class="muted">
+                سرویس Node.js با PostgreSQL، صف کار، رسانه و ffmpeg؛ پشتیبان همه ۳۲ ربات و مناسب بار سنگین. توکن Railway
+                فقط برای API استفاده می‌شود و به مخزن GitHub دسترسی نمی‌دهد.
+              </p>
+              <div class="chips">
+                <span class="chip chip-active">همه ربات‌ها</span>
+                <span class="chip chip-active">رسانه</span>
+                <span class="chip chip-active">PostgreSQL</span>
+              </div>
+              <div class="btn-row mt-2">
+                <a class="btn btn-secondary btn-sm" href="https://railway.com/account/tokens" target="_blank" rel="noopener noreferrer">دریافت API Token</a>
+                <a class="btn btn-ghost btn-sm" href="deployment.html">وضعیت استقرار</a>
+              </div>
+            </div>
+          </div>
+          <div class="notice mt-2">
+            <span data-icon="info" aria-hidden="true"></span>
+            <div>
+              <strong>نکته مهم درباره همین سایت</strong>
+              این صفحه روی GitHub Pages میزبانی می‌شود و فقط فایل ایستا است؛ برای انجام اعتبارسنجی زنده و استقرار خودکار،
+              باید آدرس کنترل‌پلین خود را در ویزارد وارد و وارد شوید. بدون سرور، ویزارد بسته استقرار و اسکریپت واقعی
+              می‌سازد تا خودتان اجرا کنید.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container container-narrow">
+          <div class="section-head">
+            <span class="eyebrow">پرسش‌های پرتکرار</span>
+            <h2 class="section-title">پاسخ‌های کوتاه و دقیق</h2>
+          </div>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button type="button" class="faq-question" aria-expanded="false">
+                <span>آیا این سایت خودش ربات را اجرا می‌کند؟</span>
+                <span data-icon="chevron-down" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer">
+                نه. GitHub Pages فقط فایل‌های ایستا را سرو می‌کند. اجرای ربات به کنترل‌پلین Node.js یا ورکر Cloudflare نیاز
+                دارد که با Dockerfile، railway.json و wrangler.toml در مخزن آماده است.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button type="button" class="faq-question" aria-expanded="false">
+                <span>توکن‌ها در مرورگر ذخیره می‌شوند؟</span>
+                <span data-icon="chevron-down" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer">
+                توکن ربات و اعتبارنامه میزبان فقط در حافظه و sessionStorage همان تب نگه داشته می‌شوند و با بستن تب پاک
+                می‌شوند. در سرور، اعتبارنامه‌ها با کلید اصلی رمزنگاری و ذخیره می‌شوند و در پاسخ API هرگز بازگردانده
+                نمی‌شوند.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button type="button" class="faq-question" aria-expanded="false">
+                <span>چرا متن سایت قابل انتخاب نیست؟</span>
+                <span data-icon="chevron-down" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer">
+                برای جلوگیری از کپی ناخواسته محتوا، متن‌ها غیرقابل انتخاب هستند؛ اما توکن‌ها، کلیدها، قطعه‌کدها و
+                فرمان‌ها قابل انتخاب‌اند و دکمه «کپی در حافظه» دارند.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button type="button" class="faq-question" aria-expanded="false">
+                <span>اگر توکن میزبان نداشته باشم چه می‌شود؟</span>
+                <span data-icon="chevron-down" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer">
+                می‌توانید نقشه استقرار، فایل .env و اسکریپت bash را دانلود کنید و همان مراحل را دستی اجرا کنید. سرویس
+                کنترل‌پلین نیز با docker compose یا Railway قابل راه‌اندازی است.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button type="button" class="faq-question" aria-expanded="false">
+                <span>آیا ربات‌ها به هم دسترسی دارند؟</span>
+                <span data-icon="chevron-down" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer">
+                نه. هر ربات شناسه مستقل، توکن رمزنگاری‌شده، تنظیمات، کاربران و رویدادهای جدا دارد. تمام پرس‌وجوهای
+                ذخیره‌سازی با شناسه ربات محدود شده‌اند.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="cta-band">
+            <span class="eyebrow">شروع سریع</span>
+            <h2>اولین ربات خود را همین حالا بسازید</h2>
+            <p>ویزارد شش‌مرحله‌ای شما را قدم‌به‌قدم تا استقرار و ثبت وب‌هوک همراهی می‌کند.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary btn-lg" href="wizard.html">شروع ساخت ربات</a>
+              <a class="btn btn-outline btn-lg" href="docs.html">مطالعه مستندات</a>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div>
-            <a class="brand" href="index.html">
-              <span class="brand-mark" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="4" y="8" width="16" height="12" rx="3" />
-                  <path d="M12 4v4" />
-                  <circle cx="9" cy="14" r="1" />
-                  <circle cx="15" cy="14" r="1" />
-                  <path d="M9 18h6" />
-                </svg>
-              </span>
-              <span>
-                BotForge
-                <small>BOT PLATFORM</small>
-              </span>
-            </a>
-            <p style="margin-top: 14px; font-size: 13.5px; max-width: 320px">
-              پلتفرم متن‌باز ساخت و مدیریت ربات‌های تلگرام، بله و روبیکا با ۳۲ قالب تولیدی و معماری ماژولار.
-            </p>
-          </div>
-          <div>
-            <h4>محصول</h4>
-            <ul>
-              <li><a href="#features">امکانات</a></li>
-              <li><a href="#catalog">کاتالوگ ربات‌ها</a></li>
-              <li><a href="#wizard">ویزارد راه‌اندازی</a></li>
-              <li><a href="#architecture">معماری</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>منابع</h4>
-            <ul>
-              <li><a href="docs.html">مستندات</a></li>
-              <li><a href="docs.html#api">مرجع API</a></li>
-              <li><a href="docs.html#deploy">راهنمای استقرار</a></li>
-              <li><a href="docs.html#troubleshooting">عیب‌یابی</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>پروژه</h4>
-            <ul>
-              <li><a href="https://github.com/amirsedighian071-stack/Botbuilder" target="_blank" rel="noopener noreferrer">مخزن GitHub</a></li>
-              <li><a href="docs.html#security">امنیت</a></li>
-              <li><a href="docs.html#bots">فهرست ربات‌ها</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <span>BotForge — ساخته‌شده با TypeScript، Fastify و بدون هیچ ایموجی در رابط کاربری.</span>
-          <span>© <span data-current-year>۱۴۰۴</span> — مجوز MIT</span>
-        </div>
-      </div>
-    </footer>
+    <footer class="site-footer" id="site-footer"></footer>
 
     <script src="assets/js/icons.js"></script>
     <script src="assets/js/catalog.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/home.js"></script>
   </body>
 </html>

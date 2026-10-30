@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ویزارد ساخت ربات — BotForge</title>
+    <meta
+      name="description"
+      content="ویزارد شش‌مرحله‌ای BotForge: انتخاب ربات، دریافت و اعتبارسنجی زنده توکن، هویت ربات، کلیدهای یکپارچه‌سازی، انتخاب میزبان و استقرار خودکار."
+    />
+    <meta name="theme-color" content="#071021" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="manifest" href="site.webmanifest" />
+    <style>
+      :root { color-scheme: dark; }
+      html { background: #040a18; }
+      body {
+        margin: 0;
+        background: #040a18;
+        color: #dbe6f5;
+        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
+        line-height: 1.85;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+      .site-header { min-height: 68px; }
+    </style>
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body data-page="wizard">
+    <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+    <header class="site-header" id="site-header"></header>
+
+    <main id="main">
+      <section class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="مسیر صفحه">
+            <a href="index.html">خانه</a>
+            <span data-icon="chevron-left" aria-hidden="true"></span>
+            <span>ساخت ربات</span>
+          </nav>
+          <span class="eyebrow">ویزارد شش‌مرحله‌ای</span>
+          <h1>ساخت و استقرار خودکار ربات</h1>
+          <p>
+            در هر مرحله فقط اطلاعات لازم پرسیده می‌شود. توکن‌ها بلافاصله با پلتفرم اعتبارسنجی می‌شوند، متغیرهای محیطی
+            خودکار ساخته می‌شوند و در پایان یک دکمه، ربات را مستقر و وب‌هوک را ثبت می‌کند.
+          </p>
+        </div>
+      </section>
+
+      <section class="section-tight">
+        <div class="container">
+          <div class="card card-pad mb-2" id="connectionCard">
+            <div class="row-between">
+              <div>
+                <h3 style="margin: 0">اتصال به کنترل‌پلین</h3>
+                <p class="tiny dim">
+                  برای اعتبارسنجی زنده و استقرار خودکار، آدرس سرور BotForge خود را وارد کنید. این سایت ایستا است و بدون
+                  سرور تنها بسته استقرار را می‌سازد.
+                </p>
+              </div>
+              <span class="badge badge-info">اختیاری اما لازم برای استقرار</span>
+            </div>
+
+            <form id="connectionPanel" class="form-grid mt-2" autocomplete="off">
+              <div class="field span-2">
+                <label for="apiBase">آدرس کنترل‌پلین</label>
+                <input id="apiBase" class="input" dir="ltr" placeholder="https://botforge-production.up.railway.app" />
+                <span class="hint">آدرس بدون اسلش انتهایی. برای اجرای محلی: <code class="code-inline">http://localhost:8090</code></span>
+              </div>
+              <div class="field">
+                <label for="adminEmail">ایمیل مدیر</label>
+                <input id="adminEmail" class="input" dir="ltr" type="email" placeholder="admin@botforge.local" />
+              </div>
+              <div class="field">
+                <label for="adminPassword">گذرواژه مدیر</label>
+                <input id="adminPassword" class="input" dir="ltr" type="password" placeholder="••••••••" />
+              </div>
+              <div class="field span-2">
+                <div class="btn-row">
+                  <button type="button" class="btn btn-outline btn-sm" id="testConnectionBtn">تست اتصال</button>
+                  <button type="button" class="btn btn-primary btn-sm" id="loginBtn">ورود به کنترل‌پلین</button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="logoutBtn" hidden>خروج از حساب</button>
+                </div>
+                <div class="field-status" id="connectionTest"></div>
+                <div class="field-status" id="connectionState"></div>
+              </div>
+            </form>
+          </div>
+
+          <div class="wizard-layout">
+            <aside class="stepper" id="wizardStepper" aria-label="مراحل ویزارد">
+              <button type="button" class="stepper-item is-active" data-step="0" aria-current="step">
+                <span class="step-num">۱</span><span class="step-label">انتخاب ربات</span>
+              </button>
+              <button type="button" class="stepper-item" data-step="1">
+                <span class="step-num">۲</span><span class="step-label">پلتفرم و توکن</span>
+              </button>
+              <button type="button" class="stepper-item" data-step="2">
+                <span class="step-num">۳</span><span class="step-label">هویت ربات</span>
+              </button>
+              <button type="button" class="stepper-item" data-step="3">
+                <span class="step-num">۴</span><span class="step-label">کلیدهای یکپارچه‌سازی</span>
+              </button>
+              <button type="button" class="stepper-item" data-step="4">
+                <span class="step-num">۵</span><span class="step-label">میزبانی و استقرار</span>
+              </button>
+              <button type="button" class="stepper-item" data-step="5">
+                <span class="step-num">۶</span><span class="step-label">بازبینی و تأیید</span>
+              </button>
+            </aside>
+
+            <div class="wizard-panel">
+              <!-- Step 1 -->
+              <section class="wizard-step is-active" data-step="0" aria-labelledby="step1Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step1Title">۱. ربات مورد نظر را انتخاب کنید</h2>
+                    <p>از میان ۳۲ قالب کامل؛ با برچسب دسته فیلتر کنید یا نام و دستور را جست‌وجو کنید.</p>
+                  </div>
+                  <span class="badge badge-info">۳۲ قالب</span>
+                </div>
+
+                <div class="field mb-2">
+                  <label class="sr-only" for="templateSearch">جست‌وجوی قالب</label>
+                  <input id="templateSearch" class="input" type="search" placeholder="جست‌وجوی ربات: فروشگاه، مترجم، نظرسنجی..." autocomplete="off" />
+                </div>
+                <div class="chips mb-2" id="templateChips"></div>
+                <div class="template-grid" id="templateList" role="list"></div>
+
+                <div class="wizard-nav">
+                  <span class="tiny dim">پس از انتخاب، دکمه «مرحله بعد» فعال می‌شود.</span>
+                  <button type="button" class="btn btn-primary" data-next>مرحله بعد</button>
+                </div>
+              </section>
+
+              <!-- Step 2 -->
+              <section class="wizard-step" data-step="1" aria-labelledby="step2Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step2Title">۲. پلتفرم و توکن ربات</h2>
+                    <p>پلتفرم را انتخاب کنید، با دکمه «دریافت API» توکن بگیرید و همان‌جا اعتبارسنجی کنید.</p>
+                  </div>
+                </div>
+
+                <div class="option-grid mb-2" id="platformOptions"></div>
+
+                <div class="card card-pad">
+                  <div class="field">
+                    <label for="botToken">توکن ربات <span class="req">*</span></label>
+                    <div class="input-group">
+                      <input id="botToken" class="input" dir="ltr" type="password" autocomplete="off" spellcheck="false" placeholder="123456789:AA..." />
+                      <button type="button" class="btn btn-secondary btn-sm" id="validateTokenBtn">اعتبارسنجی زنده</button>
+                    </div>
+                    <span class="hint" id="tokenHint"></span>
+                    <div class="field-status" id="tokenStatus"></div>
+                  </div>
+
+                  <div class="btn-row mt-2">
+                    <a class="btn btn-outline btn-sm" id="platformLink" href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">دریافت توکن</a>
+                    <a class="btn btn-ghost btn-sm" id="platformDocs" href="https://core.telegram.org/bots/tutorial" target="_blank" rel="noopener noreferrer">مستندات پلتفرم</a>
+                  </div>
+
+                  <div class="notice mt-2">
+                    <span data-icon="lock" aria-hidden="true"></span>
+                    <div>
+                      <strong>امنیت توکن</strong>
+                      توکن با درخواست HTTPS به سرور خودتان فرستاده می‌شود، در پایگاه‌داده رمزنگاری می‌شود و هرگز در آدرس
+                      صفحه یا پاسخ‌های عمومی نمایش داده نمی‌شود. در مرورگر فقط در حافظه و sessionStorage می‌ماند.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wizard-nav">
+                  <button type="button" class="btn btn-outline" data-prev>مرحله قبل</button>
+                  <button type="button" class="btn btn-primary" data-next>مرحله بعد</button>
+                </div>
+              </section>
+
+              <!-- Step 3 -->
+              <section class="wizard-step" data-step="2" aria-labelledby="step3Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step3Title">۳. هویت ربات</h2>
+                    <p>نام نمایشی و شناسه یکتای ربات را تعیین کنید؛ شناسه در آدرس وب‌هوک و نام سرویس استفاده می‌شود.</p>
+                  </div>
+                  <span class="badge badge-muted" id="identityTemplate"></span>
+                </div>
+
+                <div class="card card-pad">
+                  <div class="form-grid">
+                    <div class="field">
+                      <label for="botName">نام ربات <span class="req">*</span></label>
+                      <input id="botName" class="input" maxlength="64" placeholder="فروشگاه من" />
+                      <span class="hint">بین ۲ تا ۶۴ کاراکتر؛ در پنل و پیام‌ها نمایش داده می‌شود.</span>
+                    </div>
+                    <div class="field">
+                      <label for="botSlug">شناسه یکتا <span class="req">*</span></label>
+                      <div class="input-group">
+                        <input id="botSlug" class="input" dir="ltr" maxlength="40" placeholder="my-shop-1a2b" />
+                        <button type="button" class="btn btn-outline btn-sm" id="slugSuggest">پیشنهاد خودکار</button>
+                      </div>
+                      <span class="hint">حروف لاتین کوچک، عدد و خط تیره؛ ۳ تا ۴۰ کاراکتر و شروع با حرف یا عدد.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wizard-nav">
+                  <button type="button" class="btn btn-outline" data-prev>مرحله قبل</button>
+                  <button type="button" class="btn btn-primary" data-next>مرحله بعد</button>
+                </div>
+              </section>
+
+              <!-- Step 4 -->
+              <section class="wizard-step" data-step="3" aria-labelledby="step4Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step4Title">۴. کلیدهای یکپارچه‌سازی</h2>
+                    <p>
+                      هر کلید الزامی باید پر شود؛ کلیدهای اختیاری را می‌توانید خالی بگذارید تا ربات از منابع عمومی استفاده
+                      کند. این مقادیر به‌صورت متغیر محیطی روی سرویس مقصد تنظیم می‌شوند.
+                    </p>
+                  </div>
+                </div>
+                <div id="integrationFields"></div>
+
+                <div class="wizard-nav">
+                  <button type="button" class="btn btn-outline" data-prev>مرحله قبل</button>
+                  <button type="button" class="btn btn-primary" data-next>مرحله بعد</button>
+                </div>
+              </section>
+
+              <!-- Step 5 -->
+              <section class="wizard-step" data-step="4" aria-labelledby="step5Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step5Title">۵. میزبانی و استقرار</h2>
+                    <p>سرویس مقصد را انتخاب کنید، توکن API آن را بگیرید و با دکمه اعتبارسنجی، دسترسی را بررسی کنید.</p>
+                  </div>
+                </div>
+
+                <div class="option-grid mb-2" id="providerOptions"></div>
+
+                <div class="card card-pad">
+                  <div class="row-between">
+                    <h3 style="margin: 0">اعتبارنامه میزبان</h3>
+                    <a class="btn btn-outline btn-sm" id="providerLink" href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" rel="noopener noreferrer">دریافت API</a>
+                  </div>
+                  <p class="tiny dim" id="providerNote"></p>
+                  <div id="providerFields" class="form-grid mt-1"></div>
+                  <div class="btn-row mt-2">
+                    <button type="button" class="btn btn-secondary btn-sm" id="validateProviderBtn">اعتبارسنجی حساب</button>
+                  </div>
+                  <div class="field-status mt-1" id="providerStatus"></div>
+                </div>
+
+                <div class="notice mt-2">
+                  <span data-icon="server" aria-hidden="true"></span>
+                  <div>
+                    <strong>چه چیزی خودکار ساخته می‌شود؟</strong>
+                    پایگاه‌داده (D1 یا اتصال PostgreSQL)، متغیرهای محیطی و رمزها، نام سرویس، دامنه عمومی، کرون هر دقیقه،
+                    ثبت وب‌هوک پلتفرم و بررسی نهایی سلامت — همه با API همان سرویس، بدون دخالت دستی.
+                  </div>
+                </div>
+
+                <div class="wizard-nav">
+                  <button type="button" class="btn btn-outline" data-prev>مرحله قبل</button>
+                  <button type="button" class="btn btn-primary" data-next>مرحله بعد</button>
+                </div>
+              </section>
+
+              <!-- Step 6 -->
+              <section class="wizard-step" data-step="5" aria-labelledby="step6Title">
+                <div class="wizard-head">
+                  <div>
+                    <h2 id="step6Title">۶. بازبینی و تأیید استقرار</h2>
+                    <p>پیش از استقرار، خلاصه تنظیمات و متغیرهای محیطی را بررسی کنید؛ کلیدها ماسک شده‌اند.</p>
+                  </div>
+                </div>
+
+                <div class="card card-pad" id="reviewPanel">
+                  <h3>خلاصه پیکربندی</h3>
+                  <div class="selection-summary" id="reviewSummary"></div>
+                  <h4 class="mt-2">متغیرهای محیطی (ماسک‌شده)</h4>
+                  <div class="code-wrap selectable">
+                    <div class="code-bar">
+                      <span>environment</span>
+                      <span class="tiny dim">کلیدها مخفی هستند</span>
+                    </div>
+                    <pre class="code selectable" id="envPreview"></pre>
+                  </div>
+                  <div class="btn-row">
+                    <button type="button" class="btn btn-outline btn-sm" id="downloadBlueprint">دانلود نقشه استقرار (JSON)</button>
+                    <button type="button" class="btn btn-outline btn-sm" id="downloadEnv">دانلود فایل .env</button>
+                    <button type="button" class="btn btn-outline btn-sm" id="downloadScript">دانلود اسکریپت استقرار</button>
+                  </div>
+                </div>
+
+                <div class="card card-pad mt-2">
+                  <div class="row-between">
+                    <div>
+                      <h3 style="margin: 0">استقرار خودکار</h3>
+                      <p class="tiny dim" id="deployHint"></p>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg" id="deployBtn">
+                      <span data-icon="rocket" aria-hidden="true"></span>
+                      تأیید و استقرار خودکار
+                    </button>
+                  </div>
+                </div>
+
+                <div class="card mt-2" id="deployPanel" hidden>
+                  <div class="card-head">
+                    <h3>گزارش استقرار</h3>
+                    <div class="row-between">
+                      <span id="deployStatus"></span>
+                      <button type="button" class="btn btn-ghost btn-sm" id="refreshDeployment">به‌روزرسانی وضعیت</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="notice notice-danger" id="deployError" hidden></div>
+                    <ul class="timeline" id="deployProgress"></ul>
+                    <h4 class="mt-2">گزارش زنده</h4>
+                    <div class="log-box" id="deployLogs"></div>
+                    <div class="mt-2" id="deployUrls"></div>
+                    <div id="webhookBox" hidden>
+                      <h4>آدرس وب‌هوک ربات</h4>
+                      <div id="webhookUrl"></div>
+                    </div>
+                    <div class="btn-row mt-2" id="deployLinks" hidden>
+                      <a class="btn btn-secondary btn-sm" id="dashboardLink" href="dashboard.html">رفتن به داشبورد ربات</a>
+                      <a class="btn btn-outline btn-sm" href="deployment.html">تاریخچه استقرارها</a>
+                      <a class="btn btn-ghost btn-sm" href="docs.html#troubleshooting">عیب‌یابی</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wizard-nav">
+                  <button type="button" class="btn btn-outline" data-prev>مرحله قبل</button>
+                  <a class="btn btn-ghost" href="catalog.html">بازگشت به کاتالوگ</a>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="site-footer"></footer>
+
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/catalog.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/wizard.js"></script>
+  </body>
+</html>

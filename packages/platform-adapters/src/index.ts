@@ -46,9 +46,11 @@ export function createAdapter(options: AdapterFactoryOptions): BaseAdapter {
 }
 
 export function detectPlatformFromToken(token: string): PlatformName | null {
-  if (/^\d{6,12}:[A-Za-z0-9_-]{30,}$/.test(token)) return 'telegram';
-  if (/^[0-9]{6,}:[A-Za-z0-9_-]{20,}$/.test(token)) return 'bale';
-  if (/^[A-Za-z0-9]{20,}$/.test(token)) return 'rubika';
+  const trimmed = token.trim();
+  // Tokens without a colon are Rubika bot keys: a single opaque alphanumeric string.
+  if (/^[A-Za-z0-9]{20,}$/.test(trimmed)) return 'rubika';
+  // Telegram and Bale tokens share the same "<id>:<secret>" shape, so they cannot be
+  // told apart from the string alone. The caller's explicit platform stays authoritative.
   return null;
 }
 

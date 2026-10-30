@@ -1,0 +1,18 @@
+{
+  "name": "BotForge — پلتفرم ربات پیام‌رسان",
+  "short_name": "BotForge",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040a18",
+  "theme_color": "#0a1628",
+  "lang": "fa",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

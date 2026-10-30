@@ -1,434 +1,410 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>مستندات BotForge — نصب، استقرار، API و ربات‌ها</title>
-    <meta name="description" content="مستندات کامل BotForge: متغیرهای محیطی، دیتابیس، استقرار روی Railway و Cloudflare، مرجع API، مدیریت ربات و عیب‌یابی." />
-    <meta name="theme-color" content="#04070f" />
-    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>مستندات — BotForge</title>
+    <meta
+      name="description"
+      content="مستندات کامل BotForge: نصب، تنظیمات محیطی، معماری، مرجع API، استقرار خودکار روی Cloudflare و Railway، امنیت، عضویت اجباری و عیب‌یابی."
     />
+    <meta name="theme-color" content="#071021" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="manifest" href="site.webmanifest" />
+    <style>
+      :root { color-scheme: dark; }
+      html { background: #040a18; }
+      body {
+        margin: 0;
+        background: #040a18;
+        color: #dbe6f5;
+        font-family: 'Vazirmatn', 'IRANSansX', 'Segoe UI', Tahoma, system-ui, sans-serif;
+        line-height: 1.85;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+      .site-header { min-height: 68px; }
+    </style>
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
-  <body>
+  <body data-page="docs">
     <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
-
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="index.html" aria-label="BotForge">
-          <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="8" width="16" height="12" rx="3" />
-              <path d="M12 4v4" />
-              <circle cx="9" cy="14" r="1" />
-              <circle cx="15" cy="14" r="1" />
-              <path d="M9 18h6" />
-            </svg>
-          </span>
-          <span>
-            BotForge
-            <small>BOT PLATFORM</small>
-          </span>
-        </a>
-
-        <nav class="nav" aria-label="ناوبری اصلی">
-          <a href="index.html#features">امکانات</a>
-          <a href="index.html#catalog">کاتالوگ ربات‌ها</a>
-          <a href="index.html#wizard">راه‌اندازی</a>
-          <a href="docs.html" class="is-active">مستندات</a>
-        </nav>
-
-        <div class="header-actions">
-          <a class="btn btn-ghost btn-sm" href="https://github.com/amirsedighian071-stack/Botbuilder" target="_blank" rel="noopener noreferrer">
-            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 4.5-1.4 4.5-4.9a3.8 3.8 0 0 0-1-2.6 3.5 3.5 0 0 0-.1-2.6s-1.1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.2 5.1 5.1 5.4 5.1 5.4a3.5 3.5 0 0 0-.1 2.6 3.8 3.8 0 0 0-1 2.7c0 3.4 1.7 4.5 4.5 4.8-.3.3-.5.8-.5 1.4V21" /></svg>
-            GitHub
-          </a>
-          <button class="nav-toggle" type="button" aria-label="منوی ناوبری" aria-expanded="false">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-          </button>
-        </div>
-      </div>
-    </header>
+    <header class="site-header" id="site-header"></header>
 
     <main id="main">
-      <div class="container docs-layout">
-        <aside class="docs-sidebar" aria-label="فهرست مستندات">
-          <h3>شروع</h3>
-          <a href="#intro">معرفی</a>
-          <a href="#quickstart">شروع سریع</a>
-          <a href="#structure">ساختار مخزن</a>
-          <a href="#env">متغیرهای محیطی</a>
-          <a href="#database">پایگاه داده</a>
-          <h3>استقرار</h3>
-          <a href="#deploy">گزینه‌های استقرار</a>
-          <a href="#railway">Railway</a>
-          <a href="#docker">Docker</a>
-          <a href="#cloudflare">Cloudflare Worker و D1</a>
-          <a href="#pages">GitHub Pages</a>
-          <h3>کاربری</h3>
-          <a href="#api">مرجع API</a>
-          <a href="#admin">پنل مدیریت ربات</a>
-          <a href="#users">کاربران و پیام همگانی</a>
-          <a href="#bots">فهرست ربات‌ها</a>
-          <h3>عملیات</h3>
-          <a href="#security">امنیت</a>
-          <a href="#monitoring">پایش و سلامت</a>
-          <a href="#troubleshooting">عیب‌یابی</a>
-        </aside>
-
-        <div class="docs-content">
+      <section class="page-head">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="مسیر صفحه">
+            <a href="index.html">خانه</a>
+            <span data-icon="chevron-left" aria-hidden="true"></span>
+            <span>مستندات</span>
+          </nav>
+          <span class="eyebrow">نسخه ۱.۰.۰</span>
           <h1>مستندات BotForge</h1>
           <p>
-            این مستندات همه مراحل نصب، پیکربندی، استقرار و بهره‌برداری از BotForge را پوشش می‌دهد. BotForge یک مونوریپوی TypeScript است
-            که موتور مشترک ربات، آداپترهای تلگرام/بله/روبیکا و ۳۲ قالب ربات کامل را در یک بسته ارائه می‌کند.
+            از راه‌اندازی محلی تا استقرار خودکار روی Cloudflare Workers و Railway. همه دستورها و نمونه‌های کد قابل کپی
+            هستند.
           </p>
-
-          <div class="toc-inline">
-            <strong style="font-size: 14px">مسیر پیشنهادی مطالعه</strong>
-            <ol>
-              <li>شروع سریع و ساختار مخزن را ببینید.</li>
-              <li>متغیرهای محیطی و دیتابیس را تنظیم کنید.</li>
-              <li>یکی از روش‌های استقرار را انتخاب کنید.</li>
-              <li>مرجع API و پنل مدیریت را برای بهره‌برداری روزمره بخوانید.</li>
-            </ol>
+          <div class="field mt-2" style="max-width: 520px">
+            <label class="sr-only" for="docsSearch">جست‌وجو در مستندات</label>
+            <input id="docsSearch" class="input" type="search" placeholder="جست‌وجو در عنوان بخش‌ها..." autocomplete="off" />
           </div>
+        </div>
+      </section>
 
-          <h2 id="intro">معرفی</h2>
-          <p>
-            هر ربات در BotForge سه بخش دارد: قالب (<code>BotDefinition</code>) که منطق گفتگو را توصیف می‌کند، آداپتر پلتفرم که پیام‌ها را
-            ترجمه می‌کند و رکورد ربات در پایگاه داده که توکن، وضعیت، تنظیمات و عضویت اجباری را نگه می‌دارد. موتور، قالب را روی آداپتر
-            سوار می‌کند و چرخه دریافت به‌روزرسانی، مسیریابی، مدیریت وضعیت و پاسخ را انجام می‌دهد.
-          </p>
-          <table>
-            <thead>
-              <tr><th>مفهوم</th><th>توضیح</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>BotDefinition</code></td><td>قالب کامل ربات: منو، دستورها، اقدام‌ها، گام‌های گفتگو، کارهای زمان‌بندی‌شده و نیازمندی‌ها.</td></tr>
-              <tr><td><code>BotRuntime</code></td><td>نمونه فعال ربات در حافظه: آداپتر، تنظیمات لایه‌ای، سرویس‌ها، صف کار و محدودکننده نرخ.</td></tr>
-              <tr><td><code>BotManager</code></td><td>چرخه عمر ربات‌ها: ساخت، بازیابی توکن، ثبت وب‌هوک، بارگذاری و حذف.</td></tr>
-              <tr><td><code>Storage</code></td><td>لایه داده یکپارچه برای PostgreSQL، SQLite و D1 با جداسازی داده هر ربات.</td></tr>
-            </tbody>
-          </table>
+      <section class="section-tight">
+        <div class="container">
+          <div class="docs-layout">
+            <aside class="docs-nav" aria-label="فهرست مستندات">
+              <span class="docs-group">شروع</span>
+              <a href="#quickstart">راه‌اندازی سریع</a>
+              <a href="#architecture">معماری مونوریپو</a>
+              <a href="#env">تنظیمات محیطی</a>
+              <span class="docs-group">محصول</span>
+              <a href="#bots">۳۲ ربات و دسته‌ها</a>
+              <a href="#wizard">ویزارد و استقرار خودکار</a>
+              <a href="#force-membership">عضویت اجباری</a>
+              <span class="docs-group">مرجع</span>
+              <a href="#api">مرجع API</a>
+              <a href="#auto-deploy">استقرار خودکار</a>
+              <a href="#deploy-package">بسته استقرار</a>
+              <a href="#security">امنیت</a>
+              <a href="#troubleshooting">عیب‌یابی</a>
+            </aside>
 
-          <h2 id="quickstart">شروع سریع</h2>
-          <p>پیش‌نیاز: Node.js نسخه ۲۰.۱۱ یا بالاتر و npm ۱۰. برای بخش رسانه، نصب <code>ffmpeg</code> توصیه می‌شود.</p>
-          <pre class="copyable"><code>git clone https://github.com/amirsedighian071-stack/Botbuilder.git
+            <div class="prose" id="docsProse">
+              <h2 id="quickstart">راه‌اندازی سریع</h2>
+              <p>
+                پروژه یک مونوریپوی Node.js با حداقل نسخه ۲۰٫۱۱ است. برای اجرای محلی، ابتدا وابستگی‌ها را نصب و سپس کنترل‌پلین
+                را با درایور حافظه اجرا کنید.
+              </p>
+              <pre class="code"><code>git clone https://github.com/amirsedighian071-stack/Botbuilder.git
 cd Botbuilder
 npm install
-
-cp .env.example .env
-# مقادیر SECRET_MASTER_KEY و JWT_SECRET را با کلید تصادفی جایگزین کنید
-
-npm run migrate
-npm run seed
+npm run typecheck
+npm test</code></pre>
+              <p>اجرای کنترل‌پلین با پایگاه‌داده حافظه برای آزمایش سریع:</p>
+              <pre class="code"><code>PORT=8090 HOST=0.0.0.0 \
+DATABASE_DRIVER=memory \
+SECRET_MASTER_KEY=dev-master-key-change-me \
+JWT_SECRET=dev-jwt-secret-change-me \
+ADMIN_SEED_EMAIL=admin@botforge.local \
+ADMIN_SEED_PASSWORD='ChangeMe#2026' \
 npm run dev:api</code></pre>
-          <p>
-            پس از اجرا، بررسی سلامت در <code>http://localhost:8080/health</code> و ورود مدیر با ایمیل و گذرواژه‌ای که در مرحله بذر
-            تعیین شده انجام می‌شود. برای دیدن سایت به‌صورت محلی <code>npm run dev:web</code> را اجرا کنید.
-          </p>
-          <pre class="copyable"><code>npm run typecheck
-npm test
-npm run build</code></pre>
+              <p>سرو کردن رابط کاربری به‌صورت ایستا روی پورت ۴۱۷۳:</p>
+              <pre class="code"><code>node scripts/serve-frontend.mjs --port 4173 --host 0.0.0.0</code></pre>
+              <div class="notice">
+                <span data-icon="info" aria-hidden="true"></span>
+                <div>
+                  <strong>حساب مدیر اولیه</strong>
+                  ایمیل و گذرواژه از متغیرهای <code class="code-inline">ADMIN_SEED_EMAIL</code> و
+                  <code class="code-inline">ADMIN_SEED_PASSWORD</code> خوانده می‌شوند. پس از اولین ورود، گذرواژه را تغییر
+                  دهید: <code class="code-inline">POST /api/auth/password</code>
+                </div>
+              </div>
 
-          <h2 id="structure">ساختار مخزن</h2>
-          <table>
-            <thead>
-              <tr><th>مسیر</th><th>نقش</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>packages/core</code></td><td>تایپ‌ها، خطاها، لاگر، رمزنگاری، اعتبارسنجی، i18n، محافظت SSRF، لایه ذخیره‌سازی.</td></tr>
-              <tr><td><code>packages/platform-adapters</code></td><td>آداپتر مستقل تلگرام، بله و روبیکا + نرمال‌سازی به‌روزرسانی.</td></tr>
-              <tr><td><code>packages/engine</code></td><td>زمان اجرای ربات، صف کار، پنل مدیریت، عضویت اجباری، سرویس‌های خارجی.</td></tr>
-              <tr><td><code>packages/bot-templates</code></td><td>۳۲ قالب ربات و ابزارهای مشترک (<code>kit</code>).</td></tr>
-              <tr><td><code>apps/control-plane</code></td><td>API مدیریت، مسیر وب‌هوک، سرو فایل رسانه و راه‌اندازی صف.</td></tr>
-              <tr><td><code>apps/frontend</code></td><td>همین سایت استاتیک: کاتالوگ، ویزارد و مستندات.</td></tr>
-              <tr><td><code>apps/cloudflare-worker</code></td><td>ورکر سبک برای وب‌هوک روی D1 و زمان‌بند cron.</td></tr>
-              <tr><td><code>scripts</code></td><td>ساخت بسته‌ها، تولید کاتالوگ و سرو محلی سایت.</td></tr>
-            </tbody>
-          </table>
+              <h2 id="architecture">معماری مونوریپو</h2>
+              <p>ساختار پوشه‌ها عمداً ساده و قابل نگهداری است:</p>
+              <pre class="code"><code>packages/
+  core/               ابزار مشترک، تنظیمات، اعتبارسنجی، ذخیره‌سازی
+  platform-adapters/  آداپتور تلگرام، بله، روبیکا
+  engine/             موتور اجرا، مدیریت ربات، صف کار، وب‌هوک
+  bot-templates/      ۳۲ قالب ربات و کاتالوگ
+apps/
+  control-plane/      API Fastify + داشبورد + استقرار
+  cloudflare-worker/  نسخه ورکر برای استقرار لبه‌ای
+  frontend/           سایت چندصفحه‌ای ایستا (همین سایت)
+scripts/              ساخت، تولید کاتالوگ، سرور پیش‌نمایش</code></pre>
+              <p>
+                لایه ذخیره‌سازی با یک قرارداد مشترک پیاده شده است: SQLite برای توسعه، PostgreSQL برای تولید و D1 برای
+                ورکر. هر ربات شناسه مستقل دارد و همه پرس‌وجوها به همان شناسه محدود می‌شوند.
+              </p>
 
-          <h2 id="env">متغیرهای محیطی</h2>
-          <p>همه متغیرها در <code>packages/core/src/config.ts</code> با Zod اعتبارسنجی می‌شوند؛ مقدار نامعتبر باعث توقف اجرا با پیام روشن می‌شود.</p>
-          <table>
-            <thead>
-              <tr><th>متغیر</th><th>الزامی</th><th>پیش‌فرض</th><th>توضیح</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>PUBLIC_BASE_URL</code></td><td>بله</td><td><code>http://localhost:8080</code></td><td>آدرس عمومی کنترل‌پلین برای ساخت URL وب‌هوک و لینک رسانه.</td></tr>
-              <tr><td><code>SECRET_MASTER_KEY</code></td><td>بله</td><td>—</td><td>کلید اصلی رمزنگاری توکن‌ها و امضای لینک رسانه؛ حداقل ۱۶ نویسه.</td></tr>
-              <tr><td><code>JWT_SECRET</code></td><td>بله</td><td>—</td><td>امضای توکن ورود مدیران و کلیدهای API.</td></tr>
-              <tr><td><code>DATABASE_DRIVER</code></td><td>خیر</td><td><code>auto</code></td><td>یکی از <code>auto</code>، <code>postgres</code>، <code>sqlite</code>، <code>d1</code>، <code>memory</code>.</td></tr>
-              <tr><td><code>DATABASE_URL</code></td><td>در حالت postgres</td><td>—</td><td>رشته اتصال PostgreSQL.</td></tr>
-              <tr><td><code>SQLITE_PATH</code></td><td>خیر</td><td><code>.data/botforge.sqlite</code></td><td>مسیر فایل SQLite.</td></tr>
-              <tr><td><code>PORT</code> / <code>HOST</code></td><td>خیر</td><td><code>8080</code> / <code>0.0.0.0</code></td><td>پورت و آدرس اتصال سرور.</td></tr>
-              <tr><td><code>ADMIN_SEED_EMAIL</code></td><td>خیر</td><td><code>admin@botforge.local</code></td><td>ایمیل مدیر اولیه هنگام بذر.</td></tr>
-              <tr><td><code>ADMIN_SEED_PASSWORD</code></td><td>خیر</td><td><code>ChangeMe#2026</code></td><td>گذرواژه مدیر اولیه؛ در تولید تغییر دهید.</td></tr>
-              <tr><td><code>CORS_ORIGINS</code></td><td>خیر</td><td><code>*</code></td><td>فهرست مبدأهای مجاز جداشده با کاما. برای سایت Pages دامنه خود را وارد کنید.</td></tr>
-              <tr><td><code>MEDIA_DIR</code></td><td>خیر</td><td><code>.data/media</code></td><td>پوشه رسانه موقت برای فایل‌های تولیدشده.</td></tr>
-              <tr><td><code>MAX_UPLOAD_MB</code></td><td>خیر</td><td><code>48</code></td><td>سقف حجم فایل ورودی و اندازه بدنه درخواست.</td></tr>
-              <tr><td><code>RATE_LIMIT_MAX</code></td><td>خیر</td><td><code>240</code></td><td>سقف درخواست هر IP در پنجره زمانی.</td></tr>
-              <tr><td><code>BROADCAST_RATE_PER_SECOND</code></td><td>خیر</td><td><code>5</code></td><td>نرخ ارسال پیام همگانی.</td></tr>
-              <tr><td><code>AI_API_KEY</code></td><td>برای ربات‌های AI</td><td>—</td><td>کلید سرویس سازگار با OpenAI برای چت، ترجمه، خلاصه و تولید محتوا.</td></tr>
-              <tr><td><code>SPEECH_API_KEY</code></td><td>برای گفتار</td><td>—</td><td>کلید تبدیل گفتار به متن و متن به گفتار.</td></tr>
-              <tr><td><code>WEATHER_API_KEY</code></td><td>خیر</td><td>—</td><td>کلید اختیاری سرویس آب‌وهوا؛ بدون آن از Open-Meteo استفاده می‌شود.</td></tr>
-              <tr><td><code>NEWS_API_KEY</code></td><td>خیر</td><td>—</td><td>کلید اختیاری NewsAPI؛ بدون آن خوراک RSS خوانده می‌شود.</td></tr>
-              <tr><td><code>GOLD_API_KEY</code></td><td>خیر</td><td>—</td><td>کلید سرویس فلزات؛ بدون آن از منابع عمومی استفاده می‌شود.</td></tr>
-              <tr><td><code>SSRF_PROTECTION</code></td><td>خیر</td><td><code>true</code></td><td>فعال‌سازی فیلتر SSRF در همه درخواست‌های خارجی.</td></tr>
-            </tbody>
-          </table>
-          <pre class="copyable"><code>PUBLIC_BASE_URL=https://botforge.example.com
-SECRET_MASTER_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
-JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
-DATABASE_DRIVER=postgres
-DATABASE_URL=postgres://user:pass@host:5432/botforge
-CORS_ORIGINS=https://your-org.github.io
-ADMIN_SEED_EMAIL=admin@example.com
-ADMIN_SEED_PASSWORD=یک-گذرواژه-قوی</code></pre>
+              <h3>موتور و آداپتور</h3>
+              <p>
+                موتور، پیام‌های نرمال‌شده را دریافت می‌کند و منطق قالب را اجرا می‌کند. تفاوت‌های هر پلتفرم داخل آداپتور
+                پنهان است؛ به همین دلیل یک قالب روی تلگرام، بله و روبیکا یکسان کار می‌کند.
+              </p>
+              <pre class="code"><code>packages/platform-adapters/src/index.ts   // createAdapter, detectPlatformFromToken
+packages/engine/src/manager.ts            // createBot, reload, webhookUrl, registerWebhook
+packages/engine/src/runtime.ts            // اجرای دستورها، میان‌افزارها، محدودیت نرخ</code></pre>
 
-          <h2 id="database">پایگاه داده</h2>
-          <p>
-            لایه ذخیره‌سازی یک اینترفیس دارد و سه پیاده‌سازی: PostgreSQL برای تولید، SQLite برای اجرای تک‌سرور و D1 برای ورکر. اسکریپت
-            مهاجرت جدول‌ها و ایندکس‌ها را به‌صورت idempotent می‌سازد.
-          </p>
-          <table>
-            <thead>
-              <tr><th>جدول</th><th>کاربرد</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>bots</code></td><td>رکورد ربات: قالب، پلتفرم، توکن رمزنگاری‌شده، وضعیت، تنظیمات، عضویت اجباری.</td></tr>
-              <tr><td><code>bot_users</code></td><td>کاربران هر ربات با نقش، وضعیت مسدودسازی، تعداد پیام و یادداشت.</td></tr>
-              <tr><td><code>sessions</code></td><td>وضعیت گفتگو و داده جریان (FSM) به‌ازای کاربر.</td></tr>
-              <tr><td><code>settings</code></td><td>تنظیمات هر ربات؛ کلیدهای حساس رمزنگاری‌شده.</td></tr>
-              <tr><td><code>documents</code></td><td>مجموعه‌های سند JSON برای محصولات، سفارش‌ها، تیکت‌ها، یادآوری‌ها و… .</td></tr>
-              <tr><td><code>messages</code></td><td>گزارش پیام ورودی/خروجی با ایندکس زمانی.</td></tr>
-              <tr><td><code>jobs</code></td><td>صف کار پایدار با وضعیت، تلاش و زمان اجرا.</td></tr>
-              <tr><td><code>events</code> / <code>audits</code></td><td>رخدادهای عملیاتی ربات و ردپای اقدامات مدیران.</td></tr>
-              <tr><td><code>admins</code> / <code>api_keys</code></td><td>حساب‌های پنل و کلیدهای API هش‌شده.</td></tr>
-              <tr><td><code>processed_updates</code></td><td>حذف تکراری به‌روزرسانی‌ها برای جلوگیری از پردازش دوباره وب‌هوک.</td></tr>
-            </tbody>
-          </table>
-          <pre class="copyable"><code>npm run migrate
-npm run seed
+              <h2 id="env">تنظیمات محیطی</h2>
+              <p>متغیرهای اصلی که برای اجرای تولید لازم است:</p>
+              <table>
+                <thead>
+                  <tr><th>متغیر</th><th>الزامی</th><th>توضیح</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code class="code-inline">PORT</code></td><td>خیر</td><td>پورت سرور، پیش‌فرض ۸۰۹۰</td></tr>
+                  <tr><td><code class="code-inline">DATABASE_DRIVER</code></td><td>بله</td><td>یکی از <code class="code-inline">sqlite</code>، <code class="code-inline">postgres</code> یا <code class="code-inline">d1</code></td></tr>
+                  <tr><td><code class="code-inline">DATABASE_URL</code></td><td>بسته به درایور</td><td>رشته اتصال PostgreSQL</td></tr>
+                  <tr><td><code class="code-inline">SECRET_MASTER_KEY</code></td><td>بله</td><td>کلید رمزنگاری توکن ربات و اعتبارنامه‌ها؛ حداقل ۳۲ کاراکتر</td></tr>
+                  <tr><td><code class="code-inline">JWT_SECRET</code></td><td>بله</td><td>امضای توکن ورود مدیران، اعتبار ۱۲ ساعت</td></tr>
+                  <tr><td><code class="code-inline">CORS_ORIGINS</code></td><td>خیر</td><td>فهرست مبدأهای مجاز جداشده با کاما؛ در تولید از <code class="code-inline">*</code> استفاده نکنید</td></tr>
+                  <tr><td><code class="code-inline">SSRF_PROTECTION</code></td><td>خیر</td><td>فعال‌سازی محافظت SSRF در خلاصه‌ساز لینک و وب‌هوک</td></tr>
+                  <tr><td><code class="code-inline">DEPLOY_WORKER_BUNDLE</code></td><td>برای استقرار</td><td>مسیر بسته ورکر؛ پیش‌فرض <code class="code-inline">dist/cloudflare-worker/index.js</code></td></tr>
+                </tbody>
+              </table>
+              <div class="notice notice-warn">
+                <span data-icon="alert-triangle" aria-hidden="true"></span>
+                <div>
+                  <strong>کلیدها را در مخزن نگذارید</strong>
+                  همه متغیرهای حساس از پنل میزبان یا فایل <code class="code-inline">.env</code> خارج از Git وارد
+                  می‌شوند. فایل <code class="code-inline">.gitignore</code> این مسیرها را پوشش می‌دهد.
+                </div>
+              </div>
 
-# فقط برای توسعه
-DATABASE_DRIVER=memory npm run dev:api</code></pre>
+              <h2 id="bots">۳۲ ربات و دسته‌ها</h2>
+              <p>کاتالوگ در پنج دسته سازمان‌دهی شده و هر ربات دستورها و کلیدهای مشخص خود را دارد:</p>
+              <table>
+                <thead>
+                  <tr><th>دسته</th><th>تعداد</th><th>ربات‌ها</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>مالی و اطلاعاتی (A)</td><td>۵</td><td>قیمت طلا و ارز، رمزارز، اخبار، هشدار قیمت، آب‌وهوا، ماشین‌حساب مالی</td></tr>
+                  <tr><td>فروش و کسب‌وکار (B)</td><td>۷</td><td>فروشگاه، پشتیبانی، نوبت‌دهی، اشتراک، بازاریابی، سفارش خدمات، CRM</td></tr>
+                  <tr><td>دانلود و رسانه (C)</td><td>۸</td><td>دانلود اینستاگرام و یوتیوب، موسیقی، تبدیل صوت، فایل، فرمت، گفتار</td></tr>
+                  <tr><td>هوش مصنوعی (D)</td><td>۵</td><td>دستیار هوشمند، مترجم، دستیار مطالعه، تولید محتوا، خلاصه‌ساز SSRF-safe</td></tr>
+                  <tr><td>مدیریت و ابزار (E)</td><td>۷</td><td>مدیریت گروه، نظرسنجی، یادآور، کوتاه‌کننده لینک، فرم‌ساز، دوره، پایش سایت</td></tr>
+                </tbody>
+              </table>
+              <p>
+                فهرست دقیق با شماره، دستورها و کلیدها در <a href="catalog.html">صفحه کاتالوگ</a> آمده است. منبع واقعی
+                قالب‌ها در <code class="code-inline">packages/bot-templates/src</code> است و کاتالوگ سایت با
+                <code class="code-inline">node --import tsx scripts/generate-catalog.mjs</code> از همان منبع ساخته می‌شود.
+              </p>
 
-          <h2 id="deploy">گزینه‌های استقرار</h2>
-          <div class="grid grid-3">
-            <div class="docs-card">
-              <h3>Railway</h3>
-              <p>ساده‌ترین مسیر برای کنترل‌پلین کامل با PostgreSQL و پردازش رسانه.</p>
-            </div>
-            <div class="docs-card">
-              <h3>Docker</h3>
-              <p>اجرای قابل تکرار روی هر میزبان، با والیوم برای رسانه و فایل SQLite.</p>
-            </div>
-            <div class="docs-card">
-              <h3>Cloudflare</h3>
-              <p>ورکر سبک برای وب‌هوک، کاتالوگ و سلامت روی D1؛ سایت روی Pages.</p>
-            </div>
-          </div>
+              <h2 id="wizard">ویزارد و استقرار خودکار</h2>
+              <p>ویزارد شش مرحله دارد و هر مرحله پیش از عبور، ورودی را اعتبارسنجی می‌کند:</p>
+              <ol>
+                <li>انتخاب قالب ربات از میان ۳۲ قالب.</li>
+                <li>انتخاب پلتفرم، دریافت توکن از BotFather و اعتبارسنجی زنده با <code class="code-inline">getMe</code>.</li>
+                <li>تعیین نام و شناسه یکتای ربات.</li>
+                <li>ورود کلیدهای یکپارچه‌سازی با راهنمای دریافت هر کلید.</li>
+                <li>انتخاب میزبان و اعتبارسنجی توکن Cloudflare یا Railway.</li>
+                <li>بازبینی، ساخت بسته و «تأیید و استقرار خودکار».</li>
+              </ol>
+              <p>
+                دکمه‌های «دریافت API» همیشه به صفحه رسمی ساخت توکن لینک می‌شوند. پس از ورود توکن، در صورت اتصال به
+                کنترل‌پلین، اعتبارسنجی خودکار انجام می‌شود؛ بدون اتصال، فقط قالب توکن بررسی و بسته استقرار دانلود می‌شود.
+              </p>
 
-          <h2 id="railway">استقرار روی Railway</h2>
-          <ol>
-            <li>مخزن را به Railway متصل کنید؛ فایل <code>railway.json</code> و <code>apps/control-plane/Dockerfile</code> آماده است.</li>
-            <li>یک سرویس PostgreSQL بسازید و متغیر <code>DATABASE_URL</code> را از آن بردارید.</li>
-            <li>متغیرهای <code>PUBLIC_BASE_URL</code>، <code>SECRET_MASTER_KEY</code>، <code>JWT_SECRET</code> و کلیدهای سرویس‌ها را تنظیم کنید.</li>
-            <li>دستور مهاجرت را یک‌بار اجرا کنید: <code>npm run migrate</code>.</li>
-            <li>پس از دیپلوی، <code>/health</code> را بررسی و ربات‌ها را از پنل ثبت کنید.</li>
-          </ol>
-          <pre class="copyable"><code>railway init
-railway add --database postgres
-railway variables set PUBLIC_BASE_URL=https://your-app.up.railway.app
-railway variables set SECRET_MASTER_KEY=...
-railway variables set JWT_SECRET=...
-railway up</code></pre>
-
-          <h2 id="docker">استقرار با Docker</h2>
-          <pre class="copyable"><code>docker build -t botforge/control-plane -f apps/control-plane/Dockerfile .
-docker run -d --name botforge \
-  --env-file .env \
-  -p 8080:8080 \
-  -v botforge-media:/app/.data/media \
-  botforge/control-plane</code></pre>
-          <p>
-            ایمیج چندمرحله‌ای است: مرحله سازنده وابستگی‌ها را نصب و کد را بیلد می‌کند، مرحله اجرا فقط وابستگی تولیدی و کد کامپایل‌شده را
-            دارد و با کاربر غیر ریشه اجرا می‌شود. برای ffmpeg متغیر ساخت <code>INSTALL_FFMPEG=true</code> را تنظیم کنید.
-          </p>
-
-          <h2 id="cloudflare">Cloudflare Worker و D1</h2>
-          <p>
-            ورکر برای دریافت وب‌هوک، کاتالوگ، سلامت و اجرای زمان‌بند طراحی شده است. ابتدا پایگاه D1 بسازید و شناسه آن را در
-            <code>apps/cloudflare-worker/wrangler.toml</code> قرار دهید، سپس اسکیمای <code>packages/core/src/storage/schema.ts</code> را با
-            <code>wrangler d1 execute</code> اعمال کنید.
-          </p>
-          <pre class="copyable"><code>cd apps/cloudflare-worker
-wrangler d1 create botforge
-wrangler secret put SECRET_MASTER_KEY
-wrangler secret put JWT_SECRET
-wrangler deploy
-
-# اسکیمای اولیه
-wrangler d1 execute botforge --file=../../packages/core/sql/schema.sql --remote</code></pre>
-          <div class="hint-box warn" style="margin-top: 12px">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4z" /><path d="M12 10v4M12 17h.01" /></svg>
-            <div>
-              آپلود و تبدیل رسانه در ورکر پشتیبانی نمی‌شود؛ مسیر <code>/media</code> در ورکر پیام راهنما برمی‌گرداند. برای ربات‌های دسته
-              رسانه از کنترل‌پلین Node.js استفاده کنید.
-            </div>
-          </div>
-
-          <h2 id="pages">استقرار سایت روی GitHub Pages</h2>
-          <p>
-            سایت کاملاً استاتیک است و بدون بیلد اجرا می‌شود. ورک‌فلوی <code>.github/workflows/pages.yml</code> پس از هر تغییر در شاخه اصلی،
-            محتویات <code>apps/frontend</code> را منتشر می‌کند. در تنظیمات مخزن، Pages را روی GitHub Actions قرار دهید.
-          </p>
-          <pre class="copyable"><code>npm run build
-node scripts/generate-catalog.mjs
-node scripts/serve-frontend.mjs --port 4173</code></pre>
-
-          <h2 id="api">مرجع API</h2>
-          <p>
-            همه مسیرهای <code>/api</code> نیازمند احراز هویت هستند: یا هدر <code>Authorization: Bearer &lt;jwt&gt;</code> از ورود مدیر، یا
-            هدر <code>X-API-Key</code> با کلید ساخته‌شده در پنل. خطاها با ساختار یکسان و پیام فارسی برگردانده می‌شوند.
-          </p>
-          <table>
-            <thead>
-              <tr><th>متد و مسیر</th><th>دسترسی</th><th>کار</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>GET /health</code></td><td>عمومی</td><td>سلامت سرویس، صف و پایگاه داده.</td></tr>
-              <tr><td><code>GET /api/catalog</code></td><td>عمومی</td><td>فهرست ۳۲ ربات و دسته‌بندی‌ها.</td></tr>
-              <tr><td><code>POST /api/auth/login</code></td><td>عمومی</td><td>ورود مدیر و دریافت JWT.</td></tr>
-              <tr><td><code>GET /api/auth/me</code></td><td>احراز هویت</td><td>هویت جاری و دامنه دسترسی.</td></tr>
-              <tr><td><code>POST /api/auth/password</code></td><td>مدیر</td><td>تغییر گذرواژه با تأیید گذرواژه فعلی.</td></tr>
-              <tr><td><code>GET /api/keys</code> / <code>POST /api/keys</code></td><td>مدیر</td><td>مدیریت کلیدهای API؛ کلید فقط یک بار نمایش داده می‌شود.</td></tr>
-              <tr><td><code>GET /api/bots</code></td><td><code>bots:read</code></td><td>فهرست ربات‌ها با فیلتر پلتفرم، وضعیت و جست‌وجو.</td></tr>
-              <tr><td><code>POST /api/bots</code></td><td><code>bots:write</code></td><td>ثبت ربات، تأیید توکن با پلتفرم و ثبت وب‌هوک.</td></tr>
-              <tr><td><code>PATCH /api/bots/:id</code></td><td><code>bots:write</code></td><td>تغییر نام، وضعیت (فعال/تعمیر/غیرفعال) و تنظیمات.</td></tr>
-              <tr><td><code>DELETE /api/bots/:id</code></td><td><code>bots:write</code></td><td>حذف ربات و ابطال وب‌هوک.</td></tr>
-              <tr><td><code>GET /api/bots/:id/dashboard</code></td><td><code>bots:read</code></td><td>آمار زنده، رخدادها و پیشرفت پیام همگانی.</td></tr>
-              <tr><td><code>GET /api/bots/:id/users</code></td><td><code>users:read</code></td><td>کاربران با صفحه‌بندی و جست‌وجو.</td></tr>
-              <tr><td><code>PATCH /api/bots/:id/users/:userId</code></td><td><code>users:write</code></td><td>مسدودسازی، تغییر نقش و یادداشت.</td></tr>
-              <tr><td><code>POST /api/bots/:id/broadcast</code></td><td><code>broadcast</code></td><td>شروع ارسال همگانی صف‌محور.</td></tr>
-              <tr><td><code>GET /api/bots/:id/settings</code></td><td><code>bots:read</code></td><td>تنظیمات و وضعیت کلیدهای مورد نیاز.</td></tr>
-              <tr><td><code>PUT /api/bots/:id/settings</code></td><td><code>bots:write</code></td><td>نوشتن تنظیمات؛ کلیدهای حساس رمزنگاری می‌شوند.</td></tr>
-              <tr><td><code>GET|PUT /api/bots/:id/force-membership</code></td><td><code>bots:*</code></td><td>پیکربندی عضویت اجباری کانال‌ها.</td></tr>
-              <tr><td><code>GET /api/bots/:id/documents/:collection</code></td><td><code>bots:read</code></td><td>خواندن داده‌های ساختاریافته ربات.</td></tr>
-              <tr><td><code>POST /webhooks/:platform/:botId/:secret</code></td><td>امضای مسیر</td><td>دریافت به‌روزرسانی پلتفرم.</td></tr>
-              <tr><td><code>GET /media/:file?token=</code></td><td>توکن امضاشده</td><td>سرو فایل موقت با انقضای یک‌ساعته.</td></tr>
-            </tbody>
-          </table>
-          <pre class="copyable"><code>curl -X POST https://botforge.example.com/api/auth/login \
+              <h2 id="force-membership">عضویت اجباری</h2>
+              <p>
+                در داشبورد هر ربات، بخش «عضویت اجباری» را باز کنید. هر کانال شامل پلتفرم، شناسه چت، عنوان، لینک دعوت و
+                وضعیت الزامی بودن است. ربات پیش از اجرای دستور، عضویت کاربر را بررسی و در صورت نبود عضویت، لینک ورود
+                می‌فرستد.
+              </p>
+              <pre class="code"><code>curl -X PUT "https://SERVER/api/bots/BOT_ID/force-membership" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"..."}'
+  -d '{
+    "enabled": true,
+    "channels": [
+      {
+        "id": "ch_1",
+        "platform": "telegram",
+        "chatId": "@botforge_channel",
+        "title": "کانال رسمی BotForge",
+        "inviteLink": "https://t.me/botforge_channel",
+        "required": true
+      }
+    ]
+  }'</code></pre>
 
-curl https://botforge.example.com/api/bots \
-  -H "Authorization: Bearer $TOKEN"</code></pre>
+              <h2 id="api">مرجع API</h2>
+              <p>
+                همه مسیرها به‌جز <code class="code-inline">/health</code> و وب‌هوک‌ها به احراز هویت نیاز دارند: توکن
+                Bearer مدیر (اعتبار ۱۲ ساعت) یا کلید API با پیشوند <code class="code-inline">bf_</code>.
+              </p>
+              <table>
+                <thead>
+                  <tr><th>متد و مسیر</th><th>دسترسی</th><th>کار</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code class="code-inline">POST /api/auth/login</code></td><td>عمومی</td><td>ورود مدیر و دریافت توکن</td></tr>
+                  <tr><td><code class="code-inline">GET /api/auth/me</code></td><td>محتوا</td><td>شناسایی هویت و دامنه دسترسی</td></tr>
+                  <tr><td><code class="code-inline">GET /api/bots</code></td><td>bots:read</td><td>فهرست ربات‌ها با صفحه‌بندی و فیلتر</td></tr>
+                  <tr><td><code class="code-inline">POST /api/bots</code></td><td>bots:write</td><td>ساخت ربات از قالب</td></tr>
+                  <tr><td><code class="code-inline">PATCH /api/bots/:id</code></td><td>bots:write</td><td>تغییر نام، وضعیت و تنظیمات</td></tr>
+                  <tr><td><code class="code-inline">POST /api/bots/:id/webhook/register</code></td><td>bots:write</td><td>ثبت وب‌هوک روی پلتفرم</td></tr>
+                  <tr><td><code class="code-inline">GET /api/bots/:id/dashboard</code></td><td>bots:read</td><td>آمار زنده و رویدادها</td></tr>
+                  <tr><td><code class="code-inline">GET /api/bots/:id/users</code></td><td>users:read</td><td>فهرست کاربران با جست‌وجو</td></tr>
+                  <tr><td><code class="code-inline">PATCH /api/bots/:id/users/:userId</code></td><td>users:write</td><td>مسدودسازی یا تغییر نقش</td></tr>
+                  <tr><td><code class="code-inline">POST /api/bots/:id/broadcast</code></td><td>broadcast</td><td>ارسال همگانی با محدودیت نرخ</td></tr>
+                  <tr><td><code class="code-inline">GET /api/bots/:id/settings</code></td><td>bots:read</td><td>تنظیمات و وضعیت کلیدها</td></tr>
+                  <tr><td><code class="code-inline">POST /api/deploy/validate-token</code></td><td>bots:write</td><td>اعتبارسنجی زنده توکن پلتفرم</td></tr>
+                  <tr><td><code class="code-inline">POST /api/deploy/validate-provider</code></td><td>bots:write</td><td>اعتبارسنجی توکن Cloudflare یا Railway</td></tr>
+                  <tr><td><code class="code-inline">POST /api/bots/:id/deploy</code></td><td>bots:write</td><td>آغاز استقرار (پاسخ ۲۰۲)</td></tr>
+                  <tr><td><code class="code-inline">GET /api/bots/:id/deployments/:deploymentId</code></td><td>bots:read</td><td>وضعیت، گام‌ها و گزارش</td></tr>
+                  <tr><td><code class="code-inline">POST …/deployments/:id/health</code></td><td>bots:write</td><td>بررسی دوباره سلامت</td></tr>
+                  <tr><td><code class="code-inline">GET …/deployments/:id/package</code></td><td>bots:read</td><td>فایل‌های بسته استقرار</td></tr>
+                  <tr><td><code class="code-inline">GET /api/system/stats</code></td><td>system:read</td><td>آمار کل سامانه</td></tr>
+                </tbody>
+              </table>
+              <p>نمونه ساخت کلید API و ساخت ربات:</p>
+              <pre class="code"><code>curl -X POST "https://SERVER/api/keys" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"ci-key","scopes":["bots:read","bots:write"]}'
 
-          <h2 id="admin">پنل مدیریت ربات</h2>
-          <p>
-            در داخل هر ربات، مدیر با دستور <code>/admin</code> یا دکمه «مدیریت» به پنل دسترسی دارد. این پنل روی موتور اجرا می‌شود و نیازی
-            به رابط وب ندارد:
-          </p>
-          <ul>
-            <li><strong>آمار زنده:</strong> تعداد کاربران، پیام‌های ۲۴ ساعت، خطاهای هفته و کارهای در صف.</li>
-            <li><strong>مدیریت کاربران:</strong> جست‌وجو، تغییر نقش، مسدودسازی و یادداشت.</li>
-            <li><strong>پیام همگانی:</strong> با نمایش پیشرفت و نرخ محدودشده.</li>
-            <li><strong>تنظیمات:</strong> ویرایش کلید/مقدار با ماسک‌کردن مقادیر حساس.</li>
-            <li><strong>وضعیت ربات:</strong> فعال، متوقف موقت، حالت تعمیر و غیرفعال.</li>
-            <li><strong>نیازمندی‌ها:</strong> نمایش وضعیت هر کلید خارجی و راهنمای دریافت آن.</li>
-          </ul>
+curl -X POST "https://SERVER/api/bots" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"templateId":"gold-price","name":"قیمت طلا","slug":"gold-price","platform":"telegram","token":"123456:AA..."}'</code></pre>
+              <div class="notice">
+                <span data-icon="key" aria-hidden="true"></span>
+                <div>
+                  <strong>کلید API فقط یک بار نمایش داده می‌شود</strong>
+                  در پاسخ ساخت کلید، مقدار کامل برمی‌گردد؛ آن را در جای امن ذخیره کنید. فهرست کلیدها فقط پیشوند را نشان
+                  می‌دهد.
+                </div>
+              </div>
 
-          <h2 id="users">کاربران، نقش‌ها و پیام همگانی</h2>
-          <p>
-            نقش‌ها: <code>owner</code>، <code>admin</code> و <code>user</code>. فقط نقش‌های مدیر به پنل داخل ربات دسترسی دارند و
-            می‌توانند پیام همگانی بفرستند. پیام همگانی در صف ذخیره می‌شود؛ در صورت خطای موقت، تلاش مجدد نمایی انجام می‌شود و کاربران
-            مسدود یا حذف‌شده نادیده گرفته می‌شوند.
-          </p>
+              <h2 id="auto-deploy">استقرار خودکار</h2>
+              <p>
+                استقرار یک عملیات ناهمگام است: درخواست با کد ۲۰۲ پذیرفته می‌شود و گام‌ها در پس‌زمینه اجرا می‌شوند. برای
+                پیگیری، مسیر وضعیت را تا رسیدن به <code class="code-inline">healthy</code> یا
+                <code class="code-inline">failed</code> بخوانید.
+              </p>
+              <pre class="code"><code>curl -X POST "https://SERVER/api/bots/BOT_ID/deploy" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider": "cloudflare",
+    "credentials": { "apiToken": "CLOUDFLARE_TOKEN" },
+    "integrationKeys": { "OPENAI_API_KEY": "sk-..." },
+    "corsOrigins": "https://example.com"
+  }'</code></pre>
+              <p>پاسخ آغاز استقرار:</p>
+              <pre class="code"><code>{
+  "deployment": {
+    "id": "dep_ab12cd34",
+    "botId": "bot_9f...",
+    "provider": "cloudflare",
+    "status": "queued",
+    "steps": [],
+    "urls": {}
+  },
+  "statusUrl": "/api/bots/bot_9f.../deployments/dep_ab12cd34"
+}</code></pre>
+              <h3>گام‌های واقعی</h3>
+              <ol>
+                <li><code class="code-inline">validate</code> — بررسی توکن پلتفرم و اعتبارنامه میزبان.</li>
+                <li><code class="code-inline">database</code> یا <code class="code-inline">project</code> — ساخت D1 و اجرای طرح‌واره، یا ساخت پروژه Railway.</li>
+                <li><code class="code-inline">service</code> — ساخت سرویس مقصد برای Railway.</li>
+                <li><code class="code-inline">upload</code> یا <code class="code-inline">variables</code> — بارگذاری ماژول ورکر و رمزها، یا تنظیم متغیرهای سرویس.</li>
+                <li><code class="code-inline">domain</code> — تخصیص دامنه <code class="code-inline">workers.dev</code> یا دامنه Railway.</li>
+                <li><code class="code-inline">wait</code> — انتظار برای پایان استقرار سرویس.</li>
+                <li><code class="code-inline">webhook</code> — ثبت آدرس <code class="code-inline">/webhooks/&lt;platform&gt;/&lt;botId&gt;/&lt;secret&gt;</code>.</li>
+                <li><code class="code-inline">health</code> — درخواست <code class="code-inline">/health</code> و ثبت کد پاسخ و تأخیر.</li>
+              </ol>
+              <p>پاسخ وضعیت شامل گام‌ها، گزارش‌ها، آدرس‌ها و نتیجه سلامت است:</p>
+              <pre class="code"><code>{
+  "deployment": {
+    "status": "healthy",
+    "urls": {
+      "app": "https://botforge-gold-price.account.workers.dev",
+      "webhook": "https://botforge-gold-price.account.workers.dev/webhooks/telegram/bot_9f.../whsec_...",
+      "health": "https://botforge-gold-price.account.workers.dev/health"
+    },
+    "health": { "ok": true, "status": 200, "latencyMs": 184 }
+  }
+}</code></pre>
+              <h3>دسترسی‌های لازم</h3>
+              <p>
+                توکن Cloudflare باید دسترسی <strong>Workers Scripts:Edit</strong>، <strong>D1:Edit</strong> و
+                <strong>Account Settings:Read</strong> داشته باشد. توکن Railway از صفحه
+                <a href="https://railway.com/account/tokens" target="_blank" rel="noopener noreferrer">Account Tokens</a>
+                ساخته می‌شود و به پروژه‌های همان حساب دسترسی دارد.
+              </p>
+              <div class="notice notice-warn">
+                <span data-icon="alert-triangle" aria-hidden="true"></span>
+                <div>
+                  <strong>محدودیت واقعی GitHub Pages</strong>
+                  این سایت ایستا است و نمی‌تواند به‌جای شما درخواست API بفرستد. اعتبارسنجی زنده و استقرار خودکار فقط با
+                  آدرس کنترل‌پلین در دسترس است. برای همین، ویزارد در حالت بدون سرور بسته استقرار و اسکریپت bash معتبر
+                  می‌سازد.
+                </div>
+              </div>
+              <p>پس از استقرار، برای اطمینان از دریافت پیام، وب‌هوک را دوباره ثبت کنید:</p>
+              <pre class="code"><code>curl -X POST "https://SERVER/api/bots/BOT_ID/webhook/register" \
+  -H "Authorization: Bearer $ADMIN_TOKEN"</code></pre>
 
-          <h2 id="bots">فهرست ربات‌ها و دستورها</h2>
-          <p>جدول زیر از قالب‌های واقعی مخزن تولید می‌شود و با هر تغییر در ربات‌ها به‌روزرسانی می‌گردد.</p>
-          <table id="docsBotTable"></table>
-          <div id="docsBots" style="margin-top: 20px"></div>
+              <h2 id="deploy-package">بسته استقرار</h2>
+              <p>مسیر <code class="code-inline">GET /api/bots/:id/deployments/:id/package</code> چهار بخش برمی‌گرداند:</p>
+              <ul>
+                <li><code class="code-inline">.env</code> — متغیرهای غیرحساس و ماسک‌شده برای بازبینی.</li>
+                <li><code class="code-inline">.env.secrets</code> — مقادیر حساس تولیدشده در سمت سرور.</li>
+                <li><code class="code-inline">deploy.sh</code> — اسکریپت بازتولید همان استقرار.</li>
+                <li><code class="code-inline">webhook.txt</code> — آدرس نهایی وب‌هوک.</li>
+              </ul>
+              <p>
+                فایل‌های حاوی رمز را فقط در محیط امن نگه دارید. توصیه می‌شود پس از دریافت، آن‌ها را در رمزنگاری‌شده ذخیره
+                و از مخزن Git دور نگه دارید.
+              </p>
 
-          <h2 id="security">امنیت</h2>
-          <ul>
-            <li><strong>توکن‌ها:</strong> رمزنگاری AES-256-GCM با کلید مشتق‌شده از <code>SECRET_MASTER_KEY</code>؛ نمایش فقط به‌صورت ماسک.</li>
-            <li><strong>وب‌هوک:</strong> مسیر شامل secret یکتا و بررسی هدر اختصاصی تلگرام؛ درخواست نامعتبر با ۴۰۱ رد می‌شود.</li>
-            <li><strong>دسترسی:</strong> JWT کوتاه‌عمر برای مدیران، کلید API هش‌شده با SHA-256 و دامنه دسترسی مشخص.</li>
-            <li><strong>ورودی:</strong> اعتبارسنجی Zod برای همه بدنه‌ها، پاک‌سازی متن و escape در پاسخ‌های HTML ربات.</li>
-            <li><strong>دیتابیس:</strong> همه کوئری‌ها پارامتری هستند؛ شناسه ربات در هر شرط اجباری است.</li>
-            <li><strong>SSRF:</strong> بلاک شبکه‌های خصوصی، متادیتای ابری و پورت‌های غیرمجاز با اجازه‌نامه دامنه.</li>
-            <li><strong>نرخ:</strong> محدودیت سراسری HTTP، محدودیت به‌ازای کاربر در موتور و باکت توکنی در ارسال همگانی.</li>
-          </ul>
+              <h2 id="security">امنیت</h2>
+              <ul>
+                <li>توکن ربات با کلید اصلی رمزنگاری و فقط به‌صورت ماسک نمایش داده می‌شود.</li>
+                <li>پرس‌وجوهای SQL پارامتری‌اند؛ ورودی‌ها با zod اعتبارسنجی و متن‌ها پاک‌سازی می‌شوند.</li>
+                <li>محدودیت نرخ روی ورود، ارسال همگانی و وب‌هوک اعمال می‌شود.</li>
+                <li>خلاصه‌ساز لینک و درخواست‌های بیرونی با محافظ SSRF، DNS و بلاک شبکه خصوصی اجرا می‌شوند.</li>
+                <li>هر وب‌هوک دارای کلید مخفی در مسیر است و بدون آن پردازش نمی‌شود.</li>
+                <li>لاگ‌ها و رکوردهای حسابرسی، عملیات مدیران را ثبت می‌کنند.</li>
+              </ul>
+              <blockquote>
+                کلیدهای API فقط یک بار در پاسخ ساخت نمایش داده می‌شوند؛ ذخیره آن‌ها مسئولیت شماست. برای محیط تولید
+                <code class="code-inline">CORS_ORIGINS</code> را به دامنه دقیق سایت محدود کنید.
+              </blockquote>
 
-          <h2 id="monitoring">پایش و سلامت</h2>
-          <p>
-            مسیر <code>/health</code> وضعیت پایگاه داده، تعداد کارهای در صف و ربات‌های بارگذاری‌شده را برمی‌گرداند و برای liveness probe
-            مناسب است. رخدادهای هر ربات در جدول <code>events</code> ثبت و از طریق <code>/api/bots/:id/events</code> قابل مشاهده است.
-          </p>
-          <pre class="copyable"><code>curl -s https://botforge.example.com/health | jq .
-curl -s -H "Authorization: Bearer $TOKEN" \
-  https://botforge.example.com/api/system/stats | jq .</code></pre>
-
-          <h2 id="troubleshooting">عیب‌یابی</h2>
-          <div class="docs-card">
-            <h3>وب‌هوک ثبت نمی‌شود</h3>
-            <p>
-              <code>PUBLIC_BASE_URL</code> باید دامنه عمومی با HTTPS باشد. برای تلگرام دامنه باید گواهی معتبر داشته باشد و پورت غیراستاندارد
-              پذیرفته نمی‌شود. پاسخ <code>POST /api/bots/:id/webhook/register</code> وضعیت را برمی‌گرداند.
-            </p>
-          </div>
-          <div class="docs-card">
-            <h3>ربات پاسخ نمی‌دهد</h3>
-            <p>
-              وضعیت ربات را بررسی کنید؛ در حالت <code>maintenance</code> یا <code>disabled</code> پاسخ ارسال نمی‌شود. رخدادهای
-              <code>webhook.rejected</code> نشانه ناسازگاری secret است و <code>webhook.error</code> جزئیات خطای پردازش را دارد.
-            </p>
-          </div>
-          <div class="docs-card">
-            <h3>خطای «کلید تنظیم نشده است»</h3>
-            <p>
-              ربات‌های هوش مصنوعی، گفتار، اخبار و قیمت به کلید خارجی نیاز دارند. کلید را در پنل مدیریت ربات یا در متغیرهای محیطی تنظیم
-              کنید؛ وضعیت هر کلید در پاسخ <code>GET /api/bots/:id/settings</code> آمده است.
-            </p>
-          </div>
-          <div class="docs-card">
-            <h3>تبدیل ویدیو یا صوت شکست می‌خورد</h3>
-            <p>
-              وجود <code>ffmpeg</code> را با <code>ffmpeg -version</code> بررسی کنید. سقف حجم ورودی با <code>MAX_UPLOAD_MB</code> کنترل
-              می‌شود و پردازش بیش از دو دقیقه متوقف می‌شود.
-            </p>
-          </div>
-          <div class="docs-card">
-            <h3>صف کار پیش نمی‌رود</h3>
-            <p>
-              در کنترل‌پلین، صف با اجرای سرور شروع می‌شود. در ورکر، زمان‌بند cron وظیفه اجرای صف را دارد. کارهای ناموفق با تأخیر نمایی
-              دوباره تلاش می‌شوند و پس از سقف تلاش، وضعیت <code>dead</code> می‌گیرند.
-            </p>
+              <h2 id="troubleshooting">عیب‌یابی</h2>
+              <h4>خطای «توکن وارد شده معتبر نیست»</h4>
+              <p>
+                توکن را دوباره از BotFather کپی کنید. توکن تلگرام و بله الگوی <code class="code-inline">عدد:رشته</code>
+                دارند؛ توکن روبیکا فقط حروف و ارقام است. اگر توکن معتبر است اما پلتفرم پاسخ نمی‌دهد، اتصال خروجی سرور و
+                محدودیت شبکه را بررسی کنید.
+              </p>
+              <h4>خطای «بسته ورکر پیدا نشد»</h4>
+              <p>
+                سرور بسته ورکر را از مسیر <code class="code-inline">dist/cloudflare-worker/index.js</code> می‌خواند. ابتدا
+                <code class="code-inline">npm run build</code> را اجرا کنید یا مسیر را با
+                <code class="code-inline">DEPLOY_WORKER_BUNDLE</code> مشخص کنید.
+              </p>
+              <h4>استقرار در گام <code class="code-inline">webhook</code> متوقف می‌شود</h4>
+              <p>
+                توکن ربات باید معتبر و دسترسی ثبت وب‌هوک داشته باشد. دامنه نهایی باید عمومی و با HTTPS باشد؛ آدرس محلی یا
+                پورت غیراستاندارد پذیرفته نمی‌شود. پس از رفع، دکمه «بررسی سلامت» را بزنید یا استقرار جدید شروع کنید.
+              </p>
+              <h4>ورکر مستقر شده اما رسانه کار نمی‌کند</h4>
+              <p>
+                این محدودیت طراحی است: پردازش فایل و ffmpeg در محیط ورکر پشتیبانی نمی‌شود. برای ربات‌های دسته رسانه،
+                Railway را انتخاب کنید.
+              </p>
+              <h4>داشبورد داده نشان نمی‌دهد</h4>
+              <p>
+                ابتدا از اتصال به کنترل‌پلین مطمئن شوید. اگر آدرس درست است اما خطای ۴۰۱ می‌گیرید، توکن منقضی شده است؛
+                دوباره وارد شوید. در حالت بدون سرور، هیچ داده‌ای وجود ندارد و این رفتار طبیعی است.
+              </p>
+              <h4>خطای CORS در مرورگر</h4>
+              <p>
+                دامنه سایت را در <code class="code-inline">CORS_ORIGINS</code> سرور اضافه کنید و سرور را دوباره راه‌اندازی
+                کنید. برای محیط آزمایش می‌توانید موقتاً از <code class="code-inline">*</code> استفاده کنید.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-bottom">
-          <span>BotForge — مستندات نسخه ۱.۰.۰</span>
-          <a href="index.html">بازگشت به صفحه اصلی</a>
-        </div>
-      </div>
-    </footer>
+    <footer class="site-footer" id="site-footer"></footer>
 
     <script src="assets/js/icons.js"></script>
     <script src="assets/js/catalog.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/docs.js"></script>
   </body>
 </html>
